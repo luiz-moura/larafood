@@ -29,7 +29,8 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Domains\\": "src/Domains",
-            "Infrastructure\\": "src/Infrastructure"
+            "Infrastructure\\": "src/Infrastructure",
+            "Interfaces\\": "src/Interfaces"
         }
     },
     "autoload-dev": {
