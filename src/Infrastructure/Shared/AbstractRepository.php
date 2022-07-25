@@ -11,14 +11,14 @@ abstract class AbstractRepository
         $this->model = $this->resolveModel();
     }
 
-    public function getAll()
+    public function getAll(): ?array
     {
-        return $this->model->all();
+        return $this->model->all()?->toArray();
     }
 
-    public function findById(int $id)
+    public function findById(int $id): ?object
     {
-        return $this->model->find($id);
+        return $this->model->find($id)?->toArray();
     }
 
     public function delete(int $id): bool
@@ -26,18 +26,18 @@ abstract class AbstractRepository
         return $this->model->destroy($id);
     }
 
-    public function create(mixed $details): bool
+    public function create(object $details): bool
     {
         return $this->model->create($details);
     }
 
-    public function update(int $id, mixed $newDetails): bool
+    public function update(int $id, object $newDetails): bool
     {
         return $this->model->whereId($id)->update($newDetails);
     }
 
     private function resolveModel(): mixed
     {
-        return app($this->model);
+        return app($this->modelClass);
     }
 }
