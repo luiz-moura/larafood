@@ -16,24 +16,24 @@ abstract class AbstractRepository
         return $this->model->all()?->toArray();
     }
 
-    public function findById(int $id): ?object
+    public function findById(int $id): mixed
     {
         return $this->model->find($id)?->toArray();
     }
 
     public function delete(int $id): bool
     {
-        return $this->model->destroy($id);
+        return (bool) $this->model->destroy($id);
     }
 
-    public function create(object $details): bool
+    public function create(DataTransferObject $details): bool
     {
-        return $this->model->create($details);
+        return (bool) $this->model->create($details->toArray());
     }
 
-    public function update(int $id, object $newDetails): bool
+    public function update(int $id, DataTransferObject $newDetails): bool
     {
-        return $this->model->whereId($id)->update($newDetails);
+        return (bool) $this->model->whereId($id)->update($newDetails);
     }
 
     private function resolveModel(): mixed
