@@ -227,12 +227,12 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
+            'type' => 'navbar-search',
+            'text' => 'search',
             'topnav_right' => true,
         ],
         [
-            'type'         => 'fullscreen-widget',
+            'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
 
@@ -243,7 +243,8 @@ return [
         ],
         [
             'text' => 'Planos',
-            'url'  => 'admin/plans',
+            'url' => 'admin/plans',
+            'icon' => 'fas fa-mountain',
         ],
     ],
 
