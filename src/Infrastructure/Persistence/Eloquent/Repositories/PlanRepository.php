@@ -43,7 +43,7 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return (bool) $plan->update($planData->toArray());
     }
 
-    public function queryAllWithFilterPaginated(IndexPlansPaginationData $plansPaginationData, array $with = []): ?PlansPaginatedData
+    public function queryAllWithFilterPaginated(IndexPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData
     {
         $plans = $this->model
             ->select()
@@ -54,12 +54,10 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
             ->latest()
             ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
 
-        return (bool) $plans
-            ? PlansPaginatedData::createFromPaginator($plans)
-            : null;
+        return PlansPaginatedData::createFromPaginator($plans);
     }
 
-    public function searchByNameAndDescription(SearchPlansPaginationData $plansPaginationData, array $with = []): ?PlansPaginatedData
+    public function searchByNameAndDescription(SearchPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData
     {
         $plans = $this->model
             ->select()
@@ -68,8 +66,6 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
             ->latest()
             ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
 
-        return (bool) $plans
-            ? PlansPaginatedData::createFromPaginator($plans)
-            : null;
+        return PlansPaginatedData::createFromPaginator($plans);
     }
 }
