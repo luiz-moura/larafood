@@ -4,7 +4,8 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 
 use Domains\Plans\Contracts\PlanRepository as ContractsPlanRepository;
 use Domains\Plans\DataTransferObjects\PlansPaginatedData;
-use Domains\Plans\DataTransferObjects\{PlanData, PlansCollectionData, PlansPaginationData};
+use Domains\Plans\DataTransferObjects\{IndexPlansPaginationData, PlanData, SearchPlansPaginationData};
+use Domains\Plans\Exceptions\PlanNotFoundException;
 use Infrastructure\Persistence\Eloquent\Models\Plans;
 use Infrastructure\Shared\AbstractRepository;
 
@@ -12,30 +13,18 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
 {
     protected $modelClass = Plans::class;
 
-    public function getAll(): ?array
-    {
-        return PlansCollectionData::createFromArray(parent::getAll());
-    }
-
     public function create(object $plan): bool
     {
         return parent::create($plan);
-    }
-
-    public function update(int $id, object $plan): bool
-    {
-        return parent::update($id, $plan);
     }
 
     public function findByUrl(string $url): ?PlanData
     {
         $plan = $this->model->firstWhere('url', $url)?->toArray();
 
-        if (!$plan) {
-            return null;
-        }
-
-        return new PlanData($plan);
+        return $plan
+            ? new PlanData($plan)
+            : null;
     }
 
     public function deleteByUrl(string $url): bool
@@ -43,7 +32,18 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return $this->model->where('url', $url)->delete();
     }
 
-    public function queryAllWithFilterPaginated(PlansPaginationData $plansPaginationData, array $with = []): ?PlansPaginatedData
+    public function updateByUrl(string $url, PlanData $planData): bool
+    {
+        $plan = $this->model->firstWhere('url', $url);
+
+        if (!$plan) {
+            throw new PlanNotFoundException();
+        }
+
+        return (bool) $plan->update($planData->toArray());
+    }
+
+    public function queryAllWithFilterPaginated(IndexPlansPaginationData $plansPaginationData, array $with = []): ?PlansPaginatedData
     {
         $plans = $this->model
             ->select()
@@ -52,12 +52,24 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
                 $query->orderBy($plansPaginationData->order, $plansPaginationData->sort);
             })
             ->latest()
-            ->paginate(1, $plansPaginationData->page);
+            ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
 
-        if (!$plans) {
-            return null;
-        }
+        return (bool) $plans
+            ? PlansPaginatedData::createFromPaginator($plans)
+            : null;
+    }
 
-        return PlansPaginatedData::createFromPaginator($plans);
+    public function searchByNameAndDescription(SearchPlansPaginationData $plansPaginationData, array $with = []): ?PlansPaginatedData
+    {
+        $plans = $this->model
+            ->select()
+            ->where('name', 'ilike', "%{$plansPaginationData->filter}%")
+            ->orWhere('description', 'ilike', "%{$plansPaginationData->filter}%")
+            ->latest()
+            ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
+
+        return (bool) $plans
+            ? PlansPaginatedData::createFromPaginator($plans)
+            : null;
     }
 }
