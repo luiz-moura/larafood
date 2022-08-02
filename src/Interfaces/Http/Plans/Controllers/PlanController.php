@@ -4,6 +4,7 @@ namespace Interfaces\Http\Plans\Controllers;
 
 use Domains\Plans\Actions\{CreatePlanAction, DeletePlanByUrlAction, FindPlanByUrlAction, GetAllPlansPaginatedAction, SearchPlanAction, UpdatePlanAction};
 use Domains\Plans\DataTransferObjects\{IndexPlansPaginationData, PlanData, SearchPlansPaginationData};
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\{Redirect};
 use Infrastructure\Shared\Controller;
@@ -36,7 +37,8 @@ class PlanController extends Controller
         $planData = PlanData::createFromArray($planRequest->validated());
         $success = ($createPlanAction)($planData);
 
-        return Redirect::route('plans.index')->with('stored', $success);
+        return Redirect::route('plans.index', status: Response::HTTP_CREATED)
+            ->with('stored', $success);
     }
 
     public function show(
@@ -54,7 +56,8 @@ class PlanController extends Controller
     ) {
         $success = ($deletePlanByUrlAction)($url);
 
-        return Redirect::route('plans.index')->with('destroyed', $success);
+        return Redirect::route('plans.index', status: Response::HTTP_OK)
+            ->with('destroyed', $success);
     }
 
     public function edit(
@@ -74,7 +77,8 @@ class PlanController extends Controller
         $planData = PlanData::createFromArray($request->validated());
         $success = ($updatePlanAction)($url, $planData);
 
-        return Redirect::route('plans.index')->with('updated', $success);
+        return Redirect::route('plans.index', status: Response::HTTP_OK)
+            ->with('updated', $success);
     }
 
     public function search(
