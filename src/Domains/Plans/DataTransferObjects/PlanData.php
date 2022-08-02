@@ -7,9 +7,9 @@ use Infrastructure\Shared\DataTransferObject;
 class PlanData extends DataTransferObject
 {
     public string $name;
-    public string $url;
     public float $price;
     public string $description;
+    public ?string $url;
     public ?string $created_at;
     public ?string $updated_at;
 
@@ -17,9 +17,9 @@ class PlanData extends DataTransferObject
     {
         return new self([
             'name' => $data['name'],
-            'url' => $data['name'],
             'price' => $data['price'],
             'description' => $data['description'],
+            'url' => $data['url'] ?? null,
         ]);
     }
 }
