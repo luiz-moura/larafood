@@ -44,7 +44,7 @@ return $config
         'function_typehint_space' => true,
         'get_class_to_class_keyword' => true,
         'global_namespace_import' => true,
-        'group_import' => true,
+        'group_import' => false,
         'heredoc_indentation' => true,
         'include' => true,
         'increment_style' => true,
