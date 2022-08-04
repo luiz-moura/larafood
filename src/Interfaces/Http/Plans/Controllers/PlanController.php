@@ -3,7 +3,7 @@
 namespace Interfaces\Http\Plans\Controllers;
 
 use Domains\Plans\Actions\{CreatePlanAction, DeletePlanByUrlAction, FindPlanByUrlAction, GetAllPlansPaginatedAction, SearchPlanAction, UpdatePlanAction};
-use Domains\Plans\DataTransferObjects\{IndexPlansPaginationData, PlanData, SearchPlansPaginationData};
+use Domains\Plans\DataTransferObjects\{IndexPlansPaginationData, PlanData, PlansData, SearchPlansPaginationData};
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\{Redirect};
@@ -34,7 +34,7 @@ class PlanController extends Controller
         StorePlanRequest $planRequest,
         CreatePlanAction $createPlanAction
     ) {
-        $planData = PlanData::createFromArray($planRequest->validated());
+        $planData = PlansData::createFromArray($planRequest->validated());
         $success = ($createPlanAction)($planData);
 
         return Redirect::route('plans.index', status: Response::HTTP_CREATED)
@@ -70,11 +70,11 @@ class PlanController extends Controller
     }
 
     public function update(
-        UpdatePlanRequest $request,
         string $url,
+        UpdatePlanRequest $request,
         UpdatePlanAction $updatePlanAction
     ) {
-        $planData = PlanData::createFromArray($request->validated());
+        $planData = PlansData::createFromArray($request->validated());
         $success = ($updatePlanAction)($url, $planData);
 
         return Redirect::route('plans.index', status: Response::HTTP_OK)

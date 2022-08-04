@@ -3,8 +3,10 @@
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
 use Domains\Plans\Contracts\PlanRepository as ContractsPlanRepository;
+use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
+use Domains\Plans\DataTransferObjects\PlansData;
 use Domains\Plans\DataTransferObjects\PlansPaginatedData;
-use Domains\Plans\DataTransferObjects\{IndexPlansPaginationData, PlanData, SearchPlansPaginationData};
+use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
 use Domains\Plans\Exceptions\PlanNotFoundException;
 use Infrastructure\Persistence\Eloquent\Models\Plans;
 use Infrastructure\Shared\AbstractRepository;
@@ -18,13 +20,11 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return parent::create($plan);
     }
 
-    public function findByUrl(string $url): ?PlanData
+    public function findByUrl(string $url): PlansData
     {
         $plan = $this->model->firstWhere('url', $url)?->toArray();
 
-        return $plan
-            ? new PlanData($plan)
-            : null;
+        return new PlansData($plan);
     }
 
     public function deleteByUrl(string $url): bool
@@ -32,7 +32,7 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return $this->model->where('url', $url)->delete();
     }
 
-    public function updateByUrl(string $url, PlanData $planData): bool
+    public function updateByUrl(string $url, PlansData $planData): bool
     {
         $plan = $this->model->firstWhere('url', $url);
 

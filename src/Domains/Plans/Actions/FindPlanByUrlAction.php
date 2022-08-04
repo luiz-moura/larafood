@@ -3,7 +3,7 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\PlanData;
+use Domains\Plans\DataTransferObjects\PlansData;
 use Domains\Plans\Exceptions\PlanNotFoundException;
 
 class FindPlanByUrlAction
@@ -12,7 +12,7 @@ class FindPlanByUrlAction
     {
     }
 
-    public function __invoke(string $url): PlanData
+    public function __invoke(string $url): PlansData
     {
         $plan = $this->planRepository->findByUrl($url);
 
