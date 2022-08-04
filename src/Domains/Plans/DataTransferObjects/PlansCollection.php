@@ -2,17 +2,16 @@
 
 namespace Domains\Plans\DataTransferObjects;
 
-use Infrastructure\Shared\DataTransferObject;
+use Illuminate\Support\Collection;
 
-class PlansCollection extends DataTransferObject
+class PlansCollection extends Collection
 {
+
     public static function createFromArray(array $plans): self
     {
-        return new self(
-            array_map(
-                fn (array $plan) => PlansData::createFromArray($plan),
-                $plans
-            )
-        );
+        return new self(array_map(
+            fn (array $plan) => PlansData::createFromArray($plan),
+            $plans
+        ));
     }
 }
