@@ -14,12 +14,6 @@ class UpdatePlanAction
 
     public function __invoke(string $url, PlansData $planData): bool
     {
-        $plan = $this->planRepository->findByUrl($url);
-
-        if (!$plan) {
-            throw new PlanNotFoundException();
-        }
-
         return $this->planRepository->updateByUrl($url, $planData);
     }
 }
