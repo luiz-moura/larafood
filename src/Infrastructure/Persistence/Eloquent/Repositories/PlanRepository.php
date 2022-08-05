@@ -15,21 +15,31 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
 {
     protected $modelClass = Plans::class;
 
-    public function create(object $plan): bool
+    public function create(PlansData $planData): bool
     {
-        return parent::create($plan);
+        return $this->model->create($planData->except('id')->toArray());
     }
 
     public function findByUrl(string $url): PlansData
     {
         $plan = $this->model->firstWhere('url', $url)?->toArray();
 
+        if (!$plan) {
+            throw new PlanNotFoundException();
+        }
+
         return new PlansData($plan);
     }
 
     public function deleteByUrl(string $url): bool
     {
-        return $this->model->where('url', $url)->delete();
+        $plan = $this->model->firstWhere('url', $url);
+
+        if (!$plan) {
+            throw new PlanNotFoundException();
+        }
+
+        return $plan->delete();
     }
 
     public function updateByUrl(string $url, PlansData $planData): bool
