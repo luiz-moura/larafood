@@ -16,7 +16,7 @@ class StorePlanRequest extends FormRequest
         return [
             'name' => 'required|min:3|max:255|unique:plans',
             'description' => 'nullable|min:3|max:255',
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
         ];
     }
 }

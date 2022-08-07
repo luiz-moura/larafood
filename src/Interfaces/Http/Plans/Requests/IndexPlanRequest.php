@@ -18,7 +18,7 @@ class IndexPlanRequest extends FormRequest
             'page' => 'nullable|integer',
             'per_page' => 'nullable|integer',
             'order' => 'nullable|string',
-            'sort' => ['required_with:order', Rule::in(['asc', 'desc'])]
+            'sort' => ['required_with:order', Rule::in(['asc', 'desc'])],
         ];
     }
 }

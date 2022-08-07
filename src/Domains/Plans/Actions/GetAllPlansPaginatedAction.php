@@ -3,7 +3,8 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\{IndexPlansPaginationData, PlansPaginatedData, PlansPaginationData};
+use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
+use Domains\Plans\DataTransferObjects\PlansPaginatedData;
 
 class GetAllPlansPaginatedAction
 {

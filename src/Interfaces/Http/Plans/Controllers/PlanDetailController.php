@@ -32,7 +32,7 @@ class PlanDetailController extends Controller
         return View::make('admin.pages.plan-details.index', [
             'plan' => $plan,
             'details' => $planDetailsPaginatedData->details,
-            'pagination' => $planDetailsPaginatedData->pagination
+            'pagination' => $planDetailsPaginatedData->pagination,
         ]);
     }
 

@@ -16,7 +16,7 @@ class PlansPaginatedData extends DataTransferObject
     {
         return new self([
             'plans' => PlansCollection::createFromArray($paginated['data']),
-            'total' => $paginated['total']
+            'total' => $paginated['total'],
         ]);
     }
 
@@ -25,7 +25,7 @@ class PlansPaginatedData extends DataTransferObject
         return new self([
             'plans' => PlansCollection::createFromArray($paginated->toArray()['data']),
             'total' => $paginated->total(),
-            'pagination' => $paginated->withQueryString()->links()
+            'pagination' => $paginated->withQueryString()->links(),
         ]);
     }
 }

@@ -9,6 +9,9 @@ $config = new PhpCsFixer\Config();
 return $config
     ->setRiskyAllowed(true)
     ->setRules([
+        '@PSR12' => true,
+        '@PhpCsFixer' => true,
+        'class_attributes_separation' => false,
         'align_multiline_comment' => true,
         'array_indentation' => true,
         'array_push' => true,
@@ -144,12 +147,20 @@ return $config
         'visibility_required' => true,
         'whitespace_after_comma_in_array' => true,
         'yoda_style' => true,
+        'phpdoc_no_empty_return' => false,
+        'phpdoc_trim' => false,
+        'phpdoc_types_order' => false,
+        'phpdoc_separation' => false,
+        'phpdoc_align' => false,
+        'phpdoc_types_order' => false,
+        'no_superfluous_phpdoc_tags' => false,
+        'phpdoc_no_empty_return' => false,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
             ->in([
-                __DIR__."/src",
-                __DIR__."/tests",
+                __DIR__.'/src',
+                __DIR__.'/tests',
             ])
             ->exclude(['bootstrap', 'storage', 'vendor'])
             ->name('*.php')

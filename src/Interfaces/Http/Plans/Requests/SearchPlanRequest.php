@@ -19,7 +19,7 @@ class SearchPlanRequest extends FormRequest
             'per_page' => 'nullable|integer',
             'order' => 'nullable|string',
             'sort' => ['required_with:order', Rule::in(['asc', 'desc'])],
-            'filter' => 'string|min:2'
+            'filter' => 'string|min:2',
         ];
     }
 }

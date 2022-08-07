@@ -2,12 +2,22 @@
 
 namespace Interfaces\Http\Plans\Controllers;
 
-use Domains\Plans\Actions\{CreatePlanAction, DeletePlanByUrlAction, FindPlanByUrlAction, GetAllPlansPaginatedAction, SearchPlanAction, UpdatePlanAction};
-use Domains\Plans\DataTransferObjects\{IndexPlansPaginationData, PlansData, SearchPlansPaginationData};
+use Domains\Plans\Actions\CreatePlanAction;
+use Domains\Plans\Actions\DeletePlanByUrlAction;
+use Domains\Plans\Actions\FindPlanByUrlAction;
+use Domains\Plans\Actions\GetAllPlansPaginatedAction;
+use Domains\Plans\Actions\SearchPlanAction;
+use Domains\Plans\Actions\UpdatePlanAction;
+use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
+use Domains\Plans\DataTransferObjects\PlansData;
+use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\{Redirect};
 use Infrastructure\Shared\Controller;
-use Interfaces\Http\Plans\Requests\{IndexPlanRequest, SearchPlanRequest, StorePlanRequest, UpdatePlanRequest};
+use Interfaces\Http\Plans\Requests\IndexPlanRequest;
+use Interfaces\Http\Plans\Requests\SearchPlanRequest;
+use Interfaces\Http\Plans\Requests\StorePlanRequest;
+use Interfaces\Http\Plans\Requests\UpdatePlanRequest;
 
 class PlanController extends Controller
 {
@@ -20,7 +30,7 @@ class PlanController extends Controller
 
         return View::make('admin.pages.plans.index', [
             'plans' => $plansPaginatedData->plans,
-            'pagination' => $plansPaginatedData->pagination
+            'pagination' => $plansPaginatedData->pagination,
         ]);
     }
 
@@ -86,7 +96,7 @@ class PlanController extends Controller
 
         return View::make('admin.pages.plans.index', [
             'plans' => $plansPaginatedData->plans,
-            'pagination' => $plansPaginatedData->pagination
+            'pagination' => $plansPaginatedData->pagination,
         ]);
     }
 }

@@ -4,7 +4,6 @@ namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
 use Domains\Plans\DataTransferObjects\PlansData;
-use Domains\Plans\Exceptions\PlanNotFoundException;
 
 class UpdatePlanAction
 {
