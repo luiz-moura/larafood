@@ -5,7 +5,7 @@ namespace Interfaces\Http\Plans\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SearchPlanRequest extends FormRequest
+class IndexPlanDetailRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,7 +19,6 @@ class SearchPlanRequest extends FormRequest
             'per_page' => 'nullable|integer',
             'order' => 'nullable|string',
             'sort' => ['required_with:order', Rule::in(['asc', 'desc'])],
-            'filter' => 'string|min:2',
         ];
     }
 }

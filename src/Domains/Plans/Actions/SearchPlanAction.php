@@ -3,7 +3,8 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\{PlansPaginatedData, SearchPlansPaginationData};
+use Domains\Plans\DataTransferObjects\PlansPaginatedData;
+use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
 
 class SearchPlanAction
 {

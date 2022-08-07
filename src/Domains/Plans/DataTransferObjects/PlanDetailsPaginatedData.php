@@ -6,16 +6,16 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
 use Infrastructure\Shared\DataTransferObject;
 
-class PlansPaginatedData extends DataTransferObject
+class PlanDetailsPaginatedData extends DataTransferObject
 {
-    public PlansCollection $plans;
     public int $total;
+    public PlanDetailsCollection $details;
     public ?View $pagination;
 
     public static function createFromArray(array $paginated): self
     {
         return new self([
-            'plans' => PlansCollection::createFromArray($paginated['data']),
+            'details' => PlanDetailsCollection::createFromArray($paginated['data']),
             'total' => $paginated['total'],
         ]);
     }
@@ -23,8 +23,8 @@ class PlansPaginatedData extends DataTransferObject
     public static function createFromPaginator(LengthAwarePaginator $paginated): self
     {
         return new self([
-            'plans' => PlansCollection::createFromArray($paginated->toArray()['data']),
             'total' => $paginated->total(),
+            'details' => PlanDetailsCollection::createFromArray($paginated->toArray()['data']),
             'pagination' => $paginated->withQueryString()->links(),
         ]);
     }

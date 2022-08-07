@@ -18,7 +18,7 @@ class UpdatePlanRequest extends FormRequest
         return [
             'name' => "required|min:3|max:255|unique:plans,name,{$url},url",
             'description' => 'required|min:3|max:255',
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
         ];
     }
 }
