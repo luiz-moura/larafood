@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Interfaces\Http\Permissions\Controllers\PermissionController;
 use Interfaces\Http\Plans\Controllers\PlanController;
 use Interfaces\Http\Plans\Controllers\PlanDetailController;
 use Interfaces\Http\Profiles\Controllers\ProfileController;
@@ -34,4 +35,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get('profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
     Route::resource('profiles', ProfileController::class);
+
+    Route::get('permissions/search', [PermissionController::class, 'search'])->name('permissions.search');
+    Route::resource('permissions', PermissionController::class);
 });
