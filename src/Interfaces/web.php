@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Interfaces\Http\Plans\Controllers\PlanController;
 use Interfaces\Http\Plans\Controllers\PlanDetailController;
+use Interfaces\Http\Profiles\Controllers\ProfileController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
@@ -30,4 +31,7 @@ Route::prefix('admin')->group(function () {
             Route::put('/{url}', 'update')->name('plans.update');
         });
     });
+
+    Route::get('profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
+    Route::resource('profiles', ProfileController::class);
 });
