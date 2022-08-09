@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Title
@@ -245,6 +244,11 @@ return [
             'text' => 'Planos',
             'url' => 'admin/plans',
             'icon' => 'fas fa-mountain',
+        ],
+        [
+            'text' => 'Perfis',
+            'url' => 'admin/profiles',
+            'icon' => 'fas fa-id-card-alt',
         ],
     ],
 
