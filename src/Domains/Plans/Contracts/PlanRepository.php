@@ -13,6 +13,7 @@ interface PlanRepository
     public function create(PlansData $planData): bool;
     public function updateByUrl(string $url, PlansData $planData): bool;
     public function deleteByUrl(string $url): bool;
+    public function totalPlanDetailsByUrl(string $url): int;
     public function queryAllWithFilterPaginated(IndexPlansPaginationData $plansPaginationData): PlansPaginatedData;
     public function searchByNameAndDescription(SearchPlansPaginationData $plansPaginationData): PlansPaginatedData;
 }

@@ -53,6 +53,17 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return (bool) $plan->update($planData->toArray());
     }
 
+    public function totalPlanDetailsByUrl(string $url): int
+    {
+        $plan = $this->model->firstWhere('url', $url);
+
+        if (!$plan) {
+            throw new PlanNotFoundException();
+        }
+
+        return $plan->details()->count();
+    }
+
     public function queryAllWithFilterPaginated(IndexPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData
     {
         $plans = $this->model

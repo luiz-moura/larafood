@@ -5,3 +5,9 @@
         @endforeach
     </div>
 @endif
+
+@if (session('alert'))
+    <div class="alert alert-{{ session('alert')['type'] }}">
+        <p>{{ session('alert')['message'] }}</p>
+    </div>
+@endisset

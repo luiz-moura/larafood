@@ -16,6 +16,8 @@
                 <li><strong>Descrição: </strong> {{ $plan->description }}</li>
             </ul>
 
+            <x-alert-errors/>
+
             <form action="{{ route('plans.destroy', $plan->url) }}" method="POST">
                 @csrf
                 @method('DELETE')

@@ -11,8 +11,10 @@ use Domains\Plans\Actions\UpdatePlanAction;
 use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
 use Domains\Plans\DataTransferObjects\PlansData;
 use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
+use Domains\Plans\Exceptions\CannotDeletePlanWithDetailsException;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\{Redirect};
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Plans\Requests\IndexPlanRequest;
 use Interfaces\Http\Plans\Requests\SearchPlanRequest;
@@ -62,7 +64,16 @@ class PlanController extends Controller
         string $url,
         DeletePlanByUrlAction $deletePlanByUrlAction
     ) {
-        $success = ($deletePlanByUrlAction)($url);
+        try {
+            $success = ($deletePlanByUrlAction)($url);
+        } catch (CannotDeletePlanWithDetailsException) {
+            Session::flash('alert', [
+                'type' => 'danger',
+                'message' => 'Não é possível excluir um plano que possua detalhes',
+            ]);
+
+            return Redirect::route('plans.show', $url);
+        }
 
         return Redirect::route('plans.index')->with('destroyed', $success);
     }
