@@ -8,14 +8,14 @@ class ProfilesData extends DataTransferObject
 {
     public ?int $id;
     public string $name;
-    public string $description;
+    public ?string $description;
 
     public static function createFromArray(array $data)
     {
         return new self([
             'id' => $data['id'] ?? null,
             'name' => $data['name'],
-            'description' => $data['description'],
+            'description' => $data['description'] ?? null,
         ]);
     }
 }
