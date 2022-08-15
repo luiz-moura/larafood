@@ -3,17 +3,17 @@
 namespace Application\Observers;
 
 use Illuminate\Support\Str;
-use Infrastructure\Persistence\Eloquent\Models\Plans;
+use Infrastructure\Persistence\Eloquent\Models\Plan;
 
-class PlansObserver
+class PlanObserver
 {
-    public function creating(Plans $plan)
+    public function creating(Plan $plan)
     {
         $plan->name = ucfirst($plan->name);
         $plan->url = Str::kebab($plan->name);
     }
 
-    public function updating(Plans $plan)
+    public function updating(Plan $plan)
     {
         $plan->name = ucfirst($plan->name);
         $plan->url = Str::kebab($plan->name);

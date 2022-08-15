@@ -8,17 +8,12 @@ use Domains\Plans\DataTransferObjects\PlansData;
 use Domains\Plans\DataTransferObjects\PlansPaginatedData;
 use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
 use Domains\Plans\Exceptions\PlanNotFoundException;
-use Infrastructure\Persistence\Eloquent\Models\Plans;
+use Infrastructure\Persistence\Eloquent\Models\Plan;
 use Infrastructure\Shared\AbstractRepository;
 
 class PlanRepository extends AbstractRepository implements ContractsPlanRepository
 {
-    protected $modelClass = Plans::class;
-
-    public function create(PlansData $planData): bool
-    {
-        return $this->model->create($planData->except('id')->toArray());
-    }
+    protected $modelClass = Plan::class;
 
     public function findByUrl(string $url): PlansData
     {
@@ -31,6 +26,11 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return new PlansData($plan);
     }
 
+    public function create(PlansData $planData): bool
+    {
+        return (bool) $this->model->create($planData->except('id')->toArray());
+    }
+
     public function deleteByUrl(string $url): bool
     {
         $plan = $this->model->firstWhere('url', $url);
@@ -39,7 +39,7 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
             throw new PlanNotFoundException();
         }
 
-        return $plan->delete();
+        return (bool) $plan->delete();
     }
 
     public function updateByUrl(string $url, PlansData $planData): bool

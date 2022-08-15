@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PlanDetails extends Model
+class PlanDetail extends Model
 {
     use HasFactory;
 
@@ -15,6 +15,6 @@ class PlanDetails extends Model
 
     public function plan(): BelongsTo
     {
-        return $this->belongsTo(Plans::class, 'plan_id', 'id');
+        return $this->belongsTo(Plan::class, 'plan_id', 'id');
     }
 }

@@ -40,7 +40,7 @@
                             <td>{{ $plan->name }}</td>
                             <td>{{ $plan->price }}</td>
                             <td>
-                                <a href="{{ route('plan.details.index', $plan->url) }}" class="btn btn-primary">Detalhes</a>
+                                <a href="{{ route('plan_details.index', $plan->url) }}" class="btn btn-primary">Detalhes</a>
                                 <a href="{{ route('plans.edit', $plan->url) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('plans.show', $plan->url) }}" class="btn btn-warning">Ver</a>
                             </td>

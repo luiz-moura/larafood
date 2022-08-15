@@ -8,12 +8,23 @@ use Domains\ACL\Permissions\DataTransferObjects\PermissionsData;
 use Domains\ACL\Permissions\DataTransferObjects\PermissionsPaginatedData;
 use Domains\ACL\Permissions\DataTransferObjects\SearchPermissionsPaginationData;
 use Domains\ACL\Permissions\Exceptions\PermissionNotFoundException;
-use Infrastructure\Persistence\Eloquent\Models\Permissions;
+use Infrastructure\Persistence\Eloquent\Models\Permission;
 use Infrastructure\Shared\AbstractRepository;
 
 class PermissionRepository extends AbstractRepository implements ContractsPermissionRepository
 {
-    protected $modelClass = Permissions::class;
+    protected $modelClass = Permission::class;
+
+    public function findById(int $permissionId, array $with = []): PermissionsData
+    {
+        $permission = $this->model->find($permissionId)?->toArray();
+
+        if (!$permission) {
+            throw new PermissionNotFoundException();
+        }
+
+        return PermissionsData::createFromArray($permission);
+    }
 
     public function create(PermissionsData $permissionData): bool
     {
@@ -39,18 +50,7 @@ class PermissionRepository extends AbstractRepository implements ContractsPermis
             throw new PermissionNotFoundException();
         }
 
-        return $permission->delete();
-    }
-
-    public function findById(int $permissionId, array $with = []): PermissionsData
-    {
-        $permission = $this->model->find($permissionId)?->toArray();
-
-        if (!$permission) {
-            throw new PermissionNotFoundException();
-        }
-
-        return PermissionsData::createFromArray($permission);
+        return (bool) $permission->delete();
     }
 
     public function queryAllWithFilterPaginated(IndexPermissionsPaginationData $permissionsPaginationData, array $with = []): PermissionsPaginatedData
