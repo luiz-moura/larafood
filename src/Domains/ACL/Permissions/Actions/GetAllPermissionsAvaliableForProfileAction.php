@@ -6,14 +6,14 @@ use Domains\ACL\Permissions\Contracts\PermissionRepository;
 use Domains\ACL\Permissions\DataTransferObjects\IndexPermissionsPaginationData;
 use Domains\ACL\Permissions\DataTransferObjects\PermissionsPaginatedData;
 
-class GetAllPermissionsPaginatedAction
+class GetAllPermissionsAvaliableForProfileAction
 {
     public function __construct(private PermissionRepository $permissionRepository)
     {
     }
 
-    public function __invoke(IndexPermissionsPaginationData $indexPermissionsPaginationData, array $with = []): PermissionsPaginatedData
+    public function __invoke(int $profileId, IndexPermissionsPaginationData $indexPermissionsPaginationData, array $with = []): PermissionsPaginatedData
     {
-        return $this->permissionRepository->queryAllWithFilterPaginated($indexPermissionsPaginationData, $with);
+        return $this->permissionRepository->permissionsAvailableForProfile($profileId, $indexPermissionsPaginationData, $with);
     }
 }

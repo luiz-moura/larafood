@@ -9,10 +9,13 @@ use Domains\ACL\Profiles\DataTransferObjects\SearchProfilesPaginationData;
 
 interface ProfileRepository
 {
-    public function getAllProfilesPaginated(IndexProfilesPaginationData $indexProfilesPaginationData): ProfilesPaginatedData;
     public function create(ProfilesData $profileData): bool;
     public function update(int $id, ProfilesData $profileData): bool;
-    public function findById(int $id): ProfilesData;
     public function delete(int $id): bool;
-    public function searchByNameAndDescription(SearchProfilesPaginationData $filter): ProfilesPaginatedData;
+    public function findById(int $id, array $with = []): ProfilesData;
+    public function getAllProfilesPaginated(IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
+    public function getAllProfilesByPermissionIdPaginated(int $permissionId, IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
+    public function searchByNameAndDescription(SearchProfilesPaginationData $filter, array $with = []): ProfilesPaginatedData;
+    public function attachPermissionsInProfile(int $profileId, array $permissions): bool;
+    public function detachProfilePermission(int $profileId, int $permissionId): bool;
 }

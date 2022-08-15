@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Interfaces\Http\Permissions\Controllers\PermissionController;
 use Interfaces\Http\Plans\Controllers\PlanController;
 use Interfaces\Http\Plans\Controllers\PlanDetailController;
+use Interfaces\Http\Profiles\Controllers\PermissionProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfileController;
+use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
@@ -32,6 +34,16 @@ Route::prefix('admin')->group(function () {
             Route::put('/{url}', 'update')->name('plans.update');
         });
     });
+
+    Route::get('permissions/{id}/profiles', [ProfilePermissionController::class, 'index'])->name('permissions.profiles.index');
+
+    Route::get('profiles/{id}/permissions', [PermissionProfileController::class, 'index'])->name('profiles.permissions');
+    Route::get('profiles/{id}/permissions/search', [PermissionProfileController::class, 'search'])->name('profiles.permissions.search');
+    Route::get('profiles/{id}/permissions/available', [PermissionProfileController::class, 'available'])->name('profiles.permissions.available');
+    Route::get('profiles/{id}/permissions/available/search', [PermissionProfileController::class, 'searchAvailable'])->name('profiles.permissions.search-available');
+
+    Route::post('profiles/{id}/permissions', [PermissionProfileController::class, 'attachPermissions'])->name('profiles.permissions.attach');
+    Route::get('profiles/{id}/permissions/{permissionId}', [PermissionProfileController::class, 'detachPermission'])->name('profiles.permissions.detach');
 
     Route::get('profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
     Route::resource('profiles', ProfileController::class);

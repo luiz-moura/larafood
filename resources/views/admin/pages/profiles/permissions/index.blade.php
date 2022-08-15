@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Perfis')
+@section('title', "Permissões do perfil {$profile->name}")
 
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item active">Perfis</li>
     </ol>
-    <h1>Perfis <a href="{{ route('profiles.create') }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add</a></h1>
+    <h1>Permissões do perfil {{ $profile->name }} <a href="{{ route('profiles.permissions.available', $profile->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add nova permissão</a></h1>
 @stop
 
 @section('content')
@@ -34,18 +34,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($profiles as $profile)
+                    @forelse ($permissions as $permission)
                         <tr>
-                            <td>{{ $profile->name }}</td>
+                            <td>{{ $permission->name }}</td>
                             <td>
-                                <a href="{{ route('profiles.edit', $profile->id) }}" class="btn btn-info">Editar</a>
-                                <a href="{{ route('profiles.show', $profile->id) }}" class="btn btn-warning">Ver</a>
-                                <a href="{{ route('profiles.permissions', $profile->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-user-lock"></i>
-                                </a>
+                                <a href="{{ route('profiles.permissions.detach', [$profile->id, $permission->id]) }}" class="btn btn-danger">DESVINCULAR</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <p>No permissions</p>
+                    @endforelse
                 </tbody>
             </table>
         </div>

@@ -67,12 +67,45 @@ class PermissionRepository extends AbstractRepository implements ContractsPermis
         return PermissionsPaginatedData::createFromPaginator($permissions);
     }
 
+    public function getAllByProfileIdPaginated(
+        int $profileId,
+        IndexPermissionsPaginationData $permissionsPaginationData,
+        array $with = []
+    ): PermissionsPaginatedData {
+        $permissions = $this->model
+            ->select()
+            ->with($with)
+            ->whereHas('profiles', function ($query) use ($profileId) {
+                $query->where('profiles.id', $profileId);
+            })
+            ->when($permissionsPaginationData->order, function ($query) use ($permissionsPaginationData) {
+                $query->orderBy($permissionsPaginationData->order, $permissionsPaginationData->sort);
+            })
+            ->latest()
+            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
+
+        return PermissionsPaginatedData::createFromPaginator($permissions);
+    }
+
     public function searchByNameAndDescription(SearchPermissionsPaginationData $permissionsPaginationData, array $with = []): PermissionsPaginatedData
     {
         $permissions = $this->model
             ->select()
             ->where('name', 'ilike', "%{$permissionsPaginationData->filter}%")
             ->orWhere('description', 'ilike', "%{$permissionsPaginationData->filter}%")
+            ->latest()
+            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
+
+        return PermissionsPaginatedData::createFromPaginator($permissions);
+    }
+
+    public function permissionsAvailableForProfile(int $profileId, IndexPermissionsPaginationData $permissionsPaginationData): PermissionsPaginatedData
+    {
+        $permissions = $this->model
+            ->select()
+            ->whereDoesntHave('profiles', function ($query) use ($profileId) {
+                $query->where('profiles.id', $profileId);
+            })
             ->latest()
             ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
 
