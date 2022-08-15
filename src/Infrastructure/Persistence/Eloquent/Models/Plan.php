@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Plans extends Model
+class Plan extends Model
 {
     use HasFactory;
 
@@ -15,6 +15,6 @@ class Plans extends Model
 
     public function details(): HasMany
     {
-        return $this->hasMany(PlanDetails::class, 'plan_id', 'id');
+        return $this->hasMany(PlanDetail::class, 'plan_id', 'id');
     }
 }

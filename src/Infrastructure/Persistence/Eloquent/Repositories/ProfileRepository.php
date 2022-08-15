@@ -8,12 +8,12 @@ use Domains\ACL\Profiles\DataTransferObjects\ProfilesData;
 use Domains\ACL\Profiles\DataTransferObjects\ProfilesPaginatedData;
 use Domains\ACL\Profiles\DataTransferObjects\SearchProfilesPaginationData;
 use Domains\ACL\Profiles\Exceptions\ProfileNotFoundException;
-use Infrastructure\Persistence\Eloquent\Models\Profiles;
+use Infrastructure\Persistence\Eloquent\Models\Profile;
 use Infrastructure\Shared\AbstractRepository;
 
 class ProfileRepository extends AbstractRepository implements ContractsProfileRepository
 {
-    protected $modelClass = Profiles::class;
+    protected $modelClass = Profile::class;
 
     public function findById(int $id): ProfilesData
     {
@@ -50,7 +50,7 @@ class ProfileRepository extends AbstractRepository implements ContractsProfileRe
             throw new ProfileNotFoundException();
         }
 
-        return $profile->delete();
+        return (bool) $profile->delete();
     }
 
     public function getAllProfilesPaginated(IndexProfilesPaginationData $profilesPaginationData, $with = []): ProfilesPaginatedData

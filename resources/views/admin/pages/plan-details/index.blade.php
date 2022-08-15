@@ -11,7 +11,7 @@
         </li>
         <li class="breadcrumb-item active">Detalhes</li>
     </ol>
-    <h1>Detalhes do plano {{ $plan->name }} <a href="{{ route('plan.details.create', $plan->url) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add</a></h1>
+    <h1>Detalhes do plano {{ $plan->name }} <a href="{{ route('plan_details.create', $plan->url) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add</a></h1>
 @stop
 
 @section('content')
@@ -29,8 +29,8 @@
                         <tr>
                             <td>{{ $detail->name }}</td>
                             <td>
-                                <a href="{{ route('plan.details.edit', [$plan->url, $detail->id]) }}" class="btn btn-info">Editar</a>
-                                <a href="{{ route('plan.details.show', [$plan->url, $detail->id]) }}" class="btn btn-warning">Ver</a>
+                                <a href="{{ route('plan_details.edit', [$plan->url, $detail->id]) }}" class="btn btn-info">Editar</a>
+                                <a href="{{ route('plan_details.show', [$plan->url, $detail->id]) }}" class="btn btn-warning">Ver</a>
                             </td>
                         </tr>
                     @endforeach

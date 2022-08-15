@@ -7,16 +7,27 @@ use Domains\Plans\DataTransferObjects\IndexPlanDetailsPaginationData;
 use Domains\Plans\DataTransferObjects\PlanDetailsData;
 use Domains\Plans\DataTransferObjects\PlanDetailsPaginatedData;
 use Domains\Plans\Exceptions\PlanDetailNotFoundException;
-use Infrastructure\Persistence\Eloquent\Models\PlanDetails;
+use Infrastructure\Persistence\Eloquent\Models\PlanDetail;
 use Infrastructure\Shared\AbstractRepository;
 
 class PlanDetailRepository extends AbstractRepository implements ContractsPlanDetailRepository
 {
-    protected $modelClass = PlanDetails::class;
+    protected $modelClass = PlanDetail::class;
+
+    public function findById(int $planDetailId): PlanDetailsData
+    {
+        $planDetail = $this->model->find($planDetailId)?->toArray();
+
+        if (!$planDetail) {
+            throw new PlanDetailNotFoundException();
+        }
+
+        return new PlanDetailsData($planDetail);
+    }
 
     public function create(PlanDetailsData $planDetailsData): bool
     {
-        return $this->model->create($planDetailsData->toArray());
+        return (bool) $this->model->create($planDetailsData->toArray());
     }
 
     public function update(int $planDetailId, PlanDetailsData $planDetailData): bool
@@ -38,18 +49,7 @@ class PlanDetailRepository extends AbstractRepository implements ContractsPlanDe
             throw new PlanDetailNotFoundException();
         }
 
-        return $planDetail->delete();
-    }
-
-    public function findById(int $planDetailId): PlanDetailsData
-    {
-        $planDetail = $this->model->find($planDetailId);
-
-        if (!$planDetail) {
-            throw new PlanDetailNotFoundException();
-        }
-
-        return $planDetail;
+        return (bool) $planDetail->delete();
     }
 
     public function getByPlanIdPaginated(

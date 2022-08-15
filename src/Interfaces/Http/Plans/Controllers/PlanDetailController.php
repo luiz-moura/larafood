@@ -57,7 +57,7 @@ class PlanDetailController extends Controller
 
         $created = ($createPlanDetailAction)($planDetailData);
 
-        return Redirect::route('plan.details.index', $plan->url)
+        return Redirect::route('plan_details.index', $plan->url)
             ->with('created', $created);
     }
 
@@ -88,7 +88,7 @@ class PlanDetailController extends Controller
 
         $updated = ($updatePlanDetailAction)($planDetailId, $planDetailData);
 
-        return Redirect::route('plan.details.index', $plan->url)
+        return Redirect::route('plan_details.index', $plan->url)
             ->with('updated', $updated);
     }
 
@@ -99,7 +99,7 @@ class PlanDetailController extends Controller
     ) {
         $deleted = ($deletePlanDetailById)($planUrl, $planDetailId);
 
-        return Redirect::route('plan.details.index', $planUrl)
+        return Redirect::route('plan_details.index', $planUrl)
             ->with('deleted', $deleted);
     }
 

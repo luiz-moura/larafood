@@ -10,7 +10,7 @@
             <a href="{{ route('plans.show', $plan->url) }}">{{ $plan->name }}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{ route('plan.details.index', $detail->id) }}">{{ $detail->name }}</a>
+            <a href="{{ route('plan_details.index', $detail->id) }}">{{ $detail->name }}</a>
         </li>
         <li class="breadcrumb-item active">Edit</li>
     </ol>
@@ -20,7 +20,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('plan.details.update', [$plan->url, $detail->id]) }}" method="POST">
+            <form action="{{ route('plan_details.update', [$plan->url, $detail->id]) }}" method="POST">
                 @method('PUT')
                 @include('admin.pages.plan-details._partials.form')
             </form>

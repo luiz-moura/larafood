@@ -9,16 +9,16 @@ use Interfaces\Http\Profiles\Controllers\ProfileController;
 Route::prefix('admin')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
 
-    Route::prefix('plan')->group(function () {
+    Route::prefix('plans')->group(function () {
         Route::controller(PlanDetailController::class)->group(function () {
-            Route::get('{url}/details/{id}/edit', 'edit')->name('plan.details.edit');
-            Route::delete('{url}/details/{id}', 'destroy')->name('plan.details.destroy');
-            Route::get('{url}/details/{id}', 'show')->name('plan.details.show');
-            Route::put('{url}/details/{id}', 'update')->name('plan.details.update');
-            Route::get('{url}/details', 'index')->name('plan.details.index');
-            Route::get('{url}/details', 'index')->name('plan.details.index');
-            Route::get('{url}/details/create', 'create')->name('plan.details.create');
-            Route::post('{url}/details', 'store')->name('plan.details.store');
+            Route::get('{url}/details', 'index')->name('plan_details.index');
+            Route::get('{url}/details/create', 'create')->name('plan_details.create');
+            Route::post('{url}/details', 'store')->name('plan_details.store');
+
+            Route::get('{url}/details/{id}/edit', 'edit')->name('plan_details.edit');
+            Route::delete('{url}/details/{id}', 'destroy')->name('plan_details.destroy');
+            Route::get('{url}/details/{id}', 'show')->name('plan_details.show');
+            Route::put('{url}/details/{id}', 'update')->name('plan_details.update');
         });
 
         Route::controller(PlanController::class)->group(function () {
