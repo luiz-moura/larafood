@@ -12,7 +12,7 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('permissions_profiles', function (Blueprint $table) {
+        Schema::create('permission_profile', function (Blueprint $table) {
             $table->id();
             $table->foreignId('permission_id')
                 ->constrained('permissions')
@@ -33,6 +33,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('permissions_profiles');
+        Schema::dropIfExists('permission_profile');
     }
 };
