@@ -11,8 +11,8 @@ class FindProfileByIdAction
     {
     }
 
-    public function __invoke(int $id): ProfilesData
+    public function __invoke(int $id, array $with = []): ProfilesData
     {
-        return $this->planRepository->findById($id);
+        return $this->planRepository->findById($id, $with);
     }
 }

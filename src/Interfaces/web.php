@@ -4,21 +4,23 @@ use Illuminate\Support\Facades\Route;
 use Interfaces\Http\Permissions\Controllers\PermissionController;
 use Interfaces\Http\Plans\Controllers\PlanController;
 use Interfaces\Http\Plans\Controllers\PlanDetailController;
+use Interfaces\Http\Profiles\Controllers\PermissionProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfileController;
+use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
 
-    Route::prefix('plan')->group(function () {
+    Route::prefix('plans')->group(function () {
         Route::controller(PlanDetailController::class)->group(function () {
-            Route::get('{url}/details/{id}/edit', 'edit')->name('plan.details.edit');
-            Route::delete('{url}/details/{id}', 'destroy')->name('plan.details.destroy');
-            Route::get('{url}/details/{id}', 'show')->name('plan.details.show');
-            Route::put('{url}/details/{id}', 'update')->name('plan.details.update');
-            Route::get('{url}/details', 'index')->name('plan.details.index');
-            Route::get('{url}/details', 'index')->name('plan.details.index');
-            Route::get('{url}/details/create', 'create')->name('plan.details.create');
-            Route::post('{url}/details', 'store')->name('plan.details.store');
+            Route::get('{url}/details', 'index')->name('plan_details.index');
+            Route::get('{url}/details/create', 'create')->name('plan_details.create');
+            Route::post('{url}/details', 'store')->name('plan_details.store');
+
+            Route::get('{url}/details/{id}/edit', 'edit')->name('plan_details.edit');
+            Route::delete('{url}/details/{id}', 'destroy')->name('plan_details.destroy');
+            Route::get('{url}/details/{id}', 'show')->name('plan_details.show');
+            Route::put('{url}/details/{id}', 'update')->name('plan_details.update');
         });
 
         Route::controller(PlanController::class)->group(function () {
@@ -32,6 +34,16 @@ Route::prefix('admin')->group(function () {
             Route::put('/{url}', 'update')->name('plans.update');
         });
     });
+
+    Route::get('permissions/{id}/profiles', [ProfilePermissionController::class, 'index'])->name('permissions.profiles.index');
+
+    Route::get('profiles/{id}/permissions', [PermissionProfileController::class, 'index'])->name('profiles.permissions');
+    Route::get('profiles/{id}/permissions/search', [PermissionProfileController::class, 'search'])->name('profiles.permissions.search');
+    Route::get('profiles/{id}/permissions/available', [PermissionProfileController::class, 'available'])->name('profiles.permissions.available');
+    Route::get('profiles/{id}/permissions/available/search', [PermissionProfileController::class, 'searchAvailable'])->name('profiles.permissions.search-available');
+
+    Route::post('profiles/{id}/permissions', [PermissionProfileController::class, 'attachPermissions'])->name('profiles.permissions.attach');
+    Route::get('profiles/{id}/permissions/{permissionId}', [PermissionProfileController::class, 'detachPermission'])->name('profiles.permissions.detach');
 
     Route::get('profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
     Route::resource('profiles', ProfileController::class);

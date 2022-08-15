@@ -11,8 +11,8 @@ class FindPermissionByIdAction
     {
     }
 
-    public function __invoke(int $id): PermissionsData
+    public function __invoke(int $id, array $with = []): PermissionsData
     {
-        return $this->permissionRepository->findById($id);
+        return $this->permissionRepository->findById($id, $with);
     }
 }

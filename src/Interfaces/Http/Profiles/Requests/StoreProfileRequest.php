@@ -3,6 +3,7 @@
 namespace Interfaces\Http\Profiles\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreProfileRequest extends FormRequest
 {
@@ -16,7 +17,12 @@ class StoreProfileRequest extends FormRequest
         $id = $this->segment(3);
 
         return [
-            'name' => "required|min:3|max:255|unique:profiles,name,{$id},id",
+            'name' => [
+                'required',
+                'min:3',
+                'max:255',
+                Rule::unique('profiles')->ignore($id),
+            ],
             'description' => 'nullable|min:3|max:255',
         ];
     }

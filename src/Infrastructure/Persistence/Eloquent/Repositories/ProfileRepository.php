@@ -8,16 +8,16 @@ use Domains\ACL\Profiles\DataTransferObjects\ProfilesData;
 use Domains\ACL\Profiles\DataTransferObjects\ProfilesPaginatedData;
 use Domains\ACL\Profiles\DataTransferObjects\SearchProfilesPaginationData;
 use Domains\ACL\Profiles\Exceptions\ProfileNotFoundException;
-use Infrastructure\Persistence\Eloquent\Models\Profiles;
+use Infrastructure\Persistence\Eloquent\Models\Profile;
 use Infrastructure\Shared\AbstractRepository;
 
 class ProfileRepository extends AbstractRepository implements ContractsProfileRepository
 {
-    protected $modelClass = Profiles::class;
+    protected $modelClass = Profile::class;
 
-    public function findById(int $id): ProfilesData
+    public function findById(int $id, array $with = []): ProfilesData
     {
-        $profile = $this->model->find($id)?->toArray();
+        $profile = $this->model->with($with)->find($id)?->toArray();
 
         if (!$profile) {
             throw new ProfileNotFoundException();
@@ -50,10 +50,10 @@ class ProfileRepository extends AbstractRepository implements ContractsProfileRe
             throw new ProfileNotFoundException();
         }
 
-        return $profile->delete();
+        return (bool) $profile->delete();
     }
 
-    public function getAllProfilesPaginated(IndexProfilesPaginationData $profilesPaginationData, $with = []): ProfilesPaginatedData
+    public function getAllProfilesPaginated(IndexProfilesPaginationData $profilesPaginationData, array $with = []): ProfilesPaginatedData
     {
         $profiles = $this->model
             ->select()
@@ -67,7 +67,27 @@ class ProfileRepository extends AbstractRepository implements ContractsProfileRe
         return ProfilesPaginatedData::createFromPaginator($profiles);
     }
 
-    public function searchByNameAndDescription(SearchProfilesPaginationData $profilesPaginationData): ProfilesPaginatedData
+    public function getAllProfilesByPermissionIdPaginated(
+        int $permissionId,
+        IndexProfilesPaginationData $profilesPaginationData,
+        array $with = []
+    ): ProfilesPaginatedData {
+        $profiles = $this->model
+            ->select()
+            ->with($with)
+            ->whereHas('permissions', function ($query) use ($permissionId) {
+                $query->where('permissions.id', $permissionId);
+            })
+            ->when($profilesPaginationData->order, function ($query) use ($profilesPaginationData) {
+                $query->orderBy($profilesPaginationData->order, $profilesPaginationData->sort);
+            })
+            ->latest()
+            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+
+        return ProfilesPaginatedData::createFromPaginator($profiles);
+    }
+
+    public function searchByNameAndDescription(SearchProfilesPaginationData $profilesPaginationData, array $with = []): ProfilesPaginatedData
     {
         $profiles = $this->model
             ->select()
@@ -77,5 +97,27 @@ class ProfileRepository extends AbstractRepository implements ContractsProfileRe
             ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
 
         return ProfilesPaginatedData::createFromPaginator($profiles);
+    }
+
+    public function attachPermissionsInProfile(int $profileId, array $permissions): bool
+    {
+        $profile = $this->model->find($profileId);
+
+        if (!$profile) {
+            throw new ProfileNotFoundException();
+        }
+
+        return (bool) $profile->permissions()->attach($permissions);
+    }
+
+    public function detachProfilePermission(int $profileId, int $permissionId): bool
+    {
+        $profile = $this->model->find($profileId);
+
+        if (!$profile) {
+            throw new ProfileNotFoundException();
+        }
+
+        return (bool) $profile->permissions()->detach($permissionId);
     }
 }

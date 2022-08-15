@@ -24,7 +24,7 @@
             </ul>
         </div>
         <div class="card-footer">
-            <form action="{{ route('plan.details.destroy', [$plan->url, $detail->id]) }}" method="POST">
+            <form action="{{ route('plan_details.destroy', [$plan->url, $detail->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">Deletar o detalhe {{ $detail->name }}, do plano {{ $plan->name }}</button>

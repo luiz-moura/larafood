@@ -11,8 +11,8 @@ class SearchPermissionAction
     {
     }
 
-    public function __invoke(SearchPermissionsPaginationData $searchPermissionsPaginationData)
+    public function __invoke(SearchPermissionsPaginationData $searchPermissionsPaginationData, array $with = [])
     {
-        return $this->permissionRepository->searchByNameAndDescription($searchPermissionsPaginationData);
+        return $this->permissionRepository->searchByNameAndDescription($searchPermissionsPaginationData, $with);
     }
 }
