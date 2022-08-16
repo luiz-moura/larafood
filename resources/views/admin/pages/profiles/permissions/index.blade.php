@@ -13,7 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('profiles.search') }}"
+            <form action="{{ route('profiles.permissions.search', $profile->id) }}"
                   method="GET"
                   class="form form-inline">
                 <input type="text"
