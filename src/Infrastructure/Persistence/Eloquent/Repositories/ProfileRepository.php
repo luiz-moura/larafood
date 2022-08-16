@@ -53,7 +53,7 @@ class ProfileRepository extends AbstractRepository implements ContractsProfileRe
         return (bool) $profile->delete();
     }
 
-    public function getAllProfilesPaginated(IndexProfilesPaginationData $profilesPaginationData, array $with = []): ProfilesPaginatedData
+    public function getAll(IndexProfilesPaginationData $profilesPaginationData, array $with = []): ProfilesPaginatedData
     {
         $profiles = $this->model
             ->select()
@@ -67,7 +67,7 @@ class ProfileRepository extends AbstractRepository implements ContractsProfileRe
         return ProfilesPaginatedData::createFromPaginator($profiles);
     }
 
-    public function getAllProfilesByPermissionIdPaginated(
+    public function getAllForPermission(
         int $permissionId,
         IndexProfilesPaginationData $profilesPaginationData,
         array $with = []
@@ -93,6 +93,82 @@ class ProfileRepository extends AbstractRepository implements ContractsProfileRe
             ->select()
             ->where('name', 'ilike', "%{$profilesPaginationData->filter}%")
             ->orWhere('description', 'ilike', "%{$profilesPaginationData->filter}%")
+            ->latest()
+            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+
+        return ProfilesPaginatedData::createFromPaginator($profiles);
+    }
+
+    public function getAllForPlan(
+        int $planId,
+        IndexProfilesPaginationData $profilesPaginationData,
+        array $with = []
+    ): ProfilesPaginatedData {
+        $profiles = $this->model
+            ->select()
+            ->with($with)
+            ->whereHas('plans', function ($query) use ($planId) {
+                $query->where('plans.id', $planId);
+            })
+            ->when($profilesPaginationData->order, function ($query) use ($profilesPaginationData) {
+                $query->orderBy($profilesPaginationData->order, $profilesPaginationData->sort);
+            })
+            ->latest()
+            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+
+        return ProfilesPaginatedData::createFromPaginator($profiles);
+    }
+
+    public function searchForPlan(
+        int $planId,
+        SearchProfilesPaginationData $profilesPaginationData,
+        array $with = []
+    ): ProfilesPaginatedData {
+        $profiles = $this->model
+            ->select()
+            ->whereHas('plans', function ($query) use ($planId) {
+                $query->where('plans.id', $planId);
+            })
+            ->where(function ($query) use ($profilesPaginationData) {
+                $query->where('name', 'ilike', "%{$profilesPaginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$profilesPaginationData->filter}%");
+            })
+            ->latest()
+            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+
+        return ProfilesPaginatedData::createFromPaginator($profiles);
+    }
+
+    public function searchAvailableForPlan(
+        int $planId,
+        SearchProfilesPaginationData $profilesPaginationData,
+        array $with = []
+    ): ProfilesPaginatedData {
+        $profiles = $this->model
+            ->select()
+            ->whereDoesntHave('plans', function ($query) use ($planId) {
+                $query->where('plans.id', $planId);
+            })
+            ->where(function ($query) use ($profilesPaginationData) {
+                $query->where('name', 'ilike', "%{$profilesPaginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$profilesPaginationData->filter}%");
+            })
+            ->latest()
+            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+
+        return ProfilesPaginatedData::createFromPaginator($profiles);
+    }
+
+    public function getAllAvailableForPlan(
+        int $planId,
+        IndexProfilesPaginationData $profilesPaginationData,
+        array $with = []
+    ): ProfilesPaginatedData {
+        $profiles = $this->model
+            ->select()
+            ->whereDoesntHave('plans', function ($query) use ($planId) {
+                $query->where('plans.id', $planId);
+            })
             ->latest()
             ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
 
