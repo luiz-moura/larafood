@@ -6,14 +6,14 @@ use Domains\Plans\Contracts\PlanRepository;
 use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
 use Domains\Plans\DataTransferObjects\PlansPaginatedData;
 
-class GetAllPlansPaginatedAction
+class GetAllPlansByProfileIdPaginatedAction
 {
     public function __construct(private PlanRepository $planRepository)
     {
     }
 
-    public function __invoke(IndexPlansPaginationData $plansPaginationData): PlansPaginatedData
+    public function __invoke(int $profileId, IndexPlansPaginationData $indexProfilesPaginationData, array $with = []): PlansPaginatedData
     {
-        return $this->planRepository->queryAllWithFilter($plansPaginationData);
+        return $this->planRepository->getAllForProfile($profileId, $indexProfilesPaginationData, $with);
     }
 }

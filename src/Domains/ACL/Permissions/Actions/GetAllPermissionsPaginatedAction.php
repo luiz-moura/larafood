@@ -14,6 +14,6 @@ class GetAllPermissionsPaginatedAction
 
     public function __invoke(IndexPermissionsPaginationData $indexPermissionsPaginationData, array $with = []): PermissionsPaginatedData
     {
-        return $this->permissionRepository->queryAllWithFilterPaginated($indexPermissionsPaginationData, $with);
+        return $this->permissionRepository->queryAllWithFilter($indexPermissionsPaginationData, $with);
     }
 }

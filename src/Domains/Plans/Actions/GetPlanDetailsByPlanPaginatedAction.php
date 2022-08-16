@@ -14,6 +14,6 @@ class GetPlanDetailsByPlanPaginatedAction
 
     public function __invoke(int $planId, IndexPlanDetailsPaginationData $indexPlanDetailsPaginationData): PlanDetailsPaginatedData
     {
-        return $this->planDetailRepository->getByPlanIdPaginated($planId, $indexPlanDetailsPaginationData);
+        return $this->planDetailRepository->getAllForPlan($planId, $indexPlanDetailsPaginationData);
     }
 }
