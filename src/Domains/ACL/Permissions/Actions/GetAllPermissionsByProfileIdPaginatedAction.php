@@ -12,8 +12,8 @@ class GetAllPermissionsByProfileIdPaginatedAction
     {
     }
 
-    public function __invoke(int $profileId, IndexPermissionsPaginationData $indexPermissionsPaginationData, array $with): PermissionsPaginatedData
+    public function __invoke(int $profileId, IndexPermissionsPaginationData $indexPermissionsPaginationData, array $with = []): PermissionsPaginatedData
     {
-        return $this->permissionRepository->getAllByProfileIdPaginated($profileId, $indexPermissionsPaginationData, $with);
+        return $this->permissionRepository->getAllForProfile($profileId, $indexPermissionsPaginationData, $with);
     }
 }

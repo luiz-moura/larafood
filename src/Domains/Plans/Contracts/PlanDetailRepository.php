@@ -12,6 +12,6 @@ interface PlanDetailRepository
     public function delete(int $planDetailId): bool;
     public function update(int $planDetailId, PlanDetailsData $planDetailsData): bool;
     public function findById(int $planDetailId): PlanDetailsData;
-    public function getByPlanIdPaginated(int $planId, IndexPlanDetailsPaginationData $indexPlanDetailsPaginationData): PlanDetailsPaginatedData;
+    public function getAllForPlan(int $planId, IndexPlanDetailsPaginationData $indexPlanDetailsPaginationData): PlanDetailsPaginatedData;
     public function checkIfDetailDoesNotBelongToPlan(string $planUrl, int $planDetailId): bool;
 }

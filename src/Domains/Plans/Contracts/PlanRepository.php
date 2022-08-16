@@ -14,6 +14,9 @@ interface PlanRepository
     public function updateByUrl(string $url, PlansData $planData): bool;
     public function deleteByUrl(string $url): bool;
     public function totalPlanDetailsByUrl(string $url): int;
-    public function queryAllWithFilterPaginated(IndexPlansPaginationData $plansPaginationData): PlansPaginatedData;
-    public function searchByNameAndDescription(SearchPlansPaginationData $plansPaginationData): PlansPaginatedData;
+    public function queryAllWithFilter(IndexPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData;
+    public function searchByNameAndDescription(SearchPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData;
+    public function getAllForProfile(int $profileId, IndexPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData;
+    public function attachProfilesInPlan(string $planUrl, array $profiles): bool;
+    public function detachPlanProfile(string $planUrl, int $profileId): bool;
 }

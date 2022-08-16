@@ -14,6 +14,6 @@ class GetAllProfilesPaginatedAction
 
     public function __invoke(IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData
     {
-        return $this->profileRepository->getAllProfilesPaginated($indexProfilesPaginationData, $with);
+        return $this->profileRepository->getAll($indexProfilesPaginationData, $with);
     }
 }

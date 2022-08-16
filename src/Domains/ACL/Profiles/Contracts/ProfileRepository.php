@@ -13,9 +13,13 @@ interface ProfileRepository
     public function update(int $id, ProfilesData $profileData): bool;
     public function delete(int $id): bool;
     public function findById(int $id, array $with = []): ProfilesData;
-    public function getAllProfilesPaginated(IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
-    public function getAllProfilesByPermissionIdPaginated(int $permissionId, IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
+    public function getAll(IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
+    public function getAllForPermission(int $permissionId, IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
+    public function getAllForPlan(int $planId, IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
+    public function searchForPlan(int $planId, SearchProfilesPaginationData $filter, array $with = []): ProfilesPaginatedData;
+    public function searchAvailableForPlan(int $planId, SearchProfilesPaginationData $filter, array $with = []): ProfilesPaginatedData;
     public function searchByNameAndDescription(SearchProfilesPaginationData $filter, array $with = []): ProfilesPaginatedData;
+    public function getAllAvailableForPlan(int $planId, IndexProfilesPaginationData $indexProfilesPaginationData, array $with = []): ProfilesPaginatedData;
     public function attachPermissionsInProfile(int $profileId, array $permissions): bool;
     public function detachProfilePermission(int $profileId, int $permissionId): bool;
 }

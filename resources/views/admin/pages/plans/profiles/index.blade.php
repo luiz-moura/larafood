@@ -1,19 +1,24 @@
 @extends('adminlte::page')
 
-@section('title', 'Perfis')
+@section('title', "Perfis do plano {$plan->name}")
 
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Perfis</li>
+        <li class="breadcrumb-item active">Planos</li>
     </ol>
-    <h1>Perfis <a href="{{ route('profiles.create') }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add</a></h1>
+    <h1>
+        Perfis do plano {{ $plan->name }}
+        <a href="{{ route('plans.profiles.available', $plan->url) }}" class="btn btn-dark">
+            <i class="fas fa-plus-square"></i> Add novo perfil
+        </a>
+    </h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('profiles.search') }}"
+            <form action="{{ route('plans.profiles.search', $plan->url) }}"
                   method="GET"
                   class="form form-inline">
                 <input type="text"
@@ -34,21 +39,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($profiles as $profile)
+                    @forelse ($profiles as $profile)
                         <tr>
                             <td>{{ $profile->name }}</td>
                             <td>
-                                <a href="{{ route('profiles.edit', $profile->id) }}" class="btn btn-info">Editar</a>
-                                <a href="{{ route('profiles.show', $profile->id) }}" class="btn btn-warning">Ver</a>
-                                <a href="{{ route('profiles.permissions', $profile->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-user-lock"></i>
-                                </a>
-                                <a href="{{ route('profiles.plans', $profile->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-mountain"></i>
-                                </a>
+                                <a href="{{ route('plans.profiles.detach', [$plan->url, $profile->id]) }}" class="btn btn-danger">DESVINCULAR</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <p>No profiles</p>
+                    @endforelse
                 </tbody>
             </table>
         </div>
