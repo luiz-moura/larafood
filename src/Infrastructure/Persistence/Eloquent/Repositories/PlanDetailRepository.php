@@ -52,7 +52,7 @@ class PlanDetailRepository extends AbstractRepository implements ContractsPlanDe
         return (bool) $planDetail->delete();
     }
 
-    public function getByPlanIdPaginated(
+    public function getAllForPlan(
         int $planId,
         IndexPlanDetailsPaginationData $indexPlanDetailsPaginationData,
         array $with = []

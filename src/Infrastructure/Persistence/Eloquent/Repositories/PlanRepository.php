@@ -64,8 +64,10 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return $plan->details()->count();
     }
 
-    public function queryAllWithFilterPaginated(IndexPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData
-    {
+    public function queryAllWithFilter(
+        IndexPlansPaginationData $plansPaginationData,
+        array $with = []
+    ): PlansPaginatedData {
         $plans = $this->model
             ->select()
             ->with($with)
@@ -78,8 +80,10 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         return PlansPaginatedData::createFromPaginator($plans);
     }
 
-    public function searchByNameAndDescription(SearchPlansPaginationData $plansPaginationData, array $with = []): PlansPaginatedData
-    {
+    public function searchByNameAndDescription(
+        SearchPlansPaginationData $plansPaginationData,
+        array $with = []
+    ): PlansPaginatedData {
         $plans = $this->model
             ->select()
             ->where('name', 'ilike', "%{$plansPaginationData->filter}%")
@@ -88,5 +92,47 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
             ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
 
         return PlansPaginatedData::createFromPaginator($plans);
+    }
+
+    public function getAllForProfile(
+        int $profileId,
+        IndexPlansPaginationData $plansPaginationData,
+        array $with = []
+    ): PlansPaginatedData {
+        $plans = $this->model
+            ->select()
+            ->with($with)
+            ->whereHas('profiles', function ($query) use ($profileId) {
+                $query->where('profiles.id', $profileId);
+            })
+            ->when($plansPaginationData->order, function ($query) use ($plansPaginationData) {
+                $query->orderBy($plansPaginationData->order, $plansPaginationData->sort);
+            })
+            ->latest()
+            ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
+
+        return PlansPaginatedData::createFromPaginator($plans);
+    }
+
+    public function attachProfilesInPlan(string $planUrl, array $profiles): bool
+    {
+        $plan = $this->model->firstWhere('url', $planUrl);
+
+        if (!$plan) {
+            throw new PlanNotFoundException();
+        }
+
+        return (bool) $plan->profiles()->attach($profiles);
+    }
+
+    public function detachPlanProfile(string $planUrl, int $profileId): bool
+    {
+        $plan = $this->model->firstWhere('url', $planUrl);
+
+        if (!$plan) {
+            throw new PlanNotFoundException();
+        }
+
+        return (bool) $plan->profiles()->detach($profileId);
     }
 }
