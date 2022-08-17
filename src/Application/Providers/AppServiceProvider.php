@@ -2,6 +2,7 @@
 
 namespace Application\Providers;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Factory::guessFactoryNamesUsing(function (string $modelName) {
+            return 'Database\\Factories\\'.class_basename($modelName).'Factory';
+        });
+
         Paginator::useBootstrapFour();
     }
 }
