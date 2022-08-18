@@ -1,5 +1,7 @@
 <?php
 
+use Application\Providers\RouteServiceProvider;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -187,12 +189,12 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => RouteServiceProvider::HOME,
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
+    'password_reset_url' => 'reset-password',
+    'password_email_url' => 'forgot-password',
     'profile_url' => false,
 
     /*

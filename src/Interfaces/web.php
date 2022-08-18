@@ -10,7 +10,7 @@ use Interfaces\Http\Profiles\Controllers\ProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 use Interfaces\Http\Profiles\Controllers\ProfilePlanController;
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
 
     Route::prefix('plans')->group(function () {
@@ -62,3 +62,5 @@ Route::prefix('admin')->group(function () {
     Route::get('permissions/search', [PermissionController::class, 'search'])->name('permissions.search');
     Route::resource('permissions', PermissionController::class);
 });
+
+require __DIR__.'/auth.php';
