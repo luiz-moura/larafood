@@ -13,6 +13,7 @@ class PlansData extends DataTransferObject
     public ?string $url;
     public ?string $created_at;
     public ?string $updated_at;
+    public ?PlanDetailsCollection $details;
 
     public static function createFromArray(array $data)
     {
@@ -24,6 +25,9 @@ class PlansData extends DataTransferObject
             'url' => $data['url'] ?? null,
             'created_at' => $data['created_at'] ?? null,
             'updated_at' => $data['updated_at'] ?? null,
+            'details' => isset($data['details'])
+                ? PlanDetailsCollection::createFromArray($data['details'])
+                : null,
         ]);
     }
 }

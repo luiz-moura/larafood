@@ -9,6 +9,9 @@ use Interfaces\Http\Profiles\Controllers\PermissionProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 use Interfaces\Http\Profiles\Controllers\ProfilePlanController;
+use Interfaces\Http\Site\Controllers\SiteController;
+
+Route::get('/', [SiteController::class, 'index']);
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
