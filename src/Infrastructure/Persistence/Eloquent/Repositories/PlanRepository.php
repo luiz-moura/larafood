@@ -4,6 +4,7 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 
 use Domains\Plans\Contracts\PlanRepository as ContractsPlanRepository;
 use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
+use Domains\Plans\DataTransferObjects\PlansCollection;
 use Domains\Plans\DataTransferObjects\PlansData;
 use Domains\Plans\DataTransferObjects\PlansPaginatedData;
 use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
@@ -62,6 +63,18 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
         }
 
         return $plan->details()->count();
+    }
+
+    public function getAll(array $with = []): PlansCollection
+    {
+        $plans = $this->model
+            ->select()
+            ->with($with)
+            ->orderBy('price', 'ASC')
+            ->get()
+            ->toArray();
+
+        return PlansCollection::createFromArray($plans);
     }
 
     public function queryAllWithFilter(
