@@ -3,6 +3,9 @@
 namespace Interfaces\Http\Authentication\Controllers;
 
 use Application\Providers\RouteServiceProvider;
+use DateTime;
+use Domains\Tenants\Actions\CreateTenantAction;
+use Domains\Tenants\DataTransferObjects\TenantsFormData;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -17,8 +20,24 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
-    public function store(RegisteredUserRequest $request)
-    {
+    public function store(
+        RegisteredUserRequest $request,
+        CreateTenantAction $createTenantAction
+    ) {
+        if (!$plan = session('plan')) {
+            return redirect()->route('site.home');
+        }
+
+        $validated = $request->validated();
+
+        $tenantFormData = new TenantsFormData([
+            'plan_id' => $plan->id,
+            'name' => $validated['company'],
+            'expires_at' => new DateTime('now + 7 days'),
+        ] + $validated);
+
+        ($createTenantAction)($tenantFormData);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
