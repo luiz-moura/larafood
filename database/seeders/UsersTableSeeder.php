@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Infrastructure\Persistence\Eloquent\Models\User;
+use Infrastructure\Persistence\Eloquent\Models\Tenant;
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        Tenant::first()->users()->create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('12345678'),
