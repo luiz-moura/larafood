@@ -14,8 +14,46 @@
 @section('auth_header', __('adminlte::adminlte.register_message'))
 
 @section('auth_body')
+    <p><strong>Plano:</strong> {{ session('plan')->name ?? '' }}</p>
+
     <form action="{{ $register_url }}" method="post">
         @csrf
+
+        {{-- CNPJ field --}}
+        <div class="input-group mb-3">
+            <input type="text" name="cnpj" class="form-control @error('cnpj') is-invalid @enderror"
+                   value="{{ old('cnpj') }}" placeholder="CNPJ" autofocus>
+
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+
+            @error('cnpj')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+
+        {{-- Company field --}}
+        <div class="input-group mb-3">
+            <input type="text" name="company" class="form-control @error('company') is-invalid @enderror"
+                   value="{{ old('company') }}" placeholder="Empresa" autofocus>
+
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+
+            @error('company')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
 
         {{-- Name field --}}
         <div class="input-group mb-3">
