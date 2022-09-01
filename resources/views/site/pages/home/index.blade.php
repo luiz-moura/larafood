@@ -18,7 +18,9 @@
                     <li>{{ $detail->name }}</li>
                     @endforeach
                 </ul>
-                <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
+                <a href="{{ route('site.choose_plan', $plan->url) }}" class="w-100 btn btn-lg btn-outline-primary">
+                    Assinar
+                </a>
             </div>
         </div>
     </div>

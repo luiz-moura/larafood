@@ -23,4 +23,9 @@ class Plan extends Model
     {
         return $this->belongsToMany(Profile::class);
     }
+
+    public function tenants(): HasMany
+    {
+        return $this->hasMany(Tenant::class);
+    }
 }
