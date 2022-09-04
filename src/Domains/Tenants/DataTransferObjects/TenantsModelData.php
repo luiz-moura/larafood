@@ -35,4 +35,15 @@ class TenantsModelData extends DataTransferObject
             'updated_at' => $tenant->updated_at,
         ] + $tenant->toArray());
     }
+
+    public static function createFromArray(array $data): self
+    {
+        return new self([
+            'active' => TenantsActiveEnum::from($data['active']),
+            'subscribed_at' => new DateTime($data['subscribed_at']),
+            'expires_at' => $data['expires_at'] ? new DateTime($data['expires_at']) : null,
+            'created_at' => $data['created_at'] ? new DateTime($data['created_at']) : null,
+            'updated_at' => $data['updated_at'] ? new DateTime($data['updated_at']) : null,
+        ] + $data);
+    }
 }
