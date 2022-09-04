@@ -8,5 +8,5 @@ class UsersFormData extends DataTransferObject
 {
     public string $name;
     public string $email;
-    public string $password;
+    public ?string $password;
 }
