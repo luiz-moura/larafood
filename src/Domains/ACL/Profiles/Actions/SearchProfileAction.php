@@ -3,8 +3,8 @@
 namespace Domains\ACL\Profiles\Actions;
 
 use Domains\ACL\Profiles\Contracts\ProfileRepository;
-use Domains\ACL\Profiles\DataTransferObjects\ProfilesPaginatedData;
-use Domains\ACL\Profiles\DataTransferObjects\SearchProfilesPaginationData;
+use Domains\ACL\Profiles\DataTransferObjects\ProfilePaginatedData;
+use Interfaces\Http\Profiles\DataTransferObjects\SearchProfileRequestData;
 
 class SearchProfileAction
 {
@@ -12,8 +12,8 @@ class SearchProfileAction
     {
     }
 
-    public function __invoke(SearchProfilesPaginationData $searchProfilesPaginationData, array $with = []): ProfilesPaginatedData
+    public function __invoke(SearchProfileRequestData $paginationData, array $with = []): ProfilePaginatedData
     {
-        return $this->profileRepository->searchByNameAndDescription($searchProfilesPaginationData, $with);
+        return $this->profileRepository->queryByNameAndDescription($paginationData, $with);
     }
 }

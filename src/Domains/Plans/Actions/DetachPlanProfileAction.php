@@ -10,8 +10,8 @@ class DetachPlanProfileAction
     {
     }
 
-    public function __invoke(string $planUrl, int $profileId): bool
+    public function __invoke(string $planUrl, int $profileId): void
     {
-        return $this->planRepository->detachPlanProfile($planUrl, $profileId);
+        $this->planRepository->detachPlanProfile($planUrl, $profileId);
     }
 }

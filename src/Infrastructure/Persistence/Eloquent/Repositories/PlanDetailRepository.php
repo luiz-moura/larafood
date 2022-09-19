@@ -2,78 +2,62 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
-use Domains\Plans\Contracts\PlanDetailRepository as ContractsPlanDetailRepository;
-use Domains\Plans\DataTransferObjects\IndexPlanDetailsPaginationData;
-use Domains\Plans\DataTransferObjects\PlanDetailsData;
-use Domains\Plans\DataTransferObjects\PlanDetailsPaginatedData;
-use Domains\Plans\Exceptions\PlanDetailNotFoundException;
+use Domains\Plans\Contracts\PlanDetailRepository as PlanDetailRepositoryContract;
+use Domains\Plans\DataTransferObjects\PlanDetailData;
+use Domains\Plans\DataTransferObjects\PlanDetailPaginatedData;
 use Infrastructure\Persistence\Eloquent\Models\PlanDetail;
 use Infrastructure\Shared\AbstractRepository;
+use Interfaces\Http\PlanDetails\DataTransferObjects\IndexPlanDetailRequestData;
+use Interfaces\Http\PlanDetails\DataTransferObjects\PlanDetailFormData;
 
-class PlanDetailRepository extends AbstractRepository implements ContractsPlanDetailRepository
+class PlanDetailRepository extends AbstractRepository implements PlanDetailRepositoryContract
 {
     protected $modelClass = PlanDetail::class;
 
-    public function findById(int $planDetailId): PlanDetailsData
+    public function create(int $planId, PlanDetailFormData $formData): bool
     {
-        $planDetail = $this->model->find($planDetailId)?->toArray();
-
-        if (!$planDetail) {
-            throw new PlanDetailNotFoundException();
-        }
-
-        return new PlanDetailsData($planDetail);
+        return (bool) $this->model->create(
+            $formData->toArray() + ['plan_id' => $planId]
+        );
     }
 
-    public function create(PlanDetailsData $planDetailsData): bool
+    public function update(int $id, PlanDetailFormData $formData): bool
     {
-        return (bool) $this->model->create($planDetailsData->toArray());
+        return (bool) $this->model->findOrFail($id)->update(
+            $formData->toArray()
+        );
     }
 
-    public function update(int $planDetailId, PlanDetailsData $planDetailData): bool
+    public function delete(int $id): bool
     {
-        $planDetail = $this->model->find($planDetailId);
-
-        if (!$planDetail) {
-            throw new PlanDetailNotFoundException();
-        }
-
-        return (bool) $planDetail->update($planDetailData->except('id')->toArray());
+        return (bool) $this->model->findOrFail($id)->delete();
     }
 
-    public function delete(int $planDetailId): bool
+    public function findById(int $id): PlanDetailData
     {
-        $planDetail = $this->model->find($planDetailId);
-
-        if (!$planDetail) {
-            throw new PlanDetailNotFoundException();
-        }
-
-        return (bool) $planDetail->delete();
+        return PlanDetailData::fromModel($this->model->findOrFail($id));
     }
 
-    public function getAllForPlan(
+    public function getAllByPlan(
         int $planId,
-        IndexPlanDetailsPaginationData $indexPlanDetailsPaginationData,
+        IndexPlanDetailRequestData $paginationData,
         array $with = []
-    ): PlanDetailsPaginatedData {
+    ): PlanDetailPaginatedData {
         $plans = $this->model
             ->select()
             ->with($with)
-            ->when($indexPlanDetailsPaginationData->order, function ($query) use ($indexPlanDetailsPaginationData) {
-                $query->orderBy($indexPlanDetailsPaginationData->order, $indexPlanDetailsPaginationData->sort);
-            })
             ->where('plan_id', $planId)
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
+            })
             ->latest()
-            ->paginate($indexPlanDetailsPaginationData->per_page, $indexPlanDetailsPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PlanDetailsPaginatedData::createFromPaginator($plans);
+        return PlanDetailPaginatedData::fromPaginator($plans);
     }
 
     public function checkIfDetailDoesNotBelongToPlan(string $planUrl, int $planDetailId): bool
     {
-        $planDetailModel = $this->model->find($planDetailId);
-
-        return $planDetailModel->plan->url !== $planUrl;
+        return $this->model->find($planDetailId)->plan->url !== $planUrl;
     }
 }

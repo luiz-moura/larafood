@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Response;
 use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
@@ -10,7 +11,7 @@ beforeEach(function () {
 test('confirm password screen can be rendered', function () {
     $response = $this->actingAs($this->user)->get($this->uri);
 
-    $response->assertStatus(200);
+    $response->assertStatus(Response::HTTP_OK);
 });
 
 test('password can be confirmed', function () {

@@ -2,9 +2,9 @@
 
 namespace Domains\ACL\Users\Actions;
 
-use Domains\ACL\Users\DataTransferObjects\IndexUsersPaginationData;
-use Domains\ACL\Users\DataTransferObjects\UsersPaginatedData;
+use Domains\ACL\Users\DataTransferObjects\UserPaginatedData;
 use Domains\ACL\Users\Repositories\UserRepository;
+use Interfaces\Http\Users\DataTransferObjects\IndexUserRequestData;
 
 class GetAllUsersAction
 {
@@ -12,7 +12,7 @@ class GetAllUsersAction
     {
     }
 
-    public function __invoke(IndexUsersPaginationData $paginationData, array $with = []): UsersPaginatedData
+    public function __invoke(IndexUserRequestData $paginationData, array $with = []): UserPaginatedData
     {
         return $this->userRepository->getAll($paginationData, $with);
     }

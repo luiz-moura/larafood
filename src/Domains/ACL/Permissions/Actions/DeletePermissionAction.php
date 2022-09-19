@@ -10,8 +10,8 @@ class DeletePermissionAction
     {
     }
 
-    public function __invoke(int $id): bool
+    public function __invoke(int $id): void
     {
-        return $this->permissionRepository->delete($id);
+        $this->permissionRepository->delete($id);
     }
 }

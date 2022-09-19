@@ -4,9 +4,10 @@ namespace Interfaces\Http\Authentication\Controllers;
 
 use Application\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Authentication\Requests\LoginRequest;
+use Support\Authentication\Actions\AuthenticateAction;
+use Support\Authentication\Actions\DestroyAuthentication;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -15,22 +16,16 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request, AuthenticateAction $authenticateAction)
     {
-        $request->authenticate();
-
-        $request->session()->regenerate();
+        $authenticateAction($request);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, DestroyAuthentication $destroyAuthentication)
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        $destroyAuthentication($request);
 
         return redirect()->route('login');
     }

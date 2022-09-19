@@ -10,8 +10,8 @@ class AttachPermissionsInProfileAction
     {
     }
 
-    public function __invoke(int $profileId, array $permissions): bool
+    public function __invoke(int $profileId, array $permissions): void
     {
-        return $this->profileRepository->attachPermissionsInProfile($profileId, $permissions);
+        $this->profileRepository->attachPermissionsInProfile($profileId, $permissions);
     }
 }

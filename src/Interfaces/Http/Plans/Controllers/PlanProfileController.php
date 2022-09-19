@@ -2,19 +2,17 @@
 
 namespace Interfaces\Http\Plans\Controllers;
 
-use Domains\ACL\Profiles\Actions\GetAllProfilesAvaliableForPlanAction;
-use Domains\ACL\Profiles\Actions\GetAllProfilesByPlanIdPaginatedAction;
-use Domains\ACL\Profiles\Actions\SearchProfileForPlanAction;
-use Domains\ACL\Profiles\Actions\SearchProfilesAvaliableForPlanAction;
-use Domains\ACL\Profiles\DataTransferObjects\IndexProfilesPaginationData;
-use Domains\ACL\Profiles\DataTransferObjects\SearchProfilesPaginationData;
+use Domains\ACL\Profiles\Actions\GetAllProfilesAvailableByPlanAction;
+use Domains\ACL\Profiles\Actions\GetAllProfilesByPlanAction;
+use Domains\ACL\Profiles\Actions\SearchProfileByPlanAction;
+use Domains\ACL\Profiles\Actions\SearchProfilesAvailableByPlanAction;
 use Domains\Plans\Actions\AttachProfilesInPlanAction;
 use Domains\Plans\Actions\DetachPlanProfileAction;
 use Domains\Plans\Actions\FindPlanByUrlAction;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Plans\Requests\AttachProfilesRequest;
+use Interfaces\Http\Profiles\DataTransferObjects\IndexProfileRequestData;
+use Interfaces\Http\Profiles\DataTransferObjects\SearchProfileRequestData;
 use Interfaces\Http\Profiles\Requests\IndexProfileRequest;
 use Interfaces\Http\Profiles\Requests\SearchProfileRequest;
 
@@ -24,17 +22,17 @@ class PlanProfileController extends Controller
         string $planUrl,
         IndexProfileRequest $request,
         FindPlanByUrlAction $findPlanByUrlAction,
-        GetAllProfilesByPlanIdPaginatedAction $getAllProfilesByPlanIdPaginatedAction
+        GetAllProfilesByPlanAction $getAllProfilesByPlanAction
     ) {
-        $plan = ($findPlanByUrlAction)($planUrl);
+        $planData = $findPlanByUrlAction($planUrl);
 
-        $indexProfilePaginationData = new IndexProfilesPaginationData($request->validated());
-        $profiles = ($getAllProfilesByPlanIdPaginatedAction)($plan->id, $indexProfilePaginationData);
+        $paginationData = IndexProfileRequestData::fromRequest($request->validated());
+        $paginatedData = ($getAllProfilesByPlanAction)($planData->id, $paginationData);
 
-        return View::make('admin.pages.plans.profiles.index', [
-            'plan' => $plan,
-            'profiles' => $profiles->data,
-            'pagination' => $profiles->pagination,
+        return view('admin.pages.plans.profiles.index', [
+            'plan' => $planData,
+            'profiles' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
@@ -42,17 +40,17 @@ class PlanProfileController extends Controller
         string $planUrl,
         IndexProfileRequest $request,
         FindPlanByUrlAction $findPlanByUrlAction,
-        GetAllProfilesAvaliableForPlanAction $getAllProfilesAvaliableForPlanAction,
+        GetAllProfilesAvailableByPlanAction $getAllProfilesAvailableByPlanAction,
     ) {
-        $plan = ($findPlanByUrlAction)($planUrl);
+        $planData = $findPlanByUrlAction($planUrl);
 
-        $indexProfilePaginationData = new IndexProfilesPaginationData($request->validated());
-        $profiles = ($getAllProfilesAvaliableForPlanAction)($plan->id, $indexProfilePaginationData);
+        $paginationData = IndexProfileRequestData::fromRequest($request->validated());
+        $paginatedData = $getAllProfilesAvailableByPlanAction($planData->id, $paginationData);
 
-        return View::make('admin.pages.plans.profiles.available', [
-            'plan' => $plan,
-            'profiles' => $profiles->data,
-            'pagination' => $profiles->pagination,
+        return view('admin.pages.plans.profiles.available', [
+            'plan' => $planData,
+            'profiles' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
@@ -60,17 +58,17 @@ class PlanProfileController extends Controller
         string $planUrl,
         SearchProfileRequest $request,
         FindPlanByUrlAction $findPlanByUrlAction,
-        SearchProfileForPlanAction $searchProfileForPlanAction
+        SearchProfileByPlanAction $searchProfileByPlanAction
     ) {
-        $plan = ($findPlanByUrlAction)($planUrl);
+        $planData = $findPlanByUrlAction($planUrl);
 
-        $searchProfilePaginationData = new SearchProfilesPaginationData($request->validated());
-        $profiles = ($searchProfileForPlanAction)($plan->id, $searchProfilePaginationData);
+        $paginationData = SearchProfileRequestData::fromRequest($request->validated());
+        $paginatedData = ($searchProfileByPlanAction)($planData->id, $paginationData);
 
-        return View::make('admin.pages.plans.profiles.index', [
-            'plan' => $plan,
-            'profiles' => $profiles->data,
-            'pagination' => $profiles->pagination,
+        return view('admin.pages.plans.profiles.index', [
+            'plan' => $planData,
+            'profiles' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
@@ -78,17 +76,17 @@ class PlanProfileController extends Controller
         string $planUrl,
         SearchProfileRequest $request,
         FindPlanByUrlAction $findPlanByUrlAction,
-        SearchProfilesAvaliableForPlanAction $searchProfilesAvaliableForPlanAction
+        SearchProfilesAvailableByPlanAction $searchProfilesAvailableByPlanAction
     ) {
-        $plan = ($findPlanByUrlAction)($planUrl);
+        $planData = $findPlanByUrlAction($planUrl);
 
-        $searchProfilePaginationData = new SearchProfilesPaginationData($request->validated());
-        $profiles = ($searchProfilesAvaliableForPlanAction)($plan->id, $searchProfilePaginationData);
+        $paginationData = SearchProfileRequestData::fromRequest($request->validated());
+        $paginatedData = ($searchProfilesAvailableByPlanAction)($planData->id, $paginationData);
 
-        return View::make('admin.pages.plans.profiles.available', [
-            'plan' => $plan,
-            'profiles' => $profiles->data,
-            'pagination' => $profiles->pagination,
+        return view('admin.pages.plans.profiles.available', [
+            'plan' => $planData,
+            'profiles' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
@@ -97,9 +95,9 @@ class PlanProfileController extends Controller
         AttachProfilesRequest $request,
         AttachProfilesInPlanAction $attachProfilesInPlanAction
     ) {
-        ($attachProfilesInPlanAction)($planUrl, $request->validated()['profiles']);
+        $attachProfilesInPlanAction($planUrl, $request->validated()['profiles']);
 
-        return Redirect::route('plans.profiles', $planUrl);
+        return to_route('plans.profiles', $planUrl);
     }
 
     public function detachProfile(
@@ -107,8 +105,8 @@ class PlanProfileController extends Controller
         int $profileId,
         DetachPlanProfileAction $detachPlanProfileAction
     ) {
-        ($detachPlanProfileAction)($planUrl, $profileId);
+        $detachPlanProfileAction($planUrl, $profileId);
 
-        return Redirect::route('plans.profiles', $planUrl);
+        return to_route('plans.profiles', $planUrl);
     }
 }

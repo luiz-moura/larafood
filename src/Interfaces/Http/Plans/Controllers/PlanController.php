@@ -8,14 +8,10 @@ use Domains\Plans\Actions\FindPlanByUrlAction;
 use Domains\Plans\Actions\GetAllPlansPaginatedAction;
 use Domains\Plans\Actions\SearchPlanAction;
 use Domains\Plans\Actions\UpdatePlanAction;
-use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
-use Domains\Plans\DataTransferObjects\PlansData;
-use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
-use Domains\Plans\Exceptions\CannotDeletePlanWithDetailsException;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View;
 use Infrastructure\Shared\Controller;
+use Interfaces\Http\Plans\DataTransferObjects\IndexPlanRequestData;
+use Interfaces\Http\Plans\DataTransferObjects\PlanFormData;
+use Interfaces\Http\Plans\DataTransferObjects\SearchPlanRequestData;
 use Interfaces\Http\Plans\Requests\IndexPlanRequest;
 use Interfaces\Http\Plans\Requests\SearchPlanRequest;
 use Interfaces\Http\Plans\Requests\StorePlanRequest;
@@ -27,64 +23,55 @@ class PlanController extends Controller
         IndexPlanRequest $request,
         GetAllPlansPaginatedAction $getAllPlansPaginatedAction
     ) {
-        $plansPaginationData = new IndexPlansPaginationData($request->validated());
-        $plansPaginatedData = ($getAllPlansPaginatedAction)($plansPaginationData);
+        $paginationData = IndexPlanRequestData::fromRequest($request->validated());
+        $paginatedData = $getAllPlansPaginatedAction($paginationData);
 
-        return View::make('admin.pages.plans.index', [
-            'plans' => $plansPaginatedData->plans,
-            'pagination' => $plansPaginatedData->pagination,
+        return view('admin.pages.plans.index', [
+            'plans' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
     public function create()
     {
-        return View::make('admin.pages.plans.create');
+        return view('admin.pages.plans.create');
     }
 
     public function store(
         StorePlanRequest $planRequest,
         CreatePlanAction $createPlanAction
     ) {
-        $planData = PlansData::createFromArray($planRequest->validated());
-        $success = ($createPlanAction)($planData);
+        $formData = PlanFormData::fromRequest($planRequest->validated());
+        $createPlanAction($formData);
 
-        return Redirect::route('plans.index')->with('stored', $success);
+        return to_route('plans.index');
     }
 
     public function show(
         string $url,
         FindPlanByUrlAction $findPlanByUrlAction
     ) {
-        $plan = ($findPlanByUrlAction)($url);
+        $plan = $findPlanByUrlAction($url);
 
-        return View::make('admin.pages.plans.show', compact('plan'));
+        return view('admin.pages.plans.show', compact('plan'));
     }
 
     public function destroy(
         string $url,
         DeletePlanByUrlAction $deletePlanByUrlAction
     ) {
-        try {
-            $success = ($deletePlanByUrlAction)($url);
-        } catch (CannotDeletePlanWithDetailsException) {
-            Session::flash('alert', [
-                'type' => 'danger',
-                'message' => 'Não é possível excluir um plano que possua detalhes',
-            ]);
+        $deletePlanByUrlAction($url);
 
-            return Redirect::route('plans.show', $url);
-        }
-
-        return Redirect::route('plans.index')->with('destroyed', $success);
+        return to_route('plans.index');
     }
 
     public function edit(
         string $url,
         FindPlanByUrlAction $findPlanByUrlAction,
     ) {
-        $plan = ($findPlanByUrlAction)($url);
+        $plan = $findPlanByUrlAction($url);
 
-        return View::make('admin.pages.plans.edit', compact('plan'));
+        return view('admin.pages.plans.edit', compact('plan'));
     }
 
     public function update(
@@ -92,22 +79,22 @@ class PlanController extends Controller
         UpdatePlanRequest $request,
         UpdatePlanAction $updatePlanAction
     ) {
-        $planData = PlansData::createFromArray($request->validated());
-        $success = ($updatePlanAction)($url, $planData);
+        $formData = PlanFormData::fromRequest($request->validated());
+        $updatePlanAction($url, $formData);
 
-        return Redirect::route('plans.index')->with('updated', $success);
+        return to_route('plans.index');
     }
 
     public function search(
         SearchPlanRequest $request,
         SearchPlanAction $searchPlanAction
     ) {
-        $plansPaginationData = new SearchPlansPaginationData($request->validated());
-        $plansPaginatedData = ($searchPlanAction)($plansPaginationData);
+        $paginationData = SearchPlanRequestData::fromRequest($request->validated());
+        $paginatedData = $searchPlanAction($paginationData);
 
-        return View::make('admin.pages.plans.index', [
-            'plans' => $plansPaginatedData->plans,
-            'pagination' => $plansPaginatedData->pagination,
+        return view('admin.pages.plans.index', [
+            'plans' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 }

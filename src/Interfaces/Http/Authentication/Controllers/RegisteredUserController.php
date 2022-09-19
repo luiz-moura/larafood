@@ -3,14 +3,15 @@
 namespace Interfaces\Http\Authentication\Controllers;
 
 use Application\Providers\RouteServiceProvider;
-use DateTime;
+use Domains\ACL\Users\Actions\CreateUserAction;
+use Domains\Plans\Actions\FindPlanByUrlAction;
 use Domains\Tenants\Actions\CreateTenantAction;
-use Domains\Tenants\DataTransferObjects\TenantsFormData;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
-use Infrastructure\Persistence\Eloquent\Models\User;
 use Infrastructure\Shared\Controller;
+use Interfaces\Http\Authentication\DataTransferObjects\TenantFormData;
 use Interfaces\Http\Authentication\Requests\RegisteredUserRequest;
+use Interfaces\Http\Users\DataTransferObjects\UserFormData;
+use Support\Authentication\Actions\AuthenticateAction;
 
 class RegisteredUserController extends Controller
 {
@@ -20,32 +21,27 @@ class RegisteredUserController extends Controller
     }
 
     public function store(
+        string $planUrl,
         RegisteredUserRequest $request,
-        CreateTenantAction $createTenantAction
+        FindPlanByUrlAction $findPlanByUrlAction,
+        CreateTenantAction $createTenantAction,
+        CreateUserAction $createUserAction,
+        AuthenticateAction $authenticateAction
     ) {
-        if (!$plan = session('plan')) {
-            return redirect()->route('site.home');
-        }
+        $validatedData = $request->validated();
+        $planData = $findPlanByUrlAction($planUrl);
 
-        $validated = $request->validated();
+        $formData = TenantFormData::fromRequest(
+            ['name' => $validatedData['company']] + $validatedData
+        );
+        $tenantData = $createTenantAction($planData->id, $formData, now()->addDays(7));
 
-        $tenantFormData = new TenantsFormData([
-            'plan_id' => $plan->id,
-            'name' => $validated['company'],
-            'expires_at' => new DateTime('now + 7 days'),
-        ] + $validated);
+        $formData = UserFormData::fromRequest($validatedData);
+        $createUserAction($tenantData->id, $formData);
 
-        ($createTenantAction)($tenantFormData);
+        $authenticateAction($request);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
+        event(new Registered($request->user()));
 
         return redirect(RouteServiceProvider::HOME);
     }

@@ -10,8 +10,8 @@ class DetachProfilePermissionAction
     {
     }
 
-    public function __invoke(int $profileId, int $permissionId): bool
+    public function __invoke(int $profileId, int $permissionId): void
     {
-        return $this->profileRepository->detachProfilePermission($profileId, $permissionId);
+        $this->profileRepository->detachProfilePermission($profileId, $permissionId);
     }
 }

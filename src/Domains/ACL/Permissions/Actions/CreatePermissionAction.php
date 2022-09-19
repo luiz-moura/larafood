@@ -3,7 +3,7 @@
 namespace Domains\ACL\Permissions\Actions;
 
 use Domains\ACL\Permissions\Contracts\PermissionRepository;
-use Domains\ACL\Permissions\DataTransferObjects\PermissionsData;
+use Interfaces\Http\Permissions\DataTransferObjects\PermissionFormData;
 
 class CreatePermissionAction
 {
@@ -11,8 +11,8 @@ class CreatePermissionAction
     {
     }
 
-    public function __invoke(PermissionsData $permissionData): bool
+    public function __invoke(PermissionFormData $formData): void
     {
-        return $this->permissionRepository->create($permissionData);
+        $this->permissionRepository->create($formData);
     }
 }

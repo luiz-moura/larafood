@@ -2,18 +2,18 @@
 
 namespace Domains\ACL\Users\Repositories;
 
-use Domains\ACL\Users\DataTransferObjects\IndexUsersPaginationData;
-use Domains\ACL\Users\DataTransferObjects\SearchUsersPaginationData;
-use Domains\ACL\Users\DataTransferObjects\UsersFormData;
-use Domains\ACL\Users\DataTransferObjects\UsersModelData;
-use Domains\ACL\Users\DataTransferObjects\UsersPaginatedData;
+use Domains\ACL\Users\DataTransferObjects\UserData;
+use Domains\ACL\Users\DataTransferObjects\UserPaginatedData;
+use Interfaces\Http\Users\DataTransferObjects\IndexUserRequestData;
+use Interfaces\Http\Users\DataTransferObjects\SearchUserRequestData;
+use Interfaces\Http\Users\DataTransferObjects\UserFormData;
 
 interface UserRepository
 {
-    public function create(int $tenantId, UsersFormData $userFormData): UsersModelData;
-    public function find(int $id, array $with = []): UsersModelData;
-    public function update(int $id, UsersFormData $userFormData): bool;
+    public function create(int $tenantId, UserFormData $userFormData): UserData;
+    public function find(int $id, array $with = []): UserData;
+    public function update(int $id, UserFormData $userFormData): bool;
     public function delete(int $id): bool;
-    public function searchByName(SearchUsersPaginationData $paginationData, array $with = []): UsersPaginatedData;
-    public function getAll(IndexUsersPaginationData $paginationData, array $with = []): UsersPaginatedData;
+    public function getAll(IndexUserRequestData $paginationData, array $with = []): UserPaginatedData;
+    public function queryByName(SearchUserRequestData $paginationData, array $with = []): UserPaginatedData;
 }

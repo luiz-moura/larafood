@@ -4,16 +4,14 @@ namespace Interfaces\Http\Permissions\Controllers;
 
 use Domains\ACL\Permissions\Actions\CreatePermissionAction;
 use Domains\ACL\Permissions\Actions\DeletePermissionAction;
-use Domains\ACL\Permissions\Actions\FindPermissionByIdAction;
-use Domains\ACL\Permissions\Actions\GetAllPermissionsPaginatedAction;
+use Domains\ACL\Permissions\Actions\FindPermissionAction;
+use Domains\ACL\Permissions\Actions\GetAllPermissionsAction;
 use Domains\ACL\Permissions\Actions\SearchPermissionAction;
 use Domains\ACL\Permissions\Actions\UpdatePermissionAction;
-use Domains\ACL\Permissions\DataTransferObjects\IndexPermissionsPaginationData;
-use Domains\ACL\Permissions\DataTransferObjects\PermissionsData;
-use Domains\ACL\Permissions\DataTransferObjects\SearchPermissionsPaginationData;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
 use Infrastructure\Shared\Controller;
+use Interfaces\Http\Permissions\DataTransferObjects\IndexPermissionRequestData;
+use Interfaces\Http\Permissions\DataTransferObjects\PermissionFormData;
+use Interfaces\Http\Permissions\DataTransferObjects\SearchPermissionRequestData;
 use Interfaces\Http\Permissions\Requests\IndexPermissionRequest;
 use Interfaces\Http\Permissions\Requests\SearchPermissionRequest;
 use Interfaces\Http\Permissions\Requests\StorePermissionRequest;
@@ -22,36 +20,35 @@ class PermissionController extends Controller
 {
     public function index(
         IndexPermissionRequest $request,
-        GetAllPermissionsPaginatedAction $getAllPermissionsPaginatedAction
+        GetAllPermissionsAction $getAllPermissionsAction
     ) {
-        $indexPermissionPaginationData = new IndexPermissionsPaginationData($request->validated());
-        $permissions = ($getAllPermissionsPaginatedAction)($indexPermissionPaginationData);
+        $paginationData = IndexPermissionRequestData::fromRequest($request->validated());
+        $paginatedData = $getAllPermissionsAction($paginationData);
 
-        return View::make('admin.pages.permissions.index', [
-            'permissions' => $permissions->data,
-            'pagination' => $permissions->pagination,
+        return view('admin.pages.permissions.index', [
+            'permissions' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
     public function create()
     {
-        return View::make('admin.pages.permissions.create');
+        return view('admin.pages.permissions.create');
     }
 
     public function store(StorePermissionRequest $request, CreatePermissionAction $createPermissionAction)
     {
-        $permissionData = PermissionsData::createFromArray($request->validated());
+        $formData = PermissionFormData::fromRequest($request->validated());
+        $createPermissionAction($formData);
 
-        $success = ($createPermissionAction)($permissionData);
-
-        return Redirect::route('permissions.index');
+        return to_route('permissions.index');
     }
 
-    public function edit(int $id, FindPermissionByIdAction $findPermissionById)
+    public function edit(int $id, FindPermissionAction $findPermissionAction)
     {
-        $permission = ($findPermissionById)($id);
+        $permission = $findPermissionAction($id);
 
-        return View::make('admin.pages.permissions.edit', compact('permission'));
+        return view('admin.pages.permissions.edit', compact('permission'));
     }
 
     public function update(
@@ -59,35 +56,34 @@ class PermissionController extends Controller
         StorePermissionRequest $request,
         UpdatePermissionAction $updatePermissionAction
     ) {
-        $permissionData = PermissionsData::createFromArray($request->validated());
-        $success = ($updatePermissionAction)($id, $permissionData);
+        $permissionData = PermissionFormData::fromRequest($request->validated());
+        $updatePermissionAction($id, $permissionData);
 
-        return Redirect::route('permissions.index');
+        return to_route('permissions.index');
     }
 
-    public function show(int $id, FindPermissionByIdAction $findPermissionById)
+    public function show(int $id, FindPermissionAction $findPermissionAction)
     {
-        $permission = ($findPermissionById)($id);
+        $permission = $findPermissionAction($id);
 
-        return View::make('admin.pages.permissions.show', compact('permission'));
+        return view('admin.pages.permissions.show', compact('permission'));
     }
 
     public function destroy(int $id, DeletePermissionAction $deletePermissionAction)
     {
-        $success = ($deletePermissionAction)($id);
+        $deletePermissionAction($id);
 
-        return Redirect::route('permissions.index');
+        return to_route('permissions.index');
     }
 
     public function search(SearchPermissionRequest $request, SearchPermissionAction $searchPermissionAction)
     {
-        $searchPermissionsPaginationData = new SearchPermissionsPaginationData($request->all());
+        $paginationData = SearchPermissionRequestData::fromRequest($request->validated());
+        $paginatedData = $searchPermissionAction($paginationData);
 
-        $permissions = ($searchPermissionAction)($searchPermissionsPaginationData);
-
-        return View::make('admin.pages.permissions.index', [
-            'permissions' => $permissions->data,
-            'pagination' => $permissions->pagination,
+        return view('admin.pages.permissions.index', [
+            'permissions' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 }
