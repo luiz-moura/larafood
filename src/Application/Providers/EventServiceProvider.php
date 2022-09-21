@@ -3,11 +3,15 @@
 namespace Application\Providers;
 
 use Application\Observers\PlanObserver;
+use Application\Observers\TenantObserver;
+use Application\Observers\UserObeserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Infrastructure\Persistence\Eloquent\Models\Plan;
+use Infrastructure\Persistence\Eloquent\Models\Tenant;
+use Infrastructure\Persistence\Eloquent\Models\User;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,7 +27,9 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     protected $observers = [
+        User::class => [UserObeserver::class],
         Plan::class => [PlanObserver::class],
+        Tenant::class => [TenantObserver::class],
     ];
 
     /**

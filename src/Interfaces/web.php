@@ -10,8 +10,7 @@ use Interfaces\Http\Profiles\Controllers\ProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 use Interfaces\Http\Profiles\Controllers\ProfilePlanController;
 use Interfaces\Http\Site\Controllers\SiteController;
-
-Route::get('/', [SiteController::class, 'index']);
+use Interfaces\Http\Users\Controllers\UserController;
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
@@ -64,6 +63,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::get('permissions/search', [PermissionController::class, 'search'])->name('permissions.search');
     Route::resource('permissions', PermissionController::class);
+
+    Route::get('users/search', [UserController::class, 'search'])->name('users.search');
+    Route::resource('users', UserController::class);
+});
+
+Route::controller(SiteController::class)->group(function () {
+    Route::get('/', 'index')->name('site.home');
+    Route::get('/plan/{url}', 'choosePlan')->name('site.choose_plan');
 });
 
 require __DIR__.'/auth.php';
