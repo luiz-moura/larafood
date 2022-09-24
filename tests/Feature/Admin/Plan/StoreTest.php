@@ -1,23 +1,24 @@
 <?php
 
+use Database\Factories\PlanFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Http\Response;
-use Infrastructure\Persistence\Eloquent\Models\Plan;
-use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
     $this->uri = 'admin/plans';
-    $this->user = User::factory()->create();
+    $this->user = UserFactory::new()->create();
 });
 
 it('Should create plan', function () {
-    $plan = Plan::factory()->definition();
+    $formData = PlanFactory::new()->mock();
 
-    $response = $this->post($this->uri, $plan);
+    $response = $this->actingAs($this->user)->post($this->uri, $formData);
 
+    $response->assertSessionHasNoErrors();
     $response->assertStatus(Response::HTTP_FOUND);
 });
 
-it('should return 422 when there are no required params', function () {
+it('should return errors when there are no required params', function () {
     $response = $this->actingAs($this->user)->post($this->uri);
 
     $response->assertSessionHasErrors(['name', 'price']);

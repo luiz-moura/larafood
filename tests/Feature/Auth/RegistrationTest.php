@@ -6,7 +6,8 @@ use Infrastructure\Persistence\Eloquent\Models\Plan;
 
 beforeEach(function () {
     $this->uri = '/register';
-    $this->plan = Plan::factory()->create();
+    $plan = Plan::factory()->create();
+    $this->session(['plan' => $plan]);
 });
 
 test('registration screen can be rendered', function () {
@@ -16,7 +17,7 @@ test('registration screen can be rendered', function () {
 });
 
 test('new users can register', function () {
-    $response = $this->post("{$this->uri}/{$this->plan->url}", [
+    $response = $this->post("{$this->uri}/", [
         'name' => 'Test User',
         'company' => 'Test Company',
         'email' => 'test@example.com',

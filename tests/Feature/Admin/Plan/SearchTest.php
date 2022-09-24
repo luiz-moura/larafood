@@ -1,16 +1,16 @@
 <?php
 
-use Infrastructure\Persistence\Eloquent\Models\Plan;
-use Infrastructure\Persistence\Eloquent\Models\User;
+use Database\Factories\PlanFactory;
+use Database\Factories\UserFactory;
 
 beforeEach(function () {
     $this->uri = 'admin/plans/search';
-    $this->user = User::factory()->create();
+    $this->user = UserFactory::new()->create();
 });
 
 it('Should return only plan1', function () {
-    Plan::factory()->create(['name' => 'Teste']);
-    Plan::factory()->create();
+    PlanFactory::new()->create(['name' => 'Teste']);
+    PlanFactory::new()->create();
 
     $response = $this->actingAs($this->user)->get("{$this->uri}?filter=teste");
 

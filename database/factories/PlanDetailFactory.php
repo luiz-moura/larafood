@@ -4,22 +4,24 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Infrastructure\Persistence\Eloquent\Models\Plan;
+use Infrastructure\Persistence\Eloquent\Models\PlanDetail;
 
-class PlanFactory extends Factory
+class PlanDetailFactory extends Factory
 {
-    protected $model = Plan::class;
+    protected $model = PlanDetail::class;
 
     public function definition()
     {
-        return $this->mock();
+        return [
+            'plan_id' => Plan::factory()->create()->id,
+            ...$this->mock(),
+        ];
     }
 
     public function mock()
     {
         return [
             'name' => $this->faker->name(),
-            'price' => $this->faker->randomNumber(),
-            'description' => $this->faker->text(255),
         ];
     }
 }

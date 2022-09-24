@@ -3,11 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Infrastructure\Persistence\Eloquent\Models\Plan;
+use Infrastructure\Persistence\Eloquent\Models\Profile;
 
-class PlanFactory extends Factory
+class ProfileFactory extends Factory
 {
-    protected $model = Plan::class;
+    protected $model = Profile::class;
 
     public function definition()
     {
@@ -18,7 +18,6 @@ class PlanFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'price' => $this->faker->randomNumber(),
             'description' => $this->faker->text(255),
         ];
     }

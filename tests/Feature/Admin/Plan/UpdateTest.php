@@ -1,14 +1,14 @@
 <?php
 
+use Database\Factories\PlanFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Http\Response;
-use Infrastructure\Persistence\Eloquent\Models\Plan;
-use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
     $this->uri = 'admin/plans';
-    $this->user = User::factory()->create();
-    $this->plan = Plan::factory()->create();
-    $this->formData = Plan::factory()->definition();
+    $this->user = UserFactory::new()->create();
+    $this->plan = PlanFactory::new()->create();
+    $this->formData = PlanFactory::new()->mock();
 });
 
 it('Should update plan', function () {
@@ -17,10 +17,11 @@ it('Should update plan', function () {
         $this->formData
     );
 
+    $response->assertSessionHasNoErrors();
     $response->assertStatus(Response::HTTP_FOUND);
 });
 
-it('should return 422 when there are no required params', function () {
+it('should return errors when there are no required params', function () {
     $response = $this->actingAs($this->user)->put("{$this->uri}/{$this->plan->url}");
 
     $response->assertSessionHasErrors(['name', 'description', 'price']);
