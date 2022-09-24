@@ -14,7 +14,9 @@
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./src/Interfaces/Http/*/Controllers/</directory>
+            <directory suffix=".php">./src/Infrastructure/Persistence/</directory>
+            <directory suffix=".php">./src/Domains/*/Actions/</directory>
         </include>
     </coverage>
     <php>

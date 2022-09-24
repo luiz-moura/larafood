@@ -2,18 +2,16 @@
 
 namespace Interfaces\Http\Profiles\Controllers;
 
-use Domains\ACL\Permissions\Actions\GetAllPermissionsAvaliableForProfileAction;
-use Domains\ACL\Permissions\Actions\GetAllPermissionsByProfileIdPaginatedAction;
-use Domains\ACL\Permissions\Actions\SearchPermissionsAvailableByProfileIdPaginatedAction;
-use Domains\ACL\Permissions\Actions\SearchPermissionsByProfileIdPaginatedAction;
-use Domains\ACL\Permissions\DataTransferObjects\IndexPermissionsPaginationData;
-use Domains\ACL\Permissions\DataTransferObjects\SearchPermissionsPaginationData;
+use Domains\ACL\Permissions\Actions\GetAllPermissionsAvailableByProfileAction;
+use Domains\ACL\Permissions\Actions\GetAllPermissionsByProfileAction;
+use Domains\ACL\Permissions\Actions\SearchPermissionsAvailableByProfileAction;
+use Domains\ACL\Permissions\Actions\SearchPermissionsByProfileAction;
 use Domains\ACL\Profiles\Actions\AttachPermissionsInProfileAction;
 use Domains\ACL\Profiles\Actions\DetachProfilePermissionAction;
-use Domains\ACL\Profiles\Actions\FindProfileByIdAction;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
+use Domains\ACL\Profiles\Actions\FindProfileAction;
 use Infrastructure\Shared\Controller;
+use Interfaces\Http\Permissions\DataTransferObjects\IndexPermissionRequestData;
+use Interfaces\Http\Permissions\DataTransferObjects\SearchPermissionRequestData;
 use Interfaces\Http\Permissions\Requests\IndexPermissionRequest;
 use Interfaces\Http\Permissions\Requests\SearchPermissionRequest;
 use Interfaces\Http\Profiles\Requests\AttachPermissionsRequest;
@@ -23,72 +21,72 @@ class PermissionProfileController extends Controller
     public function index(
         int $profileId,
         IndexPermissionRequest $request,
-        FindProfileByIdAction $findProfileByIdAction,
-        GetAllPermissionsByProfileIdPaginatedAction $getAllPermissionsByProfileIdPaginatedAction
+        FindProfileAction $findProfileAction,
+        GetAllPermissionsByProfileAction $getAllPermissionsByProfileAction
     ) {
-        $profile = ($findProfileByIdAction)($profileId);
+        $profileData = $findProfileAction($profileId);
 
-        $indexProfilePaginationData = new IndexPermissionsPaginationData($request->validated());
-        $permissions = ($getAllPermissionsByProfileIdPaginatedAction)($profileId, $indexProfilePaginationData);
+        $paginationData = IndexPermissionRequestData::fromRequest($request->validated());
+        $paginatedData = $getAllPermissionsByProfileAction($profileId, $paginationData);
 
-        return View::make('admin.pages.profiles.permissions.index', [
-            'profile' => $profile,
-            'permissions' => $permissions->data,
-            'pagination' => $permissions->pagination,
+        return view('admin.pages.profiles.permissions.index', [
+            'profile' => $profileData,
+            'permissions' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
     public function available(
         int $profileId,
         IndexPermissionRequest $request,
-        FindProfileByIdAction $findProfileByIdAction,
-        GetAllPermissionsAvaliableForProfileAction $getAllPermissionsAvaliableForProfileAction
+        FindProfileAction $findProfileAction,
+        GetAllPermissionsAvailableByProfileAction $getAllPermissionsAvailableByProfileAction
     ) {
-        $profile = ($findProfileByIdAction)($profileId);
+        $profileData = $findProfileAction($profileId);
 
-        $indexProfilePaginationData = new IndexPermissionsPaginationData($request->validated());
-        $permissions = ($getAllPermissionsAvaliableForProfileAction)($profileId, $indexProfilePaginationData);
+        $paginationData = IndexPermissionRequestData::fromRequest($request->validated());
+        $paginatedData = $getAllPermissionsAvailableByProfileAction($profileId, $paginationData);
 
-        return View::make('admin.pages.profiles.permissions.available', [
-            'profile' => $profile,
-            'permissions' => $permissions->data,
-            'pagination' => $permissions->pagination,
+        return view('admin.pages.profiles.permissions.available', [
+            'profile' => $profileData,
+            'permissions' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
     public function search(
         int $profileId,
         SearchPermissionRequest $request,
-        FindProfileByIdAction $findProfileByIdAction,
-        SearchPermissionsByProfileIdPaginatedAction $searchPermissionsByProfileIdPaginatedAction
+        FindProfileAction $findProfileAction,
+        SearchPermissionsByProfileAction $searchPermissionsByProfileAction
     ) {
-        $profile = ($findProfileByIdAction)($profileId);
+        $profileData = $findProfileAction($profileId);
 
-        $searchProfilePaginationData = new SearchPermissionsPaginationData($request->validated());
-        $permissions = ($searchPermissionsByProfileIdPaginatedAction)($profileId, $searchProfilePaginationData);
+        $paginationData = SearchPermissionRequestData::fromRequest($request->validated());
+        $paginatedData = $searchPermissionsByProfileAction($profileId, $paginationData);
 
-        return View::make('admin.pages.profiles.permissions.index', [
-            'profile' => $profile,
-            'permissions' => $permissions->data,
-            'pagination' => $permissions->pagination,
+        return view('admin.pages.profiles.permissions.index', [
+            'profile' => $profileData,
+            'permissions' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
     public function searchAvailable(
         int $profileId,
         SearchPermissionRequest $request,
-        FindProfileByIdAction $findProfileByIdAction,
-        SearchPermissionsAvailableByProfileIdPaginatedAction $searchPermissionsAvailableByProfileIdPaginatedAction
+        FindProfileAction $findProfileAction,
+        SearchPermissionsAvailableByProfileAction $searchPermissionsAvailableByProfileAction
     ) {
-        $profile = ($findProfileByIdAction)($profileId);
+        $profileData = $findProfileAction($profileId);
 
-        $searchProfilePaginationData = new SearchPermissionsPaginationData($request->validated());
-        $permissions = ($searchPermissionsAvailableByProfileIdPaginatedAction)($profileId, $searchProfilePaginationData);
+        $paginationData = SearchPermissionRequestData::fromRequest($request->validated());
+        $paginatedData = $searchPermissionsAvailableByProfileAction($profileId, $paginationData);
 
-        return View::make('admin.pages.profiles.permissions.available', [
-            'profile' => $profile,
-            'permissions' => $permissions->data,
-            'pagination' => $permissions->pagination,
+        return view('admin.pages.profiles.permissions.available', [
+            'profile' => $profileData,
+            'permissions' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
@@ -97,9 +95,9 @@ class PermissionProfileController extends Controller
         AttachPermissionsRequest $request,
         AttachPermissionsInProfileAction $attachPermissionsInProfileAction
     ) {
-        ($attachPermissionsInProfileAction)($profileId, $request->validated()['permissions']);
+        $attachPermissionsInProfileAction($profileId, $request->validated()['permissions']);
 
-        return Redirect::route('profiles.permissions', $profileId);
+        return to_route('profiles.permissions', $profileId);
     }
 
     public function detachPermission(
@@ -107,8 +105,8 @@ class PermissionProfileController extends Controller
         int $permissionId,
         DetachProfilePermissionAction $detachProfilePermissionAction
     ) {
-        ($detachProfilePermissionAction)($profileId, $permissionId);
+        $detachProfilePermissionAction($profileId, $permissionId);
 
-        return Redirect::route('profiles.permissions', $profileId);
+        return to_route('profiles.permissions', $profileId);
     }
 }

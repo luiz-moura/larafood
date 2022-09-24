@@ -10,8 +10,8 @@ class AttachProfilesInPlanAction
     {
     }
 
-    public function __invoke(string $planUrl, array $profiles): bool
+    public function __invoke(string $planUrl, array $profiles): void
     {
-        return $this->planRepository->attachProfilesInPlan($planUrl, $profiles);
+        $this->planRepository->attachProfilesInPlan($planUrl, $profiles);
     }
 }

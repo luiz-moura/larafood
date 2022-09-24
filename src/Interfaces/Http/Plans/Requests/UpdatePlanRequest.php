@@ -2,15 +2,10 @@
 
 namespace Interfaces\Http\Plans\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Interfaces\Http\Common\Requests\AbstractRequest;
 
-class UpdatePlanRequest extends FormRequest
+class UpdatePlanRequest extends AbstractRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         $url = $this->segment(3);

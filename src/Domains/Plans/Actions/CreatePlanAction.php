@@ -3,7 +3,7 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\PlansData;
+use Interfaces\Http\Plans\DataTransferObjects\PlanFormData;
 
 class CreatePlanAction
 {
@@ -11,8 +11,8 @@ class CreatePlanAction
     {
     }
 
-    public function __invoke(PlansData $planData): bool
+    public function __invoke(PlanFormData $formData): void
     {
-        return $this->planRepository->create($planData);
+        $this->planRepository->create($formData);
     }
 }

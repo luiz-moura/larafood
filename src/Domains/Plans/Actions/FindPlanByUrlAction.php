@@ -3,7 +3,7 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\PlansData;
+use Domains\Plans\DataTransferObjects\PlanData;
 
 class FindPlanByUrlAction
 {
@@ -11,7 +11,7 @@ class FindPlanByUrlAction
     {
     }
 
-    public function __invoke(string $url): PlansData
+    public function __invoke(string $url): PlanData
     {
         return $this->planRepository->findByUrl($url);
     }

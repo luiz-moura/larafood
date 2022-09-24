@@ -2,153 +2,153 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
-use Domains\ACL\Permissions\Contracts\PermissionRepository as ContractsPermissionRepository;
-use Domains\ACL\Permissions\DataTransferObjects\IndexPermissionsPaginationData;
-use Domains\ACL\Permissions\DataTransferObjects\PermissionsData;
-use Domains\ACL\Permissions\DataTransferObjects\PermissionsPaginatedData;
-use Domains\ACL\Permissions\DataTransferObjects\SearchPermissionsPaginationData;
-use Domains\ACL\Permissions\Exceptions\PermissionNotFoundException;
+use Domains\ACL\Permissions\Contracts\PermissionRepository as PermissionRepositoryContract;
+use Domains\ACL\Permissions\DataTransferObjects\PermissionData;
+use Domains\ACL\Permissions\DataTransferObjects\PermissionPaginatedData;
 use Infrastructure\Persistence\Eloquent\Models\Permission;
 use Infrastructure\Shared\AbstractRepository;
+use Interfaces\Http\Permissions\DataTransferObjects\IndexPermissionRequestData;
+use Interfaces\Http\Permissions\DataTransferObjects\PermissionFormData;
+use Interfaces\Http\Permissions\DataTransferObjects\SearchPermissionRequestData;
 
-class PermissionRepository extends AbstractRepository implements ContractsPermissionRepository
+class PermissionRepository extends AbstractRepository implements PermissionRepositoryContract
 {
     protected $modelClass = Permission::class;
 
-    public function findById(int $permissionId, array $with = []): PermissionsData
-    {
-        $permission = $this->model->find($permissionId)?->toArray();
-
-        if (!$permission) {
-            throw new PermissionNotFoundException();
-        }
-
-        return PermissionsData::createFromArray($permission);
-    }
-
-    public function create(PermissionsData $permissionData): bool
+    public function create(PermissionFormData $permissionData): bool
     {
         return (bool) $this->model->create($permissionData->toArray());
     }
 
-    public function update(int $permissionId, PermissionsData $permissionData): bool
+    public function update(int $id, PermissionFormData $permissionData): bool
     {
-        $permission = $this->model->find($permissionId);
-
-        if (!$permission) {
-            throw new PermissionNotFoundException();
-        }
-
-        return (bool) $permission->update($permissionData->except('id')->toArray());
+        return (bool) $this->model->findOrFail($id)->update($permissionData->toArray());
     }
 
-    public function delete(int $permissionId): bool
+    public function delete(int $id): bool
     {
-        $permission = $this->model->find($permissionId);
-
-        if (!$permission) {
-            throw new PermissionNotFoundException();
-        }
-
-        return (bool) $permission->delete();
+        return (bool) $this->model->findOrFail($id)->delete();
     }
 
-    public function queryAllWithFilter(IndexPermissionsPaginationData $permissionsPaginationData, array $with = []): PermissionsPaginatedData
+    public function findById(int $permissionId, array $with = []): PermissionData
+    {
+        return PermissionData::fromArray(
+            $this->model->findOrFail($permissionId)->toArray()
+        );
+    }
+
+    public function getAll(IndexPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData
     {
         $permissions = $this->model
             ->select()
             ->with($with)
-            ->when($permissionsPaginationData->order, function ($query) use ($permissionsPaginationData) {
-                $query->orderBy($permissionsPaginationData->order, $permissionsPaginationData->sort);
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PermissionsPaginatedData::createFromPaginator($permissions);
+        return PermissionPaginatedData::fromPaginator($permissions);
     }
 
-    public function getAllForProfile(
+    public function getAllByProfile(
         int $profileId,
-        IndexPermissionsPaginationData $permissionsPaginationData,
+        IndexPermissionRequestData $paginationData,
         array $with = []
-    ): PermissionsPaginatedData {
+    ): PermissionPaginatedData {
         $permissions = $this->model
             ->select()
             ->with($with)
             ->whereHas('profiles', function ($query) use ($profileId) {
                 $query->where('profiles.id', $profileId);
             })
-            ->when($permissionsPaginationData->order, function ($query) use ($permissionsPaginationData) {
-                $query->orderBy($permissionsPaginationData->order, $permissionsPaginationData->sort);
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PermissionsPaginatedData::createFromPaginator($permissions);
+        return PermissionPaginatedData::fromPaginator($permissions);
     }
 
-    public function searchByNameAndDescription(SearchPermissionsPaginationData $permissionsPaginationData, array $with = []): PermissionsPaginatedData
+    public function getAllAvailableByProfile(int $profileId, IndexPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData
     {
         $permissions = $this->model
             ->select()
-            ->where('name', 'ilike', "%{$permissionsPaginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$permissionsPaginationData->filter}%")
+            ->with($with)
+            ->whereDoesntHave('profiles', function ($query) use ($profileId) {
+                $query->where('profiles.id', $profileId);
+            })
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
+            })
             ->latest()
-            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PermissionsPaginatedData::createFromPaginator($permissions);
+        return PermissionPaginatedData::fromPaginator($permissions);
     }
 
-    public function searchForProfile(
-        int $profileId,
-        SearchPermissionsPaginationData $permissionsPaginationData,
-        array $with = []
-    ): PermissionsPaginatedData {
+    public function queryByNameAndDescription(SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData
+    {
         $permissions = $this->model
             ->select()
+            ->with($with)
+            ->where('name', 'ilike', "%{$paginationData->filter}%")
+            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
+            })
+            ->latest()
+            ->paginate($paginationData->per_page, $paginationData->page);
+
+        return PermissionPaginatedData::fromPaginator($permissions);
+    }
+
+    public function queryByProfile(
+        int $profileId,
+        SearchPermissionRequestData $paginationData,
+        array $with = []
+    ): PermissionPaginatedData {
+        $permissions = $this->model
+            ->select()
+            ->with($with)
             ->whereHas('profiles', function ($query) use ($profileId) {
                 $query->where('profiles.id', $profileId);
             })
-            ->where(function ($query) use ($permissionsPaginationData) {
-                $query->where('name', 'ilike', "%{$permissionsPaginationData->filter}%")
-                    ->orWhere('description', 'ilike', "%{$permissionsPaginationData->filter}%");
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            })
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PermissionsPaginatedData::createFromPaginator($permissions);
+        return PermissionPaginatedData::fromPaginator($permissions);
     }
 
-    public function searchAvailableForProfile(
+    public function queryAvailableByProfile(
         int $profileId,
-        SearchPermissionsPaginationData $permissionsPaginationData,
+        SearchPermissionRequestData $paginationData,
         array $with = []
-    ): PermissionsPaginatedData {
+    ): PermissionPaginatedData {
         $permissions = $this->model
             ->select()
+            ->with($with)
             ->whereDoesntHave('profiles', function ($query) use ($profileId) {
                 $query->where('profiles.id', $profileId);
             })
-            ->where(function ($query) use ($permissionsPaginationData) {
-                $query->where('name', 'ilike', "%{$permissionsPaginationData->filter}%")
-                    ->orWhere('description', 'ilike', "%{$permissionsPaginationData->filter}%");
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            })
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PermissionsPaginatedData::createFromPaginator($permissions);
-    }
-
-    public function getAllAvailableForProfile(int $profileId, IndexPermissionsPaginationData $permissionsPaginationData): PermissionsPaginatedData
-    {
-        $permissions = $this->model
-            ->select()
-            ->whereDoesntHave('profiles', function ($query) use ($profileId) {
-                $query->where('profiles.id', $profileId);
-            })
-            ->latest()
-            ->paginate($permissionsPaginationData->per_page, $permissionsPaginationData->page);
-
-        return PermissionsPaginatedData::createFromPaginator($permissions);
+        return PermissionPaginatedData::fromPaginator($permissions);
     }
 }

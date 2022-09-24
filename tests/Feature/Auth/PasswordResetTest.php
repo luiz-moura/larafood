@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Notification;
 use Infrastructure\Persistence\Eloquent\Models\User;
 
@@ -12,7 +13,7 @@ beforeEach(function () {
 test('reset password link screen can be rendered', function () {
     $response = $this->get($this->uri);
 
-    $response->assertStatus(200);
+    $response->assertStatus(Response::HTTP_OK);
 });
 
 test('reset password link can be requested', function () {
@@ -31,7 +32,7 @@ test('reset password screen can be rendered', function () {
     Notification::assertSentTo($this->user, ResetPassword::class, function ($notification) {
         $response = $this->get('/reset-password/'.$notification->token);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         return true;
     });

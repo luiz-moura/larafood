@@ -3,15 +3,15 @@
 namespace Interfaces\Http\Users\Controllers;
 
 use Domains\ACL\Users\Actions\CreateUserAction;
-use Domains\ACL\Users\Actions\DeleteUserByIdAction;
-use Domains\ACL\Users\Actions\FindUserByIdAction;
+use Domains\ACL\Users\Actions\DeleteUserAction;
+use Domains\ACL\Users\Actions\FindUserAction;
 use Domains\ACL\Users\Actions\GetAllUsersAction;
-use Domains\ACL\Users\Actions\SearchUserByNameAction;
+use Domains\ACL\Users\Actions\SearchUserAction;
 use Domains\ACL\Users\Actions\UpdateUserAction;
-use Domains\ACL\Users\DataTransferObjects\IndexUsersPaginationData;
-use Domains\ACL\Users\DataTransferObjects\SearchUsersPaginationData;
-use Domains\ACL\Users\DataTransferObjects\UsersFormData;
 use Infrastructure\Shared\Controller;
+use Interfaces\Http\Users\DataTransferObjects\IndexUserRequestData;
+use Interfaces\Http\Users\DataTransferObjects\SearchUserRequestData;
+use Interfaces\Http\Users\DataTransferObjects\UserFormData;
 use Interfaces\Http\Users\Requests\IndexUserRequest;
 use Interfaces\Http\Users\Requests\SearchUserRequest;
 use Interfaces\Http\Users\Requests\StoreUserRequest;
@@ -23,12 +23,12 @@ class UserController extends Controller
         IndexUserRequest $request,
         GetAllUsersAction $getAllUsersAction
     ) {
-        $indexUsersPaginationData = new IndexUsersPaginationData($request->validated());
-        $users = ($getAllUsersAction)($indexUsersPaginationData);
+        $paginationData = IndexUserRequestData::fromRequest($request->validated());
+        $paginatedData = $getAllUsersAction($paginationData);
 
         return view('admin.pages.users.index', [
-            'users' => $users->data,
-            'pagination' => $users->pagination,
+            'users' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 
@@ -39,15 +39,15 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request, CreateUserAction $createUserAction)
     {
-        $userFormData = new UsersFormData($request->validated());
-        ($createUserAction)(auth()->user()->tenant_id, $userFormData);
+        $formData = UserFormData::fromRequest($request->validated());
+        $createUserAction($request->user()->tenant_id, $formData);
 
         return to_route('users.index');
     }
 
-    public function edit(int $id, FindUserByIdAction $findUserByIdAction)
+    public function edit(int $id, FindUserAction $findUserAction)
     {
-        $user = ($findUserByIdAction)($id);
+        $user = $findUserAction($id);
 
         return view('admin.pages.users.edit', compact('user'));
     }
@@ -57,35 +57,34 @@ class UserController extends Controller
         UpdateUserRequest $request,
         UpdateUserAction $updateUserAction
     ) {
-        $userFormData = new UsersFormData($request->validated());
-        ($updateUserAction)($id, $userFormData);
+        $formData = UserFormData::fromRequest($request->validated());
+        $updateUserAction($id, $formData);
 
         return to_route('users.index');
     }
 
-    public function show(int $id, FindUserByIdAction $findUserByIdAction)
+    public function show(int $id, FindUserAction $findUserAction)
     {
-        $user = ($findUserByIdAction)($id, ['tenant']);
+        $user = $findUserAction($id, with: ['tenant']);
 
         return view('admin.pages.users.show', compact('user'));
     }
 
-    public function destroy(int $id, DeleteUserByIdAction $deleteUserByIdAction)
+    public function destroy(int $id, DeleteUserAction $deleteUserAction)
     {
-        ($deleteUserByIdAction)($id);
+        $deleteUserAction($id);
 
         return to_route('users.index');
     }
 
-    public function search(SearchUserRequest $request, SearchUserByNameAction $searchUserByName)
+    public function search(SearchUserRequest $request, SearchUserAction $searchUserAction)
     {
-        $searchUsersPaginationData = new SearchUsersPaginationData($request->all());
-
-        $users = ($searchUserByName)($searchUsersPaginationData);
+        $paginationData = SearchUserRequestData::fromRequest($request->validated());
+        $paginatedData = $searchUserAction($paginationData);
 
         return view('admin.pages.users.index', [
-            'users' => $users->data,
-            'pagination' => $users->pagination,
+            'users' => $paginatedData->data,
+            'pagination' => $paginatedData->pagination,
         ]);
     }
 }
