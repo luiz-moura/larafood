@@ -42,8 +42,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('{url}/profiles/search', 'search')->name('plans.profiles.search');
             Route::get('{url}/profiles/available', 'available')->name('plans.profiles.available');
             Route::get('{url}/profiles/available/search', 'searchAvailable')->name('plans.profiles.search-available');
+
             Route::post('{url}/profiles', 'attachProfiles')->name('plans.profiles.attach');
-            Route::get('{url}/profiles/{profileId}', 'detachProfile')->name('plans.profiles.detach');
+            Route::delete('{url}/profiles/{profileId}', 'detachProfile')->name('plans.profiles.detach');
         });
     });
 
