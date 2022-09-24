@@ -11,8 +11,8 @@ class DestroyAuthentication
     {
         Auth::guard('web')->logout();
 
-        $this->request->session()->invalidate();
+        $request->session()->invalidate();
 
-        $this->request->session()->regenerateToken();
+        $request->session()->regenerateToken();
     }
 }
