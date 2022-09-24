@@ -2,7 +2,7 @@
 
 namespace Infrastructure\Persistence\Eloquent\Models;
 
-use Domains\Tenants\Enums\TenantsActiveEnum;
+use Domains\Tenants\Enums\TenantActiveEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,7 +35,7 @@ class Tenant extends Model
     ];
 
     protected $casts = [
-        'active' => TenantsActiveEnum::class,
+        'active' => TenantActiveEnum::class,
         'subscribed_at' => 'datetime',
         'expires_at' => 'datetime',
     ];

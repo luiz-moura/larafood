@@ -2,15 +2,10 @@
 
 namespace Interfaces\Http\Authentication\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Interfaces\Http\Common\Requests\AbstractRequest;
 
-class PasswordResetLinkRequest extends FormRequest
+class PasswordResetLinkRequest extends AbstractRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

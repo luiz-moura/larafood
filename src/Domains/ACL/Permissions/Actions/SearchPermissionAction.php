@@ -3,7 +3,7 @@
 namespace Domains\ACL\Permissions\Actions;
 
 use Domains\ACL\Permissions\Contracts\PermissionRepository;
-use Domains\ACL\Permissions\DataTransferObjects\SearchPermissionsPaginationData;
+use Interfaces\Http\Permissions\DataTransferObjects\SearchPermissionRequestData;
 
 class SearchPermissionAction
 {
@@ -11,8 +11,8 @@ class SearchPermissionAction
     {
     }
 
-    public function __invoke(SearchPermissionsPaginationData $searchPermissionsPaginationData, array $with = [])
+    public function __invoke(SearchPermissionRequestData $paginationData, array $with = [])
     {
-        return $this->permissionRepository->searchByNameAndDescription($searchPermissionsPaginationData, $with);
+        return $this->permissionRepository->queryByNameAndDescription($paginationData, $with);
     }
 }

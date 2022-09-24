@@ -2,16 +2,11 @@
 
 namespace Interfaces\Http\Profiles\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Interfaces\Http\Common\Requests\AbstractRequest;
 
-class StoreProfileRequest extends FormRequest
+class StoreProfileRequest extends AbstractRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         $id = $this->segment(3);

@@ -3,7 +3,7 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\PlansData;
+use Interfaces\Http\Plans\DataTransferObjects\PlanFormData;
 
 class UpdatePlanAction
 {
@@ -11,8 +11,8 @@ class UpdatePlanAction
     {
     }
 
-    public function __invoke(string $url, PlansData $planData): bool
+    public function __invoke(string $url, PlanFormData $formData): bool
     {
-        return $this->planRepository->updateByUrl($url, $planData);
+        return $this->planRepository->updateByUrl($url, $formData);
     }
 }

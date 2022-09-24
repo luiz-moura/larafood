@@ -2,23 +2,17 @@
 
 namespace Interfaces\Http\Plans\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Interfaces\Http\Common\Requests\AbstractRequest;
+use Interfaces\Http\Common\Traits\Paginable;
 
-class SearchPlanRequest extends FormRequest
+class SearchPlanRequest extends AbstractRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
+    use Paginable;
 
     public function rules(): array
     {
         return [
-            'page' => 'nullable|integer',
-            'per_page' => 'nullable|integer',
-            'order' => 'nullable|string',
-            'sort' => ['required_with:order', Rule::in(['asc', 'desc'])],
+            ...self::paginationRules(),
             'filter' => 'string|min:2',
         ];
     }

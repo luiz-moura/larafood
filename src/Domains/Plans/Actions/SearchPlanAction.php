@@ -3,8 +3,8 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\PlansPaginatedData;
-use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
+use Domains\Plans\DataTransferObjects\PlanPaginatedData;
+use Interfaces\Http\Plans\DataTransferObjects\SearchPlanRequestData;
 
 class SearchPlanAction
 {
@@ -12,8 +12,8 @@ class SearchPlanAction
     {
     }
 
-    public function __invoke(SearchPlansPaginationData $plansPaginationData): PlansPaginatedData
+    public function __invoke(SearchPlanRequestData $paginationData): PlanPaginatedData
     {
-        return $this->planRepository->searchByNameAndDescription($plansPaginationData);
+        return $this->planRepository->queryByNameAndDescription($paginationData);
     }
 }

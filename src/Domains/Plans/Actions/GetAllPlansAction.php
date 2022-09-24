@@ -3,7 +3,7 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\DataTransferObjects\PlansCollection;
+use Domains\Plans\DataTransferObjects\PlanCollection;
 
 class GetAllPlansAction
 {
@@ -11,7 +11,7 @@ class GetAllPlansAction
     {
     }
 
-    public function __invoke(array $with = []): PlansCollection
+    public function __invoke(array $with = []): PlanCollection
     {
         return $this->planRepository->getAll($with);
     }

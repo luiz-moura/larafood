@@ -43,7 +43,11 @@
                         <tr>
                             <td>{{ $profile->name }}</td>
                             <td>
-                                <a href="{{ route('plans.profiles.detach', [$plan->url, $profile->id]) }}" class="btn btn-danger">DESVINCULAR</a>
+                                <form method="POST" action="{{ route('plans.profiles.detach', [$plan->url, $profile->id]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">DESVINCULAR</button>
+                                </form>
                             </td>
                         </tr>
                     @empty

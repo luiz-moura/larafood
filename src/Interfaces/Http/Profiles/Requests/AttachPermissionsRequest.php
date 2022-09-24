@@ -2,15 +2,10 @@
 
 namespace Interfaces\Http\Profiles\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Interfaces\Http\Common\Requests\AbstractRequest;
 
-class AttachPermissionsRequest extends FormRequest
+class AttachPermissionsRequest extends AbstractRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

@@ -2,198 +2,183 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
-use Domains\ACL\Profiles\Contracts\ProfileRepository as ContractsProfileRepository;
-use Domains\ACL\Profiles\DataTransferObjects\IndexProfilesPaginationData;
-use Domains\ACL\Profiles\DataTransferObjects\ProfilesData;
-use Domains\ACL\Profiles\DataTransferObjects\ProfilesPaginatedData;
-use Domains\ACL\Profiles\DataTransferObjects\SearchProfilesPaginationData;
-use Domains\ACL\Profiles\Exceptions\ProfileNotFoundException;
+use Domains\ACL\Profiles\Contracts\ProfileRepository as ProfileRepositoryContract;
+use Domains\ACL\Profiles\DataTransferObjects\ProfileData;
+use Domains\ACL\Profiles\DataTransferObjects\ProfilePaginatedData;
 use Infrastructure\Persistence\Eloquent\Models\Profile;
 use Infrastructure\Shared\AbstractRepository;
+use Interfaces\Http\Profiles\DataTransferObjects\IndexProfileRequestData;
+use Interfaces\Http\Profiles\DataTransferObjects\ProfileFormData;
+use Interfaces\Http\Profiles\DataTransferObjects\SearchProfileRequestData;
 
-class ProfileRepository extends AbstractRepository implements ContractsProfileRepository
+class ProfileRepository extends AbstractRepository implements ProfileRepositoryContract
 {
     protected $modelClass = Profile::class;
 
-    public function findById(int $id, array $with = []): ProfilesData
+    public function findById(int $id, array $with = []): ProfileData
     {
-        $profile = $this->model->with($with)->find($id)?->toArray();
-
-        if (!$profile) {
-            throw new ProfileNotFoundException();
-        }
-
-        return ProfilesData::createFromArray($profile);
+        return ProfileData::fromArray(
+            $this->model->with($with)->findOrFail($id)->toArray()
+        );
     }
 
-    public function create(ProfilesData $profileData): bool
+    public function create(ProfileFormData $formData): bool
     {
-        return (bool) $this->model->create($profileData->except('id')->toArray());
+        return (bool) $this->model->create($formData->toArray());
     }
 
-    public function update(int $id, ProfilesData $profileData): bool
+    public function update(int $id, ProfileFormData $formData): bool
     {
-        $profile = $this->model->find($id);
-
-        if (!$profile) {
-            throw new ProfileNotFoundException();
-        }
-
-        return (bool) $profile->update($profileData->except('id')->toArray());
+        return (bool) $this->model->findOrFail($id)->update($formData->toArray());
     }
 
     public function delete(int $id): bool
     {
-        $profile = $this->model->find($id);
-
-        if (!$profile) {
-            throw new ProfileNotFoundException();
-        }
-
-        return (bool) $profile->delete();
+        return (bool) $this->model->findOrFail($id)->delete();
     }
 
-    public function getAll(IndexProfilesPaginationData $profilesPaginationData, array $with = []): ProfilesPaginatedData
+    public function attachPermissionsInProfile(int $profileId, array $permissions): bool
+    {
+        return (bool) $this->model->findOrFail($profileId)->permissions()->attach($permissions);
+    }
+
+    public function detachProfilePermission(int $profileId, int $permissionId): bool
+    {
+        return (bool) $this->model->findOrFail($profileId)->permissions()->detach($permissionId);
+    }
+
+    public function getAll(IndexProfileRequestData $paginationData, array $with = []): ProfilePaginatedData
     {
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->when($profilesPaginationData->order, function ($query) use ($profilesPaginationData) {
-                $query->orderBy($profilesPaginationData->order, $profilesPaginationData->sort);
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return ProfilesPaginatedData::createFromPaginator($profiles);
+        return ProfilePaginatedData::fromPaginator($profiles);
     }
 
-    public function getAllForPermission(
+    public function getAllByPermission(
         int $permissionId,
-        IndexProfilesPaginationData $profilesPaginationData,
+        IndexProfileRequestData $paginationData,
         array $with = []
-    ): ProfilesPaginatedData {
+    ): ProfilePaginatedData {
         $profiles = $this->model
             ->select()
             ->with($with)
             ->whereHas('permissions', function ($query) use ($permissionId) {
                 $query->where('permissions.id', $permissionId);
             })
-            ->when($profilesPaginationData->order, function ($query) use ($profilesPaginationData) {
-                $query->orderBy($profilesPaginationData->order, $profilesPaginationData->sort);
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return ProfilesPaginatedData::createFromPaginator($profiles);
+        return ProfilePaginatedData::fromPaginator($profiles);
     }
 
-    public function searchByNameAndDescription(SearchProfilesPaginationData $profilesPaginationData, array $with = []): ProfilesPaginatedData
+    public function queryByNameAndDescription(SearchProfileRequestData $paginationData, array $with = []): ProfilePaginatedData
     {
         $profiles = $this->model
             ->select()
-            ->where('name', 'ilike', "%{$profilesPaginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$profilesPaginationData->filter}%")
+            ->with($with)
+            ->where('name', 'ilike', "%{$paginationData->filter}%")
+            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
             ->latest()
-            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return ProfilesPaginatedData::createFromPaginator($profiles);
+        return ProfilePaginatedData::fromPaginator($profiles);
     }
 
-    public function getAllForPlan(
+    public function getAllByPlan(
         int $planId,
-        IndexProfilesPaginationData $profilesPaginationData,
+        IndexProfileRequestData $paginationData,
         array $with = []
-    ): ProfilesPaginatedData {
+    ): ProfilePaginatedData {
         $profiles = $this->model
             ->select()
             ->with($with)
             ->whereHas('plans', function ($query) use ($planId) {
                 $query->where('plans.id', $planId);
             })
-            ->when($profilesPaginationData->order, function ($query) use ($profilesPaginationData) {
-                $query->orderBy($profilesPaginationData->order, $profilesPaginationData->sort);
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return ProfilesPaginatedData::createFromPaginator($profiles);
+        return ProfilePaginatedData::fromPaginator($profiles);
     }
 
-    public function searchForPlan(
+    public function queryByPlan(
         int $planId,
-        SearchProfilesPaginationData $profilesPaginationData,
+        SearchProfileRequestData $paginationData,
         array $with = []
-    ): ProfilesPaginatedData {
+    ): ProfilePaginatedData {
         $profiles = $this->model
             ->select()
+            ->with($with)
             ->whereHas('plans', function ($query) use ($planId) {
                 $query->where('plans.id', $planId);
             })
-            ->where(function ($query) use ($profilesPaginationData) {
-                $query->where('name', 'ilike', "%{$profilesPaginationData->filter}%")
-                    ->orWhere('description', 'ilike', "%{$profilesPaginationData->filter}%");
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            })
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return ProfilesPaginatedData::createFromPaginator($profiles);
+        return ProfilePaginatedData::fromPaginator($profiles);
     }
 
-    public function searchAvailableForPlan(
+    public function queryAvailableByPlan(
         int $planId,
-        SearchProfilesPaginationData $profilesPaginationData,
+        SearchProfileRequestData $paginationData,
         array $with = []
-    ): ProfilesPaginatedData {
+    ): ProfilePaginatedData {
         $profiles = $this->model
             ->select()
+            ->with($with)
             ->whereDoesntHave('plans', function ($query) use ($planId) {
                 $query->where('plans.id', $planId);
             })
-            ->where(function ($query) use ($profilesPaginationData) {
-                $query->where('name', 'ilike', "%{$profilesPaginationData->filter}%")
-                    ->orWhere('description', 'ilike', "%{$profilesPaginationData->filter}%");
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            })
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return ProfilesPaginatedData::createFromPaginator($profiles);
+        return ProfilePaginatedData::fromPaginator($profiles);
     }
 
-    public function getAllAvailableForPlan(
+    public function getAllAvailableByPlan(
         int $planId,
-        IndexProfilesPaginationData $profilesPaginationData,
+        IndexProfileRequestData $paginationData,
         array $with = []
-    ): ProfilesPaginatedData {
+    ): ProfilePaginatedData {
         $profiles = $this->model
             ->select()
+            ->with($with)
             ->whereDoesntHave('plans', function ($query) use ($planId) {
                 $query->where('plans.id', $planId);
             })
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
+            })
             ->latest()
-            ->paginate($profilesPaginationData->per_page, $profilesPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return ProfilesPaginatedData::createFromPaginator($profiles);
-    }
-
-    public function attachPermissionsInProfile(int $profileId, array $permissions): bool
-    {
-        $profile = $this->model->find($profileId);
-
-        if (!$profile) {
-            throw new ProfileNotFoundException();
-        }
-
-        return (bool) $profile->permissions()->attach($permissions);
-    }
-
-    public function detachProfilePermission(int $profileId, int $permissionId): bool
-    {
-        $profile = $this->model->find($profileId);
-
-        if (!$profile) {
-            throw new ProfileNotFoundException();
-        }
-
-        return (bool) $profile->permissions()->detach($permissionId);
+        return ProfilePaginatedData::fromPaginator($profiles);
     }
 }

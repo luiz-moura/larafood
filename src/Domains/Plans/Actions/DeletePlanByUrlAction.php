@@ -11,14 +11,12 @@ class DeletePlanByUrlAction
     {
     }
 
-    public function __invoke(string $url): bool
+    public function __invoke(string $url): void
     {
-        $planDetails = $this->planRepository->totalPlanDetailsByUrl($url);
+        $hasDetail = $this->planRepository->hasDetail($url);
 
-        if ($planDetails) {
-            throw new CannotDeletePlanWithDetailsException();
-        }
+        throw_if($hasDetail, CannotDeletePlanWithDetailsException::class);
 
-        return $this->planRepository->deleteByUrl($url);
+        $this->planRepository->deleteByUrl($url);
     }
 }

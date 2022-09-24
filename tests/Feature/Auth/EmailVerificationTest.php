@@ -2,6 +2,7 @@
 
 use Application\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Infrastructure\Persistence\Eloquent\Models\User;
@@ -15,7 +16,7 @@ beforeEach(function () {
 test('email verification screen can be rendered', function () {
     $response = $this->actingAs($this->user)->get('/verify-email');
 
-    $response->assertStatus(200);
+    $response->assertStatus(Response::HTTP_OK);
 });
 
 test('email can be verified', function () {

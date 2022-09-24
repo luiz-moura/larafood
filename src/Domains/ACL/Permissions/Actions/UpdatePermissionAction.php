@@ -3,7 +3,7 @@
 namespace Domains\ACL\Permissions\Actions;
 
 use Domains\ACL\Permissions\Contracts\PermissionRepository;
-use Domains\ACL\Permissions\DataTransferObjects\PermissionsData;
+use Interfaces\Http\Permissions\DataTransferObjects\PermissionFormData;
 
 class UpdatePermissionAction
 {
@@ -11,8 +11,8 @@ class UpdatePermissionAction
     {
     }
 
-    public function __invoke(int $id, PermissionsData $permissionsData): bool
+    public function __invoke(int $id, PermissionFormData $formData): void
     {
-        return $this->permissionRepository->update($id, $permissionsData);
+        $this->permissionRepository->update($id, $formData);
     }
 }

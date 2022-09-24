@@ -3,7 +3,7 @@
 namespace Domains\ACL\Profiles\Actions;
 
 use Domains\ACL\Profiles\Contracts\ProfileRepository;
-use Domains\ACL\Profiles\DataTransferObjects\ProfilesData;
+use Interfaces\Http\Profiles\DataTransferObjects\ProfileFormData;
 
 class CreateProfileAction
 {
@@ -11,8 +11,8 @@ class CreateProfileAction
     {
     }
 
-    public function __invoke(ProfilesData $profileData): bool
+    public function __invoke(ProfileFormData $formData): void
     {
-        return $this->profileRepository->create($profileData);
+        $this->profileRepository->create($formData);
     }
 }

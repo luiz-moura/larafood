@@ -3,7 +3,7 @@
 namespace Application\Observers;
 
 use DateTime;
-use Domains\Tenants\Enums\TenantsActiveEnum;
+use Domains\Tenants\Enums\TenantActiveEnum;
 use Illuminate\Support\Str;
 use Infrastructure\Persistence\Eloquent\Models\Tenant;
 
@@ -14,7 +14,7 @@ class TenantObserver
         $tenant->name = ucfirst($tenant->name);
         $tenant->url = Str::kebab($tenant->name);
         $tenant->uuid = Str::uuid();
-        $tenant->active ??= TenantsActiveEnum::ACTIVE;
+        $tenant->active ??= TenantActiveEnum::ACTIVE;
         $tenant->subscription_active ??= true;
         $tenant->subscription_suspended ??= false;
         $tenant->subscribed_at ??= new DateTime();
@@ -25,6 +25,6 @@ class TenantObserver
     {
         $tenant->name = ucfirst($tenant->name);
         $tenant->url = Str::kebab($tenant->name);
-        $tenant->active ??= TenantsActiveEnum::ACTIVE;
+        $tenant->active ??= TenantActiveEnum::ACTIVE;
     }
 }

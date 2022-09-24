@@ -2,21 +2,22 @@
 
 namespace Domains\ACL\Permissions\Contracts;
 
-use Domains\ACL\Permissions\DataTransferObjects\IndexPermissionsPaginationData;
-use Domains\ACL\Permissions\DataTransferObjects\PermissionsData;
-use Domains\ACL\Permissions\DataTransferObjects\PermissionsPaginatedData;
-use Domains\ACL\Permissions\DataTransferObjects\SearchPermissionsPaginationData;
+use Domains\ACL\Permissions\DataTransferObjects\PermissionData;
+use Domains\ACL\Permissions\DataTransferObjects\PermissionPaginatedData;
+use Interfaces\Http\Permissions\DataTransferObjects\IndexPermissionRequestData;
+use Interfaces\Http\Permissions\DataTransferObjects\PermissionFormData;
+use Interfaces\Http\Permissions\DataTransferObjects\SearchPermissionRequestData;
 
 interface PermissionRepository
 {
-    public function create(PermissionsData $PermissionsData): bool;
-    public function update(int $id, PermissionsData $PermissionsData): bool;
+    public function create(PermissionFormData $formData): bool;
+    public function update(int $id, PermissionFormData $formData): bool;
     public function delete(int $id): bool;
-    public function findById(int $id, array $with = []): PermissionsData;
-    public function searchByNameAndDescription(SearchPermissionsPaginationData $filter, array $with = []): PermissionsPaginatedData;
-    public function queryAllWithFilter(IndexPermissionsPaginationData $indexPermissionsPaginationData, array $with = []): PermissionsPaginatedData;
-    public function getAllForProfile(int $profileId, IndexPermissionsPaginationData $indexPermissionsPaginationData, array $with = []): PermissionsPaginatedData;
-    public function searchForProfile(int $profileId, SearchPermissionsPaginationData $searchPermissionsPaginationData, array $with = []): PermissionsPaginatedData;
-    public function searchAvailableForProfile(int $profileId, SearchPermissionsPaginationData $searchPermissionsPaginationData, array $with = []): PermissionsPaginatedData;
-    public function getAllAvailableForProfile(int $profileId, IndexPermissionsPaginationData $permissionsPaginationData): PermissionsPaginatedData;
+    public function findById(int $id, array $with = []): PermissionData;
+    public function getAll(IndexPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
+    public function getAllByProfile(int $profileId, IndexPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
+    public function getAllAvailableByProfile(int $profileId, IndexPermissionRequestData $paginationData): PermissionPaginatedData;
+    public function queryByNameAndDescription(SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
+    public function queryByProfile(int $profileId, SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
+    public function queryAvailableByProfile(int $profileId, SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
 }

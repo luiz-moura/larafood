@@ -3,7 +3,7 @@
 namespace Domains\ACL\Profiles\Actions;
 
 use Domains\ACL\Profiles\Contracts\ProfileRepository;
-use Domains\ACL\Profiles\DataTransferObjects\ProfilesData;
+use Interfaces\Http\Profiles\DataTransferObjects\ProfileFormData;
 
 class UpdateProfileAction
 {
@@ -11,8 +11,8 @@ class UpdateProfileAction
     {
     }
 
-    public function __invoke(int $id, ProfilesData $profileData): bool
+    public function __invoke(int $id, ProfileFormData $formData): void
     {
-        return $this->profileRepository->update($id, $profileData);
+        $this->profileRepository->update($id, $formData);
     }
 }

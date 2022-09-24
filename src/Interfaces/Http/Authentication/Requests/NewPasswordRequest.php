@@ -2,16 +2,11 @@
 
 namespace Interfaces\Http\Authentication\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
+use Interfaces\Http\Common\Requests\AbstractRequest;
 
-class NewPasswordRequest extends FormRequest
+class NewPasswordRequest extends AbstractRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

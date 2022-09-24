@@ -2,16 +2,11 @@
 
 namespace Interfaces\Http\Users\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
+use Interfaces\Http\Common\Requests\AbstractRequest;
 
-class UpdateUserRequest extends FormRequest
+class UpdateUserRequest extends AbstractRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         $id = $this->segment(3);

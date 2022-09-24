@@ -4,7 +4,7 @@ namespace Application\Providers;
 
 use Application\Observers\PlanObserver;
 use Application\Observers\TenantObserver;
-use Application\Observers\UserObeserver;
+use Application\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,7 +27,7 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     protected $observers = [
-        User::class => [UserObeserver::class],
+        User::class => [UserObserver::class],
         Plan::class => [PlanObserver::class],
         Tenant::class => [TenantObserver::class],
     ];

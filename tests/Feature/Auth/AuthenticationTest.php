@@ -1,6 +1,7 @@
 <?php
 
 use Application\Providers\RouteServiceProvider;
+use Illuminate\Http\Response;
 use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
@@ -11,7 +12,7 @@ beforeEach(function () {
 test('login screen can be rendered', function () {
     $response = $this->get($this->uri);
 
-    $response->assertStatus(200);
+    $response->assertStatus(Response::HTTP_OK);
 });
 
 test('users can authenticate using the login screen', function () {

@@ -10,8 +10,8 @@ class DeleteProfileAction
     {
     }
 
-    public function __invoke(int $id): bool
+    public function __invoke(int $id): void
     {
-        return $this->profileRepository->delete($id);
+        $this->profileRepository->delete($id);
     }
 }

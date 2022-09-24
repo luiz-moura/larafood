@@ -2,70 +2,60 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
-use Domains\Plans\Contracts\PlanRepository as ContractsPlanRepository;
-use Domains\Plans\DataTransferObjects\IndexPlansPaginationData;
-use Domains\Plans\DataTransferObjects\PlansCollection;
-use Domains\Plans\DataTransferObjects\PlansData;
-use Domains\Plans\DataTransferObjects\PlansPaginatedData;
-use Domains\Plans\DataTransferObjects\SearchPlansPaginationData;
-use Domains\Plans\Exceptions\PlanNotFoundException;
+use Domains\Plans\Contracts\PlanRepository as PlanRepositoryContract;
+use Domains\Plans\DataTransferObjects\PlanCollection;
+use Domains\Plans\DataTransferObjects\PlanData;
+use Domains\Plans\DataTransferObjects\PlanPaginatedData;
 use Infrastructure\Persistence\Eloquent\Models\Plan;
 use Infrastructure\Shared\AbstractRepository;
+use Interfaces\Http\Plans\DataTransferObjects\IndexPlanRequestData;
+use Interfaces\Http\Plans\DataTransferObjects\PlanFormData;
+use Interfaces\Http\Plans\DataTransferObjects\SearchPlanRequestData;
 
-class PlanRepository extends AbstractRepository implements ContractsPlanRepository
+class PlanRepository extends AbstractRepository implements PlanRepositoryContract
 {
     protected $modelClass = Plan::class;
 
-    public function findByUrl(string $url): PlansData
+    public function create(PlanFormData $formData): bool
     {
-        $plan = $this->model->firstWhere('url', $url)?->toArray();
-
-        if (!$plan) {
-            throw new PlanNotFoundException();
-        }
-
-        return new PlansData($plan);
-    }
-
-    public function create(PlansData $planData): bool
-    {
-        return (bool) $this->model->create($planData->except('id')->toArray());
+        return (bool) $this->model->create($formData->toArray());
     }
 
     public function deleteByUrl(string $url): bool
     {
-        $plan = $this->model->firstWhere('url', $url);
-
-        if (!$plan) {
-            throw new PlanNotFoundException();
-        }
-
-        return (bool) $plan->delete();
+        return (bool) $this->model->where('url', $url)->firstOrFail()->delete();
     }
 
-    public function updateByUrl(string $url, PlansData $planData): bool
+    public function updateByUrl(string $url, PlanFormData $formData): bool
     {
-        $plan = $this->model->firstWhere('url', $url);
-
-        if (!$plan) {
-            throw new PlanNotFoundException();
-        }
-
-        return (bool) $plan->update($planData->toArray());
+        return (bool) $this->model->where('url', $url)->firstOrFail()->update(
+            $formData->toArray()
+        );
     }
 
-    public function totalPlanDetailsByUrl(string $url): int
+    public function findByUrl(string $url): PlanData
     {
-        $plan = $this->model->firstWhere('url', $url);
-
-        if (!$plan) {
-            throw new PlanNotFoundException();
-        }
-
-        return $plan->details()->count();
+        return PlanData::fromArray(
+            $this->model->where('url', $url)->firstOrFail()->toArray()
+        );
     }
 
-    public function getAll(array $with = []): PlansCollection
+    public function hasDetail(string $url): bool
+    {
+        return $this->model->firstOrFail('url', $url)->details()->exists();
+    }
+
+    public function attachProfilesInPlan(string $planUrl, array $profiles): bool
+    {
+        return (bool) $this->model->where('url', $planUrl)->firstOrFail()->profiles()->attach($profiles);
+    }
+
+    public function detachPlanProfile(string $planUrl, int $profileId): bool
+    {
+        return (bool) $this->model->where('url', $planUrl)->firstOrFail()->profiles()->detach($profileId);
+    }
+
+    public function getAll(array $with = []): PlanCollection
     {
         $plans = $this->model
             ->select()
@@ -74,78 +64,60 @@ class PlanRepository extends AbstractRepository implements ContractsPlanReposito
             ->get()
             ->toArray();
 
-        return PlansCollection::createFromArray($plans);
+        return PlanCollection::fromArray($plans);
     }
 
-    public function queryAllWithFilter(
-        IndexPlansPaginationData $plansPaginationData,
+    public function getAllPaginated(
+        IndexPlanRequestData $paginationData,
         array $with = []
-    ): PlansPaginatedData {
+    ): PlanPaginatedData {
         $plans = $this->model
             ->select()
             ->with($with)
-            ->when($plansPaginationData->order, function ($query) use ($plansPaginationData) {
-                $query->orderBy($plansPaginationData->order, $plansPaginationData->sort);
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PlansPaginatedData::createFromPaginator($plans);
+        return PlanPaginatedData::fromPaginator($plans);
     }
 
-    public function searchByNameAndDescription(
-        SearchPlansPaginationData $plansPaginationData,
+    public function queryByNameAndDescription(
+        SearchPlanRequestData $paginationData,
         array $with = []
-    ): PlansPaginatedData {
+    ): PlanPaginatedData {
         $plans = $this->model
             ->select()
-            ->where('name', 'ilike', "%{$plansPaginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$plansPaginationData->filter}%")
+            ->with($with)
+            ->where('name', 'ilike', "%{$paginationData->filter}%")
+            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
+            })
             ->latest()
-            ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PlansPaginatedData::createFromPaginator($plans);
+        return PlanPaginatedData::fromPaginator($plans);
     }
 
-    public function getAllForProfile(
+    public function getAllByProfile(
         int $profileId,
-        IndexPlansPaginationData $plansPaginationData,
+        IndexPlanRequestData $paginationData,
         array $with = []
-    ): PlansPaginatedData {
+    ): PlanPaginatedData {
         $plans = $this->model
             ->select()
             ->with($with)
             ->whereHas('profiles', function ($query) use ($profileId) {
                 $query->where('profiles.id', $profileId);
             })
-            ->when($plansPaginationData->order, function ($query) use ($plansPaginationData) {
-                $query->orderBy($plansPaginationData->order, $plansPaginationData->sort);
+            ->when($paginationData->order, function ($query) use ($paginationData) {
+                $query->orderBy($paginationData->order, $paginationData->sort);
             })
             ->latest()
-            ->paginate($plansPaginationData->per_page, $plansPaginationData->page);
+            ->paginate($paginationData->per_page, $paginationData->page);
 
-        return PlansPaginatedData::createFromPaginator($plans);
-    }
-
-    public function attachProfilesInPlan(string $planUrl, array $profiles): bool
-    {
-        $plan = $this->model->firstWhere('url', $planUrl);
-
-        if (!$plan) {
-            throw new PlanNotFoundException();
-        }
-
-        return (bool) $plan->profiles()->attach($profiles);
-    }
-
-    public function detachPlanProfile(string $planUrl, int $profileId): bool
-    {
-        $plan = $this->model->firstWhere('url', $planUrl);
-
-        if (!$plan) {
-            throw new PlanNotFoundException();
-        }
-
-        return (bool) $plan->profiles()->detach($profileId);
+        return PlanPaginatedData::fromPaginator($plans);
     }
 }
