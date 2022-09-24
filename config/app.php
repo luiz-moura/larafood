@@ -193,6 +193,7 @@ return [
         Application\Providers\AuthServiceProvider::class,
         Application\Providers\BroadcastServiceProvider::class,
         Application\Providers\EventServiceProvider::class,
+        Application\Providers\HorizonServiceProvider::class,
         Application\Providers\RouteServiceProvider::class,
         Application\Providers\RepositoryServiceProvider::class,
     ],
