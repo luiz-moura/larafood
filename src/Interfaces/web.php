@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Interfaces\Http\Categories\Controllers\CategoryController;
 use Interfaces\Http\Permissions\Controllers\PermissionController;
 use Interfaces\Http\PlanDetails\Controllers\PlanDetailController;
 use Interfaces\Http\Plans\Controllers\PlanController;
@@ -70,6 +71,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::prefix('users')->group(function () {
         Route::get('users/search', [UserController::class, 'search'])->name('users.search');
+    });
+
+    Route::resource('categories', CategoryController::class);
+    Route::prefix('categories')->group(function () {
+        Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
     });
 });
 

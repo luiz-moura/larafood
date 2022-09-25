@@ -5,10 +5,12 @@ namespace Application\Providers;
 use Domains\ACL\Permissions\Contracts\PermissionRepository as PermissionRepositoryContract;
 use Domains\ACL\Profiles\Contracts\ProfileRepository as RepositoriesProfileContract;
 use Domains\ACL\Users\Repositories\UserRepository as UserRepositoryContract;
+use Domains\Categories\Repositories\CategoryRepository as CategoryRepositoryContract;
 use Domains\Plans\Contracts\PlanDetailRepository as PlanDetailRepositoryContract;
 use Domains\Plans\Contracts\PlanRepository as PlanRepositoryContract;
 use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Illuminate\Support\ServiceProvider;
+use Infrastructure\Persistence\Eloquent\Repositories\CategoryRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PermissionRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PlanDetailRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PlanRepository;
@@ -31,6 +33,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionRepositoryContract::class, PermissionRepository::class);
         $this->app->bind(TenantRepositoryContract::class, TenantRepository::class);
         $this->app->bind(UserRepositoryContract::class, UserRepository::class);
+        $this->app->bind(CategoryRepositoryContract::class, CategoryRepository::class);
     }
 
     /**
