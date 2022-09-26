@@ -6,6 +6,7 @@ use Interfaces\Http\Permissions\Controllers\PermissionController;
 use Interfaces\Http\PlanDetails\Controllers\PlanDetailController;
 use Interfaces\Http\Plans\Controllers\PlanController;
 use Interfaces\Http\Plans\Controllers\PlanProfileController;
+use Interfaces\Http\Products\Controllers\ProductController;
 use Interfaces\Http\Profiles\Controllers\PermissionProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
@@ -76,6 +77,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::prefix('categories')->group(function () {
         Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
+    });
+
+    Route::resource('products', ProductController::class);
+    Route::prefix('products')->group(function () {
+        Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
     });
 });
 
