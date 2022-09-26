@@ -4,6 +4,7 @@ namespace Application\Providers;
 
 use Application\Observers\CategoryObserver;
 use Application\Observers\PlanObserver;
+use Application\Observers\ProductObserver;
 use Application\Observers\TenantObserver;
 use Application\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use Infrastructure\Persistence\Eloquent\Models\Category;
 use Infrastructure\Persistence\Eloquent\Models\Plan;
+use Infrastructure\Persistence\Eloquent\Models\Product;
 use Infrastructure\Persistence\Eloquent\Models\Tenant;
 use Infrastructure\Persistence\Eloquent\Models\User;
 
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
         Plan::class => [PlanObserver::class],
         Tenant::class => [TenantObserver::class],
         Category::class => [CategoryObserver::class],
+        Product::class => [ProductObserver::class],
     ];
 
     /**

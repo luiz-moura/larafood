@@ -9,26 +9,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Infrastructure\Persistence\Eloquent\Scopes\TenantScope;
 
-class Category extends Model
+class Product extends Model
 {
     use HasFactory;
 
-    protected $table = 'categories';
-    protected $fillable = ['name', 'description', 'url'];
+    protected $table = 'products';
 
-    public function scopeTenantUser(Builder $query): Builder
-    {
-        return $query->where('tenant_id', auth()->user()->tenant_id);
-    }
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'image',
+        'flag',
+        'tenant_id',
+    ];
 
-    public function products(): BelongsToMany
+    public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Category::class);
     }
 
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    public function scopeTenantUser(Builder $query): Builder
+    {
+        return $query->where('tenant_id', auth()->user()->tenant_id);
     }
 
     protected static function booted()
