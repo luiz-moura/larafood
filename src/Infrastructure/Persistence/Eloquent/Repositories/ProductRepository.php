@@ -74,4 +74,14 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
 
         return ProductPaginatedData::fromPaginator($products);
     }
+
+    public function attachCategories(int $id, array $categories): void
+    {
+        $this->model->findOrFail($id)->categories()->attach($categories);
+    }
+
+    public function detachCategory(int $productId, int $categoryId): void
+    {
+        $this->model->findOrFail($productId)->categories()->detach($categoryId);
+    }
 }

@@ -1,19 +1,21 @@
 @extends('adminlte::page')
 
-@section('title', 'Produtos')
+@section('title', "Categorias do produto {$product->name}")
 
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Produtos</li>
+        <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a></li>
+        <li class="breadcrumb-item active">Categorias</li>
     </ol>
-    <h1>Produtos <a href="{{ route('products.create') }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add</a></h1>
+    <h1>Categorias do produto {{ $product->name }} <a href="{{ route('products.categories.available', $product->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add nova categoria</a></h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('products.search') }}"
+            <form action="{{ route('products.categories.search', $product->id) }}"
                   method="GET"
                   class="form form-inline">
                 <input type="text"
@@ -29,29 +31,25 @@
             <table class="table-condensed table">
                 <thead>
                     <tr>
-                        <th>Imagem</th>
                         <th>Nome</th>
-                        <th>Descrição</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($products as $product)
+                    @forelse ($categories as $category)
                         <tr>
+                            <td>{{ $category->name }}</td>
                             <td>
-                                <img src="{{ url("storage/{$product->image}") }}"
-                                     alt="{{ $product->name }}"
-                                     style="max-width: 90px">
-                            </td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->description }}</td>
-                            <td>
-                                <a href="{{ route('products.categories', $product->id) }}" class="btn btn-default">Categorias</a>
-                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-info">Editar</a>
-                                <a href="{{ route('products.show', $product->id) }}" class="btn btn-warning">Ver</a>
+                                <form method="POST" action="{{ route('products.categories.detach', [$product->id, $category->id]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">DESVINCULAR</button>
+                                </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <p>No categories</p>
+                    @endforelse
                 </tbody>
             </table>
         </div>

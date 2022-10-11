@@ -6,6 +6,7 @@ use Interfaces\Http\Permissions\Controllers\PermissionController;
 use Interfaces\Http\PlanDetails\Controllers\PlanDetailController;
 use Interfaces\Http\Plans\Controllers\PlanController;
 use Interfaces\Http\Plans\Controllers\PlanProfileController;
+use Interfaces\Http\Products\Controllers\ProductCategoryController;
 use Interfaces\Http\Products\Controllers\ProductController;
 use Interfaces\Http\Profiles\Controllers\PermissionProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfileController;
@@ -79,7 +80,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
     });
 
-    Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
+    Route::prefix('products')->group(function () {
+        Route::get('search', [ProductController::class, 'search'])->name('products.search');
+
+        Route::controller(ProductCategoryController::class)->group(function () {
+            Route::get('{id}/categories', 'index')->name('products.categories');
+            Route::get('{id}/categories/search', 'search')->name('products.categories.search');
+            Route::get('{id}/categories/available', 'available')->name('products.categories.available');
+            Route::post('{id}/categories', 'attachCategories')->name('products.categories.attach');
+            Route::delete('{id}/categories/{categoryId}', 'detachCategory')->name('products.categories.detach');
+        });
+    });
     Route::resource('products', ProductController::class);
 });
 

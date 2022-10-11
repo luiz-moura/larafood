@@ -16,4 +16,8 @@ interface CategoryRepository
     public function delete(int $id): bool;
     public function getAll(IndexCategoryRequestData $paginationData, array $with = []): CategoryPaginatedData;
     public function queryByName(SearchCategoryRequestData $paginationData, array $with = []): CategoryPaginatedData;
+
+    public function queryByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData;
+    public function queryAvailableByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData;
+    public function queryByNameAndByProductId(int $id, SearchCategoryRequestData $request, array $with = []): CategoryPaginatedData;
 }
