@@ -69,7 +69,7 @@ class ProductController extends Controller
     ) {
         $validatedData = $request->validated();
 
-        if ($validatedData['file']) {
+        if (isset($validatedData['file'])) {
             $pathImage = $storageProductImageAction($validatedData['file'], $id);
             $validatedData['image'] = $pathImage;
         }
