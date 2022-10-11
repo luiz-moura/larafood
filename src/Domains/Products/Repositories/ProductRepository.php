@@ -16,4 +16,6 @@ interface ProductRepository
     public function delete(int $id): bool;
     public function getAll(IndexProductRequestData $paginationData, array $with = []): ProductPaginatedData;
     public function queryByName(SearchProductRequestData $paginationData, array $with = []): ProductPaginatedData;
+    public function attachCategories(int $id, array $categories): void;
+    public function detachCategory(int $productId, int $categoryId): void;
 }

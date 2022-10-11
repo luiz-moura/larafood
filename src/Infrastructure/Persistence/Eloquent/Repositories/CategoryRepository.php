@@ -73,4 +73,60 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
 
         return CategoryPaginatedData::fromPaginator($categories);
     }
+
+    public function queryByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData
+    {
+        $categories = $this->model
+            ->select()
+            ->with($with)
+            ->tenantUser()
+            ->whereRelation('products', 'products.id', $id)
+            ->latest()
+            ->when($request->order, function (Builder $query) use ($request) {
+                $query->orderBy($request->order, $request->sort);
+            })
+            ->paginate($request->per_page, $request->page);
+
+        return CategoryPaginatedData::fromPaginator($categories);
+    }
+
+    public function queryAvailableByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData
+    {
+        $categories = $this->model
+            ->select()
+            ->with($with)
+            ->tenantUser()
+            ->whereDoesntHave('products', function ($query) use ($id) {
+                $query->where('products.id', $id);
+            })
+            ->latest()
+            ->when($request->order, function (Builder $query) use ($request) {
+                $query->orderBy($request->order, $request->sort);
+            })
+            ->paginate($request->per_page, $request->page);
+
+        return CategoryPaginatedData::fromPaginator($categories);
+    }
+
+    public function queryByNameAndByProductId(int $id, SearchCategoryRequestData $request, array $with = []): CategoryPaginatedData
+    {
+        $categories = $this->model
+            ->select()
+            ->with($with)
+            ->tenantUser()
+            ->whereHas('products', function ($query) use ($id) {
+                $query->where('products.id', $id);
+            })
+            ->where(function ($query) use ($request) {
+                $query->where('name', 'ilike', "%{$request->filter}%")
+                    ->orWhere('description', 'ilike', "%{$request->filter}%");
+            })
+            ->latest()
+            ->when($request->order, function (Builder $query) use ($request) {
+                $query->orderBy($request->order, $request->sort);
+            })
+            ->paginate($request->per_page, $request->page);
+
+        return CategoryPaginatedData::fromPaginator($categories);
+    }
 }
