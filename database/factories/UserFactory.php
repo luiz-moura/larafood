@@ -12,7 +12,10 @@ class UserFactory extends Factory
 
     public function definition(): array
     {
-        return $this->mock();
+        return [
+            ...$this->mock(),
+            'tenant_id' => TenantFactory::new()->create()->id,
+        ];
     }
 
     public function unverified(): static

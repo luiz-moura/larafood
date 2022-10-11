@@ -13,8 +13,8 @@ class PlanDetailFactory extends Factory
     public function definition()
     {
         return [
-            'plan_id' => Plan::factory()->create()->id,
             ...$this->mock(),
+            'plan_id' => Plan::factory()->create()->id,
         ];
     }
 

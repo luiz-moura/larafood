@@ -79,10 +79,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
     });
 
+    Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
     Route::resource('products', ProductController::class);
-    Route::prefix('products')->group(function () {
-        Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
-    });
 });
 
 Route::controller(SiteController::class)->group(function () {
