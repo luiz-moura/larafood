@@ -9,6 +9,7 @@ use Domains\Categories\Repositories\CategoryRepository as CategoryRepositoryCont
 use Domains\Plans\Contracts\PlanDetailRepository as PlanDetailRepositoryContract;
 use Domains\Plans\Contracts\PlanRepository as PlanRepositoryContract;
 use Domains\Products\Repositories\ProductRepository as ProductRepositoryContract;
+use Domains\Tables\Contracts\TableRepository as TableRepositoryContract;
 use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Illuminate\Support\ServiceProvider;
 use Infrastructure\Persistence\Eloquent\Repositories\CategoryRepository;
@@ -17,6 +18,7 @@ use Infrastructure\Persistence\Eloquent\Repositories\PlanDetailRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PlanRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\ProductRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\ProfileRepository;
+use Infrastructure\Persistence\Eloquent\Repositories\TableRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\TenantRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\UserRepository;
 
@@ -37,6 +39,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryContract::class, UserRepository::class);
         $this->app->bind(CategoryRepositoryContract::class, CategoryRepository::class);
         $this->app->bind(ProductRepositoryContract::class, ProductRepository::class);
+        $this->app->bind(TableRepositoryContract::class, TableRepository::class);
     }
 
     /**
