@@ -13,6 +13,7 @@ use Interfaces\Http\Profiles\Controllers\ProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 use Interfaces\Http\Profiles\Controllers\ProfilePlanController;
 use Interfaces\Http\Site\Controllers\SiteController;
+use Interfaces\Http\Tables\Controllers\TableController;
 use Interfaces\Http\Users\Controllers\UserController;
 
 Route::prefix('admin')->middleware('auth')->group(function () {
@@ -96,6 +97,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         });
 
         Route::resource('products', ProductController::class);
+    });
+
+    Route::resource('products', ProductController::class);
+
+    Route::middleware('can:tables')->group(function () {
+      Route::get('tables/search', [TableController::class, 'search'])->name('tables.search');
+      Route::resource('tables', TableController::class);
     });
 });
 
