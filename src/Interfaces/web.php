@@ -19,83 +19,92 @@ use Interfaces\Http\Users\Controllers\UserController;
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
 
-    Route::prefix('plans')->group(function () {
-        Route::controller(PlanDetailController::class)->group(function () {
-            Route::get('{url}/details', 'index')->name('plan_details.index');
-            Route::get('{url}/details/create', 'create')->name('plan_details.create');
-            Route::post('{url}/details', 'store')->name('plan_details.store');
-            Route::get('{url}/details/{id}/edit', 'edit')->name('plan_details.edit');
-            Route::delete('{url}/details/{id}', 'destroy')->name('plan_details.destroy');
-            Route::get('{url}/details/{id}', 'show')->name('plan_details.show');
-            Route::put('{url}/details/{id}', 'update')->name('plan_details.update');
+    Route::middleware('can:plans')->group(function () {
+        Route::prefix('plans')->group(function () {
+            // TODO: change to use nested resource
+            Route::controller(PlanDetailController::class)->group(function () {
+                Route::get('{url}/details', 'index')->name('plan_details.index');
+                Route::get('{url}/details/create', 'create')->name('plan_details.create');
+                Route::post('{url}/details', 'store')->name('plan_details.store');
+                Route::get('{url}/details/{id}', 'show')->name('plan_details.show');
+                Route::get('{url}/details/{id}/edit', 'edit')->name('plan_details.edit');
+                Route::put('{url}/details/{id}', 'update')->name('plan_details.update');
+                Route::delete('{url}/details/{id}', 'destroy')->name('plan_details.destroy');
+            });
+
+            Route::controller(PlanProfileController::class)->group(function () {
+                Route::get('{url}/profiles', 'index')->name('plans.profiles');
+                Route::get('{url}/profiles/search', 'search')->name('plans.profiles.search');
+                Route::get('{url}/profiles/available', 'available')->name('plans.profiles.available');
+                Route::get('{url}/profiles/available/search', 'searchAvailable')->name('plans.profiles.search-available');
+                Route::post('{url}/profiles', 'attachProfiles')->name('plans.profiles.attach');
+                Route::delete('{url}/profiles/{profileId}', 'detachProfile')->name('plans.profiles.detach');
+            });
+
+            Route::get('search', [PlanController::class, 'search'])->name('plans.search');
         });
 
-        Route::controller(PlanController::class)->group(function () {
-            Route::get('/', 'index')->name('plans.index');
-            Route::post('/', 'store')->name('plans.store');
-            Route::get('create', 'create')->name('plans.create');
-            Route::get('search', 'search')->name('plans.search');
-            Route::get('{url}', 'show')->name('plans.show');
-            Route::delete('{url}', 'destroy')->name('plans.destroy');
-            Route::get('{url}/edit', 'edit')->name('plans.edit');
-            Route::put('{url}', 'update')->name('plans.update');
+        Route::resource('plans', PlanController::class)->parameter('id', 'url');
+    });
+
+    Route::middleware('can:profiles')->group(function () {
+        Route::prefix('profiles')->group(function () {
+            Route::get('{id}/plans', [ProfilePlanController::class, 'index'])->name('profiles.plans');
+            Route::controller(PermissionProfileController::class)->group(function () {
+                Route::get('{id}/permissions', 'index')->name('profiles.permissions');
+                Route::get('{id}/permissions/search', 'search')->name('profiles.permissions.search');
+                Route::get('{id}/permissions/available', 'available')->name('profiles.permissions.available');
+                Route::get('{id}/permissions/available/search', 'searchAvailable')->name('profiles.permissions.search-available');
+                Route::post('{id}/permissions', 'attachPermissions')->name('profiles.permissions.attach');
+                Route::get('{id}/permissions/{permissionId}', 'detachPermission')->name('profiles.permissions.detach');
+            });
+            Route::get('search', [ProfileController::class, 'search'])->name('profiles.search');
         });
 
-        Route::controller(PlanProfileController::class)->group(function () {
-            Route::get('{url}/profiles', 'index')->name('plans.profiles');
-            Route::get('{url}/profiles/search', 'search')->name('plans.profiles.search');
-            Route::get('{url}/profiles/available', 'available')->name('plans.profiles.available');
-            Route::get('{url}/profiles/available/search', 'searchAvailable')->name('plans.profiles.search-available');
+        Route::resource('profiles', ProfileController::class);
+    });
 
-            Route::post('{url}/profiles', 'attachProfiles')->name('plans.profiles.attach');
-            Route::delete('{url}/profiles/{profileId}', 'detachProfile')->name('plans.profiles.detach');
+    Route::middleware('can:permissions')->group(function () {
+        Route::prefix('permissions')->group(function () {
+            Route::get('{id}/profiles', [ProfilePermissionController::class, 'index'])->name('permissions.profiles.index');
+            Route::get('search', [PermissionController::class, 'search'])->name('permissions.search');
         });
+
+        Route::resource('permissions', PermissionController::class);
     });
 
-    Route::resource('profiles', ProfileController::class);
-    Route::prefix('profiles')->group(function () {
-        Route::get('{id}/plans', [ProfilePlanController::class, 'index'])->name('profiles.plans');
-        Route::get('{id}/permissions', [PermissionProfileController::class, 'index'])->name('profiles.permissions');
-        Route::get('{id}/permissions/search', [PermissionProfileController::class, 'search'])->name('profiles.permissions.search');
-        Route::get('{id}/permissions/available', [PermissionProfileController::class, 'available'])->name('profiles.permissions.available');
-        Route::get('{id}/permissions/available/search', [PermissionProfileController::class, 'searchAvailable'])->name('profiles.permissions.search-available');
-        Route::post('{id}/permissions', [PermissionProfileController::class, 'attachPermissions'])->name('profiles.permissions.attach');
-        Route::get('{id}/permissions/{permissionId}', [PermissionProfileController::class, 'detachPermission'])->name('profiles.permissions.detach');
-
-        Route::get('search', [ProfileController::class, 'search'])->name('profiles.search');
-    });
-
-    Route::resource('permissions', PermissionController::class);
-    Route::prefix('permissions')->group(function () {
-        Route::get('{id}/profiles', [ProfilePermissionController::class, 'index'])->name('permissions.profiles.index');
-        Route::get('search', [PermissionController::class, 'search'])->name('permissions.search');
-    });
-
-    Route::resource('users', UserController::class);
-    Route::prefix('users')->group(function () {
+    Route::middleware('can:users')->group(function () {
         Route::get('users/search', [UserController::class, 'search'])->name('users.search');
+        Route::resource('users', UserController::class);
     });
 
-    Route::resource('categories', CategoryController::class);
-    Route::prefix('categories')->group(function () {
+    Route::middleware('can:categories')->group(function () {
         Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
+        Route::resource('categories', CategoryController::class);
     });
 
-    Route::prefix('products')->group(function () {
-        Route::get('search', [ProductController::class, 'search'])->name('products.search');
+    Route::middleware('can:products')->group(function () {
+        Route::prefix('products')->group(function () {
+            Route::controller(ProductCategoryController::class)->group(function () {
+                Route::get('{id}/categories', 'index')->name('products.categories');
+                Route::get('{id}/categories/search', 'search')->name('products.categories.search');
+                Route::get('{id}/categories/available', 'available')->name('products.categories.available');
+                Route::post('{id}/categories', 'attachCategories')->name('products.categories.attach');
+                Route::delete('{id}/categories/{categoryId}', 'detachCategory')->name('products.categories.detach');
+            });
 
-        Route::controller(ProductCategoryController::class)->group(function () {
-            Route::get('{id}/categories', 'index')->name('products.categories');
-            Route::get('{id}/categories/search', 'search')->name('products.categories.search');
-            Route::get('{id}/categories/available', 'available')->name('products.categories.available');
-            Route::post('{id}/categories', 'attachCategories')->name('products.categories.attach');
-            Route::delete('{id}/categories/{categoryId}', 'detachCategory')->name('products.categories.detach');
+            Route::get('search', [ProductController::class, 'search'])->name('products.search');
         });
+
+        Route::resource('products', ProductController::class);
     });
+
     Route::resource('products', ProductController::class);
 
-    Route::get('tables/search', [TableController::class, 'search'])->name('tables.search');
-    Route::resource('tables', TableController::class);
+    Route::middleware('can:tables')->group(function () {
+      Route::get('tables/search', [TableController::class, 'search'])->name('tables.search');
+      Route::resource('tables', TableController::class);
+    });
 });
 
 Route::controller(SiteController::class)->group(function () {

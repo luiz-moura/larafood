@@ -246,26 +246,31 @@ return [
             'text' => 'Planos',
             'url' => 'admin/plans',
             'icon' => 'fas fa-mountain',
+            'can' => 'plans',
         ],
         [
             'text' => 'Perfis',
             'url' => 'admin/profiles',
             'icon' => 'fas fa-id-card-alt',
+            'can' => 'profiles',
         ],
         [
             'text' => 'Permissões',
             'url' => 'admin/permissions',
             'icon' => 'fas fa-user-lock',
+            'can' => 'permissions',
         ],
         [
             'text' => 'Usuários',
             'url' => 'admin/users',
             'icon' => 'fas fa-users',
+            'can' => 'users',
         ],
         [
             'text' => 'Categorias',
             'url' => 'admin/categories',
             'icon' => 'fas fa-layer-group',
+            'can' => 'categories',
         ],
         [
             'text' => 'Produtos',
