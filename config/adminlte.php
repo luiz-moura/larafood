@@ -275,8 +275,12 @@ return [
         [
             'text' => 'Produtos',
             'url' => 'admin/products',
-            'icon' => 'fas fa-layer-group',
-            'can' => 'products',
+            'icon' => 'fab fa-product-hunt',
+        ],
+        [
+            'text' => 'Mesas',
+            'url' => 'admin/tables',
+            'icon' => 'fas fa-table',
         ],
     ],
 
