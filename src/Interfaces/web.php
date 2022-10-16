@@ -14,6 +14,7 @@ use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 use Interfaces\Http\Profiles\Controllers\ProfilePlanController;
 use Interfaces\Http\Site\Controllers\SiteController;
 use Interfaces\Http\Tables\Controllers\TableController;
+use Interfaces\Http\Tenant\Controllers\TenantController;
 use Interfaces\Http\Users\Controllers\UserController;
 
 Route::prefix('admin')->middleware('auth')->group(function () {
@@ -99,11 +100,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::resource('products', ProductController::class);
     });
 
-    Route::resource('products', ProductController::class);
+    Route::middleware('can:tenants')->group(function () {
+        Route::get('tenants/search', [TenantController::class, 'search'])->name('tenants.search');
+        Route::resource('tenants', TenantController::class);
+    });
 
     Route::middleware('can:tables')->group(function () {
-      Route::get('tables/search', [TableController::class, 'search'])->name('tables.search');
-      Route::resource('tables', TableController::class);
+        Route::get('tables/search', [TableController::class, 'search'])->name('tables.search');
+        Route::resource('tables', TableController::class);
     });
 });
 
