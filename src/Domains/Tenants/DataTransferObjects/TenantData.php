@@ -3,6 +3,7 @@
 namespace Domains\Tenants\DataTransferObjects;
 
 use DateTime;
+use Domains\Plans\DataTransferObjects\PlanData;
 use Domains\Tenants\Enums\TenantActiveEnum;
 use Infrastructure\Persistence\Eloquent\Models\Tenant;
 use Infrastructure\Shared\DataTransferObject;
@@ -24,6 +25,7 @@ class TenantData extends DataTransferObject
     public DateTime $expires_at;
     public DateTime $created_at;
     public ?DateTime $updated_at;
+    public PlanData $plan;
 
     public static function fromModel(Tenant $tenant): self
     {
@@ -33,6 +35,7 @@ class TenantData extends DataTransferObject
             'expires_at' => $tenant->expires_at,
             'created_at' => $tenant->created_at,
             'updated_at' => $tenant->updated_at,
+            'plan' => PlanData::fromModel($tenant->plan),
         ] + $tenant->toArray());
     }
 
@@ -44,6 +47,7 @@ class TenantData extends DataTransferObject
             'created_at' => new DateTime($data['created_at']),
             'expires_at' => $data['expires_at'] ? new DateTime($data['expires_at']) : null,
             'updated_at' => $data['updated_at'] ? new DateTime($data['updated_at']) : null,
+            'plan' => isset($data['plan']) ? PlanData::fromArray($data['plan']) : null,
         ] + $data);
     }
 }
