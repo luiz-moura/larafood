@@ -267,6 +267,12 @@ return [
             'can' => 'permissions',
         ],
         [
+            'text' => 'Cargos',
+            'url' => 'admin/roles',
+            'icon' => 'fas fa-table',
+            'can' => 'roles',
+        ],
+        [
             'text' => 'Usuários',
             'url' => 'admin/users',
             'icon' => 'fas fa-users',
