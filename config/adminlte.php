@@ -243,6 +243,12 @@ return [
             'text' => 'search',
         ],
         [
+            'text' => 'Empresas',
+            'url' => 'admin/tenants',
+            'icon' => 'fas fa-building',
+            'can' => 'tables',
+        ],
+        [
             'text' => 'Planos',
             'url' => 'admin/plans',
             'icon' => 'fas fa-mountain',
@@ -276,11 +282,13 @@ return [
             'text' => 'Produtos',
             'url' => 'admin/products',
             'icon' => 'fab fa-product-hunt',
+            'can' => 'products',
         ],
         [
             'text' => 'Mesas',
             'url' => 'admin/tables',
             'icon' => 'fas fa-table',
+            'can' => 'tables',
         ],
     ],
 
