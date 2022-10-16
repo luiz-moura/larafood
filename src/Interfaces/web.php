@@ -12,6 +12,7 @@ use Interfaces\Http\Profiles\Controllers\PermissionProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfileController;
 use Interfaces\Http\Profiles\Controllers\ProfilePermissionController;
 use Interfaces\Http\Profiles\Controllers\ProfilePlanController;
+use Interfaces\Http\Roles\Controllers\RoleController;
 use Interfaces\Http\Site\Controllers\SiteController;
 use Interfaces\Http\Tables\Controllers\TableController;
 use Interfaces\Http\Tenant\Controllers\TenantController;
@@ -108,6 +109,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::middleware('can:tables')->group(function () {
         Route::get('tables/search', [TableController::class, 'search'])->name('tables.search');
         Route::resource('tables', TableController::class);
+    });
+
+    Route::middleware('can:roles')->group(function () {
+        Route::get('roles/search', [RoleController::class, 'search'])->name('roles.search');
+        Route::resource('roles', RoleController::class);
     });
 });
 
