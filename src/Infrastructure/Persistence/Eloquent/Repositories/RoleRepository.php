@@ -61,4 +61,14 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryContrac
 
         return RolePaginatedData::fromPaginator($roles);
     }
+
+    public function attachPermissions(int $roleId, array $permissions): bool
+    {
+        return (bool) $this->model->findOrFail($roleId)->permissions()->sync($permissions, false);
+    }
+
+    public function detachPermission(int $roleId, int $permissionId): bool
+    {
+        return (bool) $this->model->findOrFail($roleId)->permissions()->detach($permissionId);
+    }
 }
