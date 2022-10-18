@@ -1,19 +1,19 @@
 @extends('adminlte::page')
 
-@section('title', "Permissões disponíveis - perfil {$profile->name}")
+@section('title', "Permissões disponíveis - cargo {$role->name}")
 
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item active">Perfis</li>
     </ol>
-    <h1>Permissões disponíveis - perfil {{ $profile->name }}</h1>
+    <h1>Permissões disponíveis - cargo {{ $role->name }}</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('profiles.permissions.search-available', $profile->id) }}"
+            <form action="{{ route('roles.permissions.search', $role->id) }}"
                   method="GET"
                   class="form form-inline">
                 <input type="text"
@@ -36,7 +36,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <form action="{{ route('profiles.permissions.attach', $profile->id) }}" method="post">
+                        <form action="{{ route('roles.permissions.attach', $role->id) }}" method="post">
                             @csrf
                             @foreach ($permissions as $permission)
                                 <tr>
