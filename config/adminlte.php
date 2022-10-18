@@ -243,6 +243,12 @@ return [
             'text' => 'search',
         ],
         [
+            'text' => 'Empresas',
+            'url' => 'admin/tenants',
+            'icon' => 'fas fa-building',
+            'can' => 'tables',
+        ],
+        [
             'text' => 'Planos',
             'url' => 'admin/plans',
             'icon' => 'fas fa-mountain',
@@ -261,6 +267,12 @@ return [
             'can' => 'permissions',
         ],
         [
+            'text' => 'Cargos',
+            'url' => 'admin/roles',
+            'icon' => 'fas fa-table',
+            'can' => 'roles',
+        ],
+        [
             'text' => 'Usuários',
             'url' => 'admin/users',
             'icon' => 'fas fa-users',
@@ -276,11 +288,13 @@ return [
             'text' => 'Produtos',
             'url' => 'admin/products',
             'icon' => 'fab fa-product-hunt',
+            'can' => 'products',
         ],
         [
             'text' => 'Mesas',
             'url' => 'admin/tables',
             'icon' => 'fas fa-table',
+            'can' => 'tables',
         ],
     ],
 
