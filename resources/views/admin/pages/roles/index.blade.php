@@ -40,9 +40,9 @@
                             <td>
                                 <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('roles.show', $role->id) }}" class="btn btn-warning">Ver</a>
-                                {{-- <a href="{{ route('roles.permissions', $role->id) }}" class="btn btn-warning">
+                                <a href="{{ route('roles.permissions', $role->id) }}" class="btn btn-warning">
                                     <i class="fas fa-user-lock"></i>
-                                </a> --}}
+                                </a>
                             </td>
                         </tr>
                     @endforeach

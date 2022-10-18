@@ -15,9 +15,14 @@ interface PermissionRepository
     public function delete(int $id): bool;
     public function findById(int $id, array $with = []): PermissionData;
     public function getAll(IndexPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
+    public function queryByNameAndDescription(SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
+
     public function getAllByProfile(int $profileId, IndexPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
     public function getAllAvailableByProfile(int $profileId, IndexPermissionRequestData $paginationData): PermissionPaginatedData;
-    public function queryByNameAndDescription(SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
     public function queryByProfile(int $profileId, SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
     public function queryAvailableByProfile(int $profileId, SearchPermissionRequestData $paginationData, array $with = []): PermissionPaginatedData;
+
+    public function queryByRole(int $roleId, IndexPermissionRequestData $validatedRequest): PermissionPaginatedData;
+    public function queryAvailableByRole(int $roleId, IndexPermissionRequestData $validatedRequest): PermissionPaginatedData;
+    public function queryAvailableByRoleWithFilter(int $roleId, SearchPermissionRequestData $validatedRequest): PermissionPaginatedData;
 }

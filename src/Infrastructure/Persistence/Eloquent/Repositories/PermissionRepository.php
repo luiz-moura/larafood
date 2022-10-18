@@ -151,4 +151,62 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
 
         return PermissionPaginatedData::fromPaginator($permissions);
     }
+
+    public function queryByRole(
+        int $roleId,
+        IndexPermissionRequestData $validatedRequest
+    ): PermissionPaginatedData {
+        $permissions = $this->model
+            ->select()
+            ->whereHas('roles', function ($query) use ($roleId) {
+                $query->where('roles.id', $roleId);
+            })
+            ->when($validatedRequest->order, function ($query) use ($validatedRequest) {
+                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
+            })
+            ->latest()
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
+
+        return PermissionPaginatedData::fromPaginator($permissions);
+    }
+
+    public function queryAvailableByRole(
+        int $roleId,
+        IndexPermissionRequestData $validatedRequest
+    ): PermissionPaginatedData {
+        $permissions = $this->model
+            ->select()
+            ->whereDoesntHave('roles', function ($query) use ($roleId) {
+                $query->where('roles.id', $roleId);
+            })
+            ->when($validatedRequest->order, function ($query) use ($validatedRequest) {
+                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
+            })
+            ->latest()
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
+
+        return PermissionPaginatedData::fromPaginator($permissions);
+    }
+
+    public function queryAvailableByRoleWithFilter(
+        int $roleId,
+        SearchPermissionRequestData $validatedRequest
+    ): PermissionPaginatedData {
+        $permissions = $this->model
+            ->select()
+            ->whereDoesntHave('roles', function ($query) use ($roleId) {
+                $query->where('roles.id', $roleId);
+            })
+            ->where(function ($query) use ($validatedRequest) {
+                $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
+                    ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
+            })
+            ->when($validatedRequest->order, function ($query) use ($validatedRequest) {
+                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
+            })
+            ->latest()
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
+
+        return PermissionPaginatedData::fromPaginator($permissions);
+    }
 }
