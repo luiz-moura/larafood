@@ -4,6 +4,7 @@ namespace Domains\ACL\Roles\DataTransferObjects;
 
 use Domains\ACL\Permissions\DataTransferObjects\PermissionCollection;
 use Illuminate\Support\Arr;
+use Infrastructure\Persistence\Eloquent\Models\Role;
 use Infrastructure\Shared\DataTransferObject;
 
 class RoleData extends DataTransferObject
@@ -21,6 +22,18 @@ class RoleData extends DataTransferObject
             description: Arr::get($data, 'description'),
             permissions: isset($data['permissions'])
                 ? PermissionCollection::fromArray($data['permissions'])
+                : null,
+        );
+    }
+
+    public static function fromModel(Role $model)
+    {
+        return new self(
+            id: $model->id,
+            name: $model->nome,
+            description: $model->description,
+            permissions: $model->permissions
+                ? PermissionCollection::fromModel($model->permissions)
                 : null,
         );
     }

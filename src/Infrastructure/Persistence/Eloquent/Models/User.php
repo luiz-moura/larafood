@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Infrastructure\Persistence\Eloquent\Traits\ACLTrait;
@@ -25,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'tenant_id',
+        'admin',
     ];
 
     protected $hidden = [
@@ -39,6 +41,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
     }
 
     public function scopeTenantUser(Builder $query): Builder

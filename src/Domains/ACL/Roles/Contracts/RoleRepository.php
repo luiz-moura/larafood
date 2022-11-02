@@ -17,5 +17,8 @@ interface RoleRepository
     public function getAll(IndexRoleRequestData $validatedRequest): RolePaginatedData;
     public function attachPermissions(int $id, array $permissions): bool;
     public function detachPermission(int $id, int $permissionId): bool;
-    public function queryByNameAndDescription(SearchRoleRequestData $validatedReques): RolePaginatedData;
+    public function queryByNameAndDescription(SearchRoleRequestData $validatedRequest): RolePaginatedData;
+    public function queryByUser(int $userId, IndexRoleRequestData $validatedRequest): RolePaginatedData;
+    public function queryAvailableFromUser(int $userId, IndexRoleRequestData $validatedRequest): RolePaginatedData;
+    public function queryAvailableFromUserByName(int $userId, SearchRoleRequestData $validatedRequest): RolePaginatedData;
 }
