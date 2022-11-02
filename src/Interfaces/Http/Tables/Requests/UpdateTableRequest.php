@@ -4,7 +4,7 @@ namespace Interfaces\Http\Tables\Requests;
 
 use Interfaces\Http\Common\Requests\AbstractRequest;
 
-class StoreTableRequest extends AbstractRequest
+class UpdateTableRequest extends AbstractRequest
 {
     public function rules()
     {
