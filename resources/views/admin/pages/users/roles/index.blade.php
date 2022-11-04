@@ -1,19 +1,19 @@
 @extends('adminlte::page')
 
-@section('title', 'Usuários')
+@section('title', "Cargos do usuário {$user->name}")
 
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Usuários</li>
+        <li class="breadcrumb-item active">Perfis</li>
     </ol>
-    <h1>Usuários <a href="{{ route('users.create') }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add</a></h1>
+    <h1>Cargos do usuário {{ $user->name }} <a href="{{ route('users.roles.available', $user->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add novo cargo</a></h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('users.search') }}"
+            <form action="{{ route('users.roles.search', $user->id) }}"
                   method="GET"
                   class="form form-inline">
                 <input type="text"
@@ -30,22 +30,20 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>E-mail</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @forelse ($roles as $role)
                         <tr>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
+                            <td>{{ $role->name }}</td>
                             <td>
-                                <a href="{{ route('users.roles', $user->id) }}" class="btn btn-info">Cargos</a>
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info">Editar</a>
-                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-warning">Ver</a>
+                                <a href="{{ route('users.roles.detach', [$user->id, $role->id]) }}" class="btn btn-danger">DESVINCULAR</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <p>No roles</p>
+                    @endforelse
                 </tbody>
             </table>
         </div>
