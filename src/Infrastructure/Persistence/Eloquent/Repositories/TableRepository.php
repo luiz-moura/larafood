@@ -5,7 +5,6 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 use Domains\Tables\Contracts\TableRepository as TableRepositoryContract;
 use Domains\Tables\DataTransferObjects\TableData;
 use Domains\Tables\DataTransferObjects\TablePaginatedData;
-use Illuminate\Database\Query\Builder;
 use Infrastructure\Persistence\Eloquent\Models\Table;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Tables\DataTransferObjects\IndexTableRequestData;
@@ -28,29 +27,25 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
     public function find(int $id): TableData
     {
         return TableData::fromModel(
-            $this->model->tenantUser()->findOrFail($id)
+            $this->model->findOrFail($id)
         );
     }
 
     public function update(int $id, TableFormData $formData): bool
     {
-        return $this->model->tenantUser()->findOrFail($id)->update($formData->toArray());
+        return $this->model->findOrFail($id)->update($formData->toArray());
     }
 
     public function delete(int $id): bool
     {
-        return $this->model->tenantUser()->findOrFail($id)->delete();
+        return $this->model->findOrFail($id)->delete();
     }
 
     public function getAll(IndexTableRequestData $paginationData): TablePaginatedData
     {
         $tables = $this->model
             ->select()
-            ->tenantUser()
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return TablePaginatedData::fromPaginator($tables);
@@ -60,13 +55,11 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
     {
         $tables = $this->model
             ->select()
-            ->tenantUser()
-            ->where('identify', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
+            ->where(function ($query) use ($paginationData) {
+                $query->where('identify', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return TablePaginatedData::fromPaginator($tables);

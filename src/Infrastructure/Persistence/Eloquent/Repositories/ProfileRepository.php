@@ -34,7 +34,7 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
 
     public function delete(int $id): bool
     {
-        return (bool) $this->model->findOrFail($id)->delete();
+        return $this->model->findOrFail($id)->delete();
     }
 
     public function attachPermissionsInProfile(int $profileId, array $permissions): bool
@@ -52,10 +52,7 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return ProfilePaginatedData::fromPaginator($profiles);
@@ -69,13 +66,8 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->whereHas('permissions', function ($query) use ($permissionId) {
-                $query->where('permissions.id', $permissionId);
-            })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->whereHas('permissions', fn ($query) => $query->where('permissions.id', $permissionId))
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return ProfilePaginatedData::fromPaginator($profiles);
@@ -86,9 +78,11 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->where('name', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
-            ->latest()
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            })
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return ProfilePaginatedData::fromPaginator($profiles);
@@ -102,13 +96,8 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->whereHas('plans', function ($query) use ($planId) {
-                $query->where('plans.id', $planId);
-            })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->whereHas('plans', fn ($query) => $query->where('plans.id', $planId))
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return ProfilePaginatedData::fromPaginator($profiles);
@@ -122,17 +111,12 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->whereHas('plans', function ($query) use ($planId) {
-                $query->where('plans.id', $planId);
-            })
+            ->whereHas('plans', fn ($query) => $query->where('plans.id', $planId))
             ->where(function ($query) use ($paginationData) {
                 $query->where('name', 'ilike', "%{$paginationData->filter}%")
                     ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return ProfilePaginatedData::fromPaginator($profiles);
@@ -146,17 +130,12 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->whereDoesntHave('plans', function ($query) use ($planId) {
-                $query->where('plans.id', $planId);
-            })
+            ->whereDoesntHave('plans', fn ($query) => $query->where('plans.id', $planId))
             ->where(function ($query) use ($paginationData) {
                 $query->where('name', 'ilike', "%{$paginationData->filter}%")
                     ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return ProfilePaginatedData::fromPaginator($profiles);
@@ -170,13 +149,8 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryC
         $profiles = $this->model
             ->select()
             ->with($with)
-            ->whereDoesntHave('plans', function ($query) use ($planId) {
-                $query->where('plans.id', $planId);
-            })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->whereDoesntHave('plans', fn ($query) => $query->where('plans.id', $planId))
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return ProfilePaginatedData::fromPaginator($profiles);

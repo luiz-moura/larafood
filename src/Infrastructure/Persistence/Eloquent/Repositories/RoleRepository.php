@@ -34,12 +34,12 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryContrac
 
     public function delete(int $id): bool
     {
-        return (bool) $this->model->findOrFail($id)->delete();
+        return $this->model->findOrFail($id)->delete();
     }
 
     public function attachPermissions(int $roleId, array $permissions): bool
     {
-        return (bool) $this->model->findOrFail($roleId)->permissions()->sync($permissions, false);
+        return (bool) $this->model->findOrFail($roleId)->permissions()->syncWithoutDetaching($permissions);
     }
 
     public function detachPermission(int $roleId, int $permissionId): bool
@@ -61,11 +61,11 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryContrac
     {
         $roles = $this->model
             ->select()
-            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->where(function ($query) use ($validatedRequest) {
                 $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
                     ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
             })
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return RolePaginatedData::fromPaginator($roles);

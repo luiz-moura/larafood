@@ -49,6 +49,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
             ->tenantUser()
             ->select()
             ->with($with)
+            ->tenantUser()
             ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
@@ -61,8 +62,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
             ->tenantUser()
             ->select()
             ->with($with)
-            ->where('name', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
+            ->tenantUser()
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            })
             ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 

@@ -6,7 +6,6 @@ use DateTime;
 use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Domains\Tenants\DataTransferObjects\TenantData;
 use Domains\Tenants\DataTransferObjects\TenantPaginatedData;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Infrastructure\Persistence\Eloquent\Models\Tenant;
 use Infrastructure\Shared\AbstractRepository;
@@ -21,7 +20,9 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
     public function create(int $planId, TenantFormData $formData, DateTime $expires): TenantData
     {
         return TenantData::fromModel(
-            $this->model->create($formData->toArray() + ['plan_id' => $planId])
+            $this->model->create(
+                $formData->toArray() + ['plan_id' => $planId]
+            )
         );
     }
 
@@ -48,10 +49,7 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
     {
         $products = $this->model
             ->select()
-            ->when($validatedRequest->order, function (Builder $query) use ($validatedRequest) {
-                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
-            })
-            ->latest()
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return TenantPaginatedData::fromPaginator($products);
@@ -62,10 +60,7 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
         $products = $this->model
             ->select()
             ->where('name', 'ilike', "%{$validatedRequest->filter}%")
-            ->when($validatedRequest->order, function (Builder $query) use ($validatedRequest) {
-                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
-            })
-            ->latest()
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return TenantPaginatedData::fromPaginator($products);
