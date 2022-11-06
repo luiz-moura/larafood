@@ -2,6 +2,7 @@
 
 namespace Interfaces\Http\Authentication\Controllers;
 
+use Application\Events\TenantCreated;
 use Application\Providers\RouteServiceProvider;
 use Domains\ACL\Users\Actions\CreateUserAction;
 use Domains\Tenants\Actions\CreateTenantAction;
@@ -45,6 +46,7 @@ class RegisteredUserController extends Controller
         session()->forget('planData');
 
         event(new Registered($request->user()));
+        event(new TenantCreated($request->user()));
 
         return redirect(RouteServiceProvider::HOME);
     }

@@ -2,6 +2,8 @@
 
 namespace Application\Providers;
 
+use Application\Events\TenantCreated;
+use Application\Listeners\AddRoleTenant;
 use Application\Observers\CategoryObserver;
 use Application\Observers\PlanObserver;
 use Application\Observers\ProductObserver;
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        TenantCreated::class => [
+            AddRoleTenant::class,
         ],
     ];
 
