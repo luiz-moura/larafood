@@ -4,8 +4,6 @@ namespace Infrastructure\Persistence\Eloquent\Traits;
 
 trait ACLTrait
 {
-    private $permissionsNames;
-
     public function hasPermission(string $permission): bool
     {
         return in_array(mb_strtolower($permission), $this->permissions(), true);
@@ -18,16 +16,28 @@ trait ACLTrait
 
     private function permissions(): array
     {
-        if (!$this->permissionsNames) {
-            $this->permissionsNames = $this->tenant->plan->profiles
-                ->pluck('permissions')
-                ->flatten()
-                ->pluck('name')
-                ->map(fn ($name) => mb_strtolower($name))
-                ->unique()
-                ->toArray();
-        }
+        return array_intersect($this->rolePermissions(), $this->planPermissions());
+    }
 
-        return $this->permissionsNames;
+    private function rolePermissions(): array
+    {
+        return $this->roles
+            ->pluck('permissions')
+            ->flatten()
+            ->pluck('name')
+            ->map(fn ($name) => mb_strtolower($name))
+            ->unique()
+            ->toArray();
+    }
+
+    private function planPermissions()
+    {
+        return $this->tenant->plan->profiles
+            ->pluck('permissions')
+            ->flatten()
+            ->pluck('name')
+            ->map(fn ($name) => mb_strtolower($name))
+            ->unique()
+            ->toArray();
     }
 }
