@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
@@ -27,9 +28,9 @@ return new class() extends Migration {
             $table->string('logo')->nullable()->unique();
             $table->string('subscription_id', 255)->nullable();
             $table->enum('active', ['Y', 'N'])->default('Y');
-            $table->boolean('subscription_active')->default(false);
+            $table->boolean('subscription_active')->default(true);
             $table->boolean('subscription_suspended')->default(false);
-            $table->date('subscribed_at')->nullable();
+            $table->date('subscribed_at')->nullable()->default(now());
             $table->date('expires_at')->nullable();
             $table->timestamps();
         });
