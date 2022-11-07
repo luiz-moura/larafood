@@ -9,7 +9,7 @@ use Domains\Tenants\DataTransferObjects\TenantPaginatedData;
 use Illuminate\Support\Arr;
 use Infrastructure\Persistence\Eloquent\Models\Tenant;
 use Infrastructure\Shared\AbstractRepository;
-use Interfaces\Http\Authentication\DataTransferObjects\TenantFormData as TenantAuthenticatedFormData;
+use Interfaces\Http\Authentication\DataTransferObjects\UserTenantFormData;
 use Interfaces\Http\Tenant\DataTransferObjects\IndexTenantRequestData;
 use Interfaces\Http\Tenant\DataTransferObjects\SearchTenantRequestData;
 use Interfaces\Http\Tenant\DataTransferObjects\TenantFormData;
@@ -18,7 +18,11 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
 {
     protected $modelClass = Tenant::class;
 
-    public function create(int $planId, TenantFormData|TenantAuthenticatedFormData $formData, DateTime $expires): TenantData
+    public function create(
+        int $planId,
+        TenantFormData|UserTenantFormData $formData,
+        DateTime $expires
+    ): TenantData
     {
         return TenantData::fromModel(
             $this->model->create(
