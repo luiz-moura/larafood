@@ -16,9 +16,9 @@ class TenantsTableSeeder extends Seeder
     {
         Plan::first()->tenants()->create([
             'cnpj' => '65.462.943/0001-81',
-            'name' => 'Mac Donalds',
-            'url' => 'macdonalds',
-            'email' => '_____macdonalds@test.com.br',
+            'name' => 'Limited intelligence',
+            'url' => 'limitedintelligence',
+            'email' => 'limitedintelligences@test.com.br',
         ]);
     }
 }
