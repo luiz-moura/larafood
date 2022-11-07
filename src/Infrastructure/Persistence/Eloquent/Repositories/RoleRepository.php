@@ -34,17 +34,24 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryContrac
 
     public function delete(int $id): bool
     {
-        return (bool) $this->model->findOrFail($id)->delete();
+        return $this->model->findOrFail($id)->delete();
+    }
+
+    public function attachPermissions(int $roleId, array $permissions): bool
+    {
+        return (bool) $this->model->findOrFail($roleId)->permissions()->syncWithoutDetaching($permissions);
+    }
+
+    public function detachPermission(int $roleId, int $permissionId): bool
+    {
+        return (bool) $this->model->findOrFail($roleId)->permissions()->detach($permissionId);
     }
 
     public function getAll(IndexRoleRequestData $validatedRequest): RolePaginatedData
     {
         $roles = $this->model
             ->select()
-            ->when($validatedRequest->order, function ($query) use ($validatedRequest) {
-                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
-            })
-            ->latest()
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return RolePaginatedData::fromPaginator($roles);
@@ -54,21 +61,50 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryContrac
     {
         $roles = $this->model
             ->select()
-            ->where('name', 'ilike', "%{$validatedRequest->filter}%")
-            ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%")
-            ->latest()
+            ->where(function ($query) use ($validatedRequest) {
+                $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
+                    ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
+            })
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return RolePaginatedData::fromPaginator($roles);
     }
 
-    public function attachPermissions(int $roleId, array $permissions): bool
+    public function queryByUser(int $userId, IndexRoleRequestData $validatedRequest): RolePaginatedData
     {
-        return (bool) $this->model->findOrFail($roleId)->permissions()->sync($permissions, false);
+        $roles = $this->model
+            ->select()
+            ->whereHas('users', fn ($query) => $query->where('users.id', $userId))
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
+
+        return RolePaginatedData::fromPaginator($roles);
     }
 
-    public function detachPermission(int $roleId, int $permissionId): bool
+    public function queryAvailableFromUser(int $userId, IndexRoleRequestData $validatedRequest): RolePaginatedData
     {
-        return (bool) $this->model->findOrFail($roleId)->permissions()->detach($permissionId);
+        $roles = $this->model
+            ->select()
+            ->whereDoesntHave('users', fn ($query) => $query->where('users.id', $userId))
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
+
+        return RolePaginatedData::fromPaginator($roles);
+    }
+
+    public function queryAvailableFromUserByName(int $userId, SearchRoleRequestData $validatedRequest): RolePaginatedData
+    {
+        $roles = $this->model
+            ->select()
+            ->whereDoesntHave('users', fn ($query) => $query->where('users.id', $userId))
+            ->where(function ($query) use ($validatedRequest) {
+                $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
+                    ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
+            })
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
+
+        return RolePaginatedData::fromPaginator($roles);
     }
 }

@@ -27,7 +27,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
 
     public function delete(int $id): bool
     {
-        return (bool) $this->model->findOrFail($id)->delete();
+        return $this->model->findOrFail($id)->delete();
     }
 
     public function findById(int $permissionId, array $with = []): PermissionData
@@ -42,10 +42,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         $permissions = $this->model
             ->select()
             ->with($with)
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -59,13 +56,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         $permissions = $this->model
             ->select()
             ->with($with)
-            ->whereHas('profiles', function ($query) use ($profileId) {
-                $query->where('profiles.id', $profileId);
-            })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->whereHas('profiles', fn ($query) => $query->where('profiles.id', $profileId))
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -76,13 +68,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         $permissions = $this->model
             ->select()
             ->with($with)
-            ->whereDoesntHave('profiles', function ($query) use ($profileId) {
-                $query->where('profiles.id', $profileId);
-            })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->whereDoesntHave('profiles', fn ($query) => $query->where('profiles.id', $profileId))
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -93,12 +80,11 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         $permissions = $this->model
             ->select()
             ->with($with)
-            ->where('name', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -112,17 +98,12 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         $permissions = $this->model
             ->select()
             ->with($with)
-            ->whereHas('profiles', function ($query) use ($profileId) {
-                $query->where('profiles.id', $profileId);
-            })
+            ->whereHas('profiles', fn ($query) => $query->where('profiles.id', $profileId))
             ->where(function ($query) use ($paginationData) {
                 $query->where('name', 'ilike', "%{$paginationData->filter}%")
                     ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -136,17 +117,12 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         $permissions = $this->model
             ->select()
             ->with($with)
-            ->whereDoesntHave('profiles', function ($query) use ($profileId) {
-                $query->where('profiles.id', $profileId);
-            })
+            ->whereDoesntHave('profiles', fn ($query) => $query->where('profiles.id', $profileId))
             ->where(function ($query) use ($paginationData) {
                 $query->where('name', 'ilike', "%{$paginationData->filter}%")
                     ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -158,13 +134,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     ): PermissionPaginatedData {
         $permissions = $this->model
             ->select()
-            ->whereHas('roles', function ($query) use ($roleId) {
-                $query->where('roles.id', $roleId);
-            })
-            ->when($validatedRequest->order, function ($query) use ($validatedRequest) {
-                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
-            })
-            ->latest()
+            ->whereHas('roles', fn ($query) => $query->where('roles.id', $roleId))
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -176,13 +147,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     ): PermissionPaginatedData {
         $permissions = $this->model
             ->select()
-            ->whereDoesntHave('roles', function ($query) use ($roleId) {
-                $query->where('roles.id', $roleId);
-            })
-            ->when($validatedRequest->order, function ($query) use ($validatedRequest) {
-                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
-            })
-            ->latest()
+            ->whereDoesntHave('roles', fn ($query) => $query->where('roles.id', $roleId))
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);
@@ -194,17 +160,12 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     ): PermissionPaginatedData {
         $permissions = $this->model
             ->select()
-            ->whereDoesntHave('roles', function ($query) use ($roleId) {
-                $query->where('roles.id', $roleId);
-            })
+            ->whereDoesntHave('roles', fn ($query) => $query->where('roles.id', $roleId))
             ->where(function ($query) use ($validatedRequest) {
                 $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
                     ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
             })
-            ->when($validatedRequest->order, function ($query) use ($validatedRequest) {
-                $query->orderBy($validatedRequest->order, $validatedRequest->sort);
-            })
-            ->latest()
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return PermissionPaginatedData::fromPaginator($permissions);

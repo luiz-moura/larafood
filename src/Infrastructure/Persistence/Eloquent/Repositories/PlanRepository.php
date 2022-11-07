@@ -21,16 +21,16 @@ class PlanRepository extends AbstractRepository implements PlanRepositoryContrac
         return (bool) $this->model->create($formData->toArray());
     }
 
-    public function deleteByUrl(string $url): bool
-    {
-        return (bool) $this->model->where('url', $url)->firstOrFail()->delete();
-    }
-
     public function updateByUrl(string $url, PlanFormData $formData): bool
     {
         return (bool) $this->model->where('url', $url)->firstOrFail()->update(
             $formData->toArray()
         );
+    }
+
+    public function deleteByUrl(string $url): bool
+    {
+        return $this->model->where('url', $url)->firstOrFail()->delete();
     }
 
     public function findByUrl(string $url): PlanData
@@ -74,10 +74,7 @@ class PlanRepository extends AbstractRepository implements PlanRepositoryContrac
         $plans = $this->model
             ->select()
             ->with($with)
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PlanPaginatedData::fromPaginator($plans);
@@ -90,12 +87,11 @@ class PlanRepository extends AbstractRepository implements PlanRepositoryContrac
         $plans = $this->model
             ->select()
             ->with($with)
-            ->where('name', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PlanPaginatedData::fromPaginator($plans);
@@ -109,13 +105,8 @@ class PlanRepository extends AbstractRepository implements PlanRepositoryContrac
         $plans = $this->model
             ->select()
             ->with($with)
-            ->whereHas('profiles', function ($query) use ($profileId) {
-                $query->where('profiles.id', $profileId);
-            })
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->whereHas('profiles', fn ($query) => $query->where('profiles.id', $profileId))
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PlanPaginatedData::fromPaginator($plans);

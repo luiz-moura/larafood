@@ -40,6 +40,7 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
+                                <a href="{{ route('users.roles', $user->id) }}" class="btn btn-info">Cargos</a>
                                 <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('users.show', $user->id) }}" class="btn btn-warning">Ver</a>
                             </td>

@@ -6,7 +6,7 @@ use Illuminate\Validation\Rule;
 
 trait Paginable
 {
-    public function paginationRules(): array
+    public function rules(): array
     {
         return [
             'page' => 'nullable|integer',

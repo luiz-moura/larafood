@@ -5,7 +5,8 @@ namespace Domains\Tenants\Actions;
 use DateTime;
 use Domains\Tenants\Contracts\TenantRepository;
 use Domains\Tenants\DataTransferObjects\TenantData;
-use Interfaces\Http\Authentication\DataTransferObjects\TenantFormData;
+use Interfaces\Http\Authentication\DataTransferObjects\UserTenantFormData;
+use Interfaces\Http\Tenant\DataTransferObjects\TenantFormData;
 
 class CreateTenantAction
 {
@@ -13,8 +14,11 @@ class CreateTenantAction
     {
     }
 
-    public function __invoke(int $planId, TenantFormData $formData, DateTime $expires): TenantData
-    {
+    public function __invoke(
+        int $planId,
+        TenantFormData|UserTenantFormData $formData,
+        DateTime $expires
+    ): TenantData {
         return $this->tenantRepository->create($planId, $formData, $expires);
     }
 }

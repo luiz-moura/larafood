@@ -5,7 +5,6 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 use Domains\Products\DataTransferObjects\ProductData;
 use Domains\Products\DataTransferObjects\ProductPaginatedData;
 use Domains\Products\Repositories\ProductRepository as ProductRepositoryContract;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Infrastructure\Persistence\Eloquent\Models\Product;
 use Infrastructure\Shared\AbstractRepository;
@@ -29,50 +28,20 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
     public function find(int $id, array $with = []): ProductData
     {
         return ProductData::fromModel(
-            $this->model->with($with)->tenantUser()->findOrFail($id)
+            $this->model->with($with)->findOrFail($id)
         );
     }
 
     public function update(int $id, ProductFormData $formData): bool
     {
-        return $this->model->tenantUser()->findOrFail($id)->update(Arr::whereNotNull($formData->toArray()));
+        return $this->model->findOrFail($id)->update(
+            Arr::whereNotNull($formData->toArray())
+        );
     }
 
     public function delete(int $id): bool
     {
-        return $this->model->tenantUser()->findOrFail($id)->delete();
-    }
-
-    public function getAll(IndexProductRequestData $paginationData, array $with = []): ProductPaginatedData
-    {
-        $products = $this->model
-            ->select()
-            ->with($with)
-            ->tenantUser()
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
-            ->paginate($paginationData->per_page, $paginationData->page);
-
-        return ProductPaginatedData::fromPaginator($products);
-    }
-
-    public function queryByName(SearchProductRequestData $paginationData, array $with = []): ProductPaginatedData
-    {
-        $products = $this->model
-            ->select()
-            ->with($with)
-            ->tenantUser()
-            ->where('name', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
-            ->paginate($paginationData->per_page, $paginationData->page);
-
-        return ProductPaginatedData::fromPaginator($products);
+        return $this->model->findOrFail($id)->delete();
     }
 
     public function attachCategories(int $id, array $categories): void
@@ -83,5 +52,31 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
     public function detachCategory(int $productId, int $categoryId): void
     {
         $this->model->findOrFail($productId)->categories()->detach($categoryId);
+    }
+
+    public function getAll(IndexProductRequestData $paginationData, array $with = []): ProductPaginatedData
+    {
+        $products = $this->model
+            ->select()
+            ->with($with)
+            ->orderBy($paginationData->order, $paginationData->sort)
+            ->paginate($paginationData->per_page, $paginationData->page);
+
+        return ProductPaginatedData::fromPaginator($products);
+    }
+
+    public function queryByName(SearchProductRequestData $paginationData, array $with = []): ProductPaginatedData
+    {
+        $products = $this->model
+            ->select()
+            ->with($with)
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            })
+            ->orderBy($paginationData->order, $paginationData->sort)
+            ->paginate($paginationData->per_page, $paginationData->page);
+
+        return ProductPaginatedData::fromPaginator($products);
     }
 }

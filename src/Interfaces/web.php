@@ -17,6 +17,7 @@ use Interfaces\Http\Roles\Controllers\RolePermissionController;
 use Interfaces\Http\Site\Controllers\SiteController;
 use Interfaces\Http\Tables\Controllers\TableController;
 use Interfaces\Http\Tenant\Controllers\TenantController;
+use Interfaces\Http\Users\Controllers\RoleUserController;
 use Interfaces\Http\Users\Controllers\UserController;
 
 Route::prefix('admin')->middleware('auth')->group(function () {
@@ -77,6 +78,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     });
 
     Route::middleware('can:users')->group(function () {
+        Route::prefix('users')->controller(RoleUserController::class)->group(function () {
+            Route::get('{id}/roles', 'index')->name('users.roles');
+            Route::get('{id}/roles/available', 'available')->name('users.roles.available');
+            Route::get('{id}/roles/available/search', 'search')->name('users.roles.search');
+            Route::post('{id}/roles', 'attachRoles')->name('users.roles.attach');
+            Route::get('{id}/roles/{roleId}', 'detachRole')->name('users.roles.detach');
+        });
+
         Route::get('users/search', [UserController::class, 'search'])->name('users.search');
         Route::resource('users', UserController::class);
     });

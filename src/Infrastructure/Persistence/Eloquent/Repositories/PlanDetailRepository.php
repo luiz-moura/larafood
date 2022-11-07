@@ -30,12 +30,14 @@ class PlanDetailRepository extends AbstractRepository implements PlanDetailRepos
 
     public function delete(int $id): bool
     {
-        return (bool) $this->model->findOrFail($id)->delete();
+        return $this->model->findOrFail($id)->delete();
     }
 
     public function findById(int $id): PlanDetailData
     {
-        return PlanDetailData::fromModel($this->model->findOrFail($id));
+        return PlanDetailData::fromModel(
+            $this->model->findOrFail($id)
+        );
     }
 
     public function getAllByPlan(
@@ -47,10 +49,7 @@ class PlanDetailRepository extends AbstractRepository implements PlanDetailRepos
             ->select()
             ->with($with)
             ->where('plan_id', $planId)
-            ->when($paginationData->order, function ($query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return PlanDetailPaginatedData::fromPaginator($plans);

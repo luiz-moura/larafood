@@ -8,9 +8,4 @@ use Interfaces\Http\Common\Traits\Paginable;
 class IndexPlanDetailRequest extends AbstractRequest
 {
     use Paginable;
-
-    public function rules(): array
-    {
-        return self::paginationRules();
-    }
 }

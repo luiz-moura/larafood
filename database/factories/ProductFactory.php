@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Infrastructure\Persistence\Eloquent\Models\Product;
+use Infrastructure\Shared\AbstractFactory;
 
-class ProductFactory extends Factory
+class ProductFactory extends AbstractFactory
 {
     protected $model = Product::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
             ...$this->mock(),
@@ -17,15 +17,15 @@ class ProductFactory extends Factory
         ];
     }
 
-    public function mock()
+    public function mock(array $extra = []): array
     {
-        return [
+        return $extra + [
+            'tenant_id' => $this->faker->randomNumber(),
             'name' => $this->faker->name(),
             'description' => $this->faker->text(255),
             'price' => $this->faker->randomNumber(),
             'image' => $this->faker->filePath(),
             'flag' => $this->faker->boolean(),
-            'tenant_id' => $this->faker->randomNumber(),
         ];
     }
 }

@@ -5,7 +5,6 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 use Domains\ACL\Users\DataTransferObjects\UserData;
 use Domains\ACL\Users\DataTransferObjects\UserPaginatedData;
 use Domains\ACL\Users\Repositories\UserRepository as UserRepositoryContract;
-use Illuminate\Database\Query\Builder;
 use Infrastructure\Persistence\Eloquent\Models\User;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Users\DataTransferObjects\IndexUserRequestData;
@@ -34,7 +33,9 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
 
     public function update(int $id, UserFormData $userFormData): bool
     {
-        return $this->model->tenantUser()->findOrFail($id)->update($userFormData->toArray());
+        return (bool) $this->model->tenantUser()
+            ->findOrFail($id)
+            ->update($userFormData->toArray());
     }
 
     public function delete(int $id): bool
@@ -45,13 +46,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
     public function getAll(IndexUserRequestData $paginationData, array $with = []): UserPaginatedData
     {
         $users = $this->model
+            ->tenantUser()
             ->select()
             ->with($with)
             ->tenantUser()
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return UserPaginatedData::fromPaginator($users);
@@ -60,17 +59,27 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
     public function queryByName(SearchUserRequestData $paginationData, array $with = []): UserPaginatedData
     {
         $users = $this->model
+            ->tenantUser()
             ->select()
             ->with($with)
             ->tenantUser()
-            ->where('name', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return UserPaginatedData::fromPaginator($users);
+    }
+
+    public function attachRoles(int $id, array $roles): void
+    {
+        $this->model->findOrFail($id)->roles()->syncWithoutDetaching($roles);
+    }
+
+    public function detachRole(int $userId, int $roleId): void
+    {
+        $this->model->findOrFail($userId)->roles()->detach($roleId);
     }
 }

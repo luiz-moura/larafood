@@ -10,9 +10,4 @@ class ProductFormData extends DataTransferObject
     public float $price;
     public string $description;
     public ?string $image;
-
-    public static function fromRequest(array $data): self
-    {
-        return new self($data);
-    }
 }

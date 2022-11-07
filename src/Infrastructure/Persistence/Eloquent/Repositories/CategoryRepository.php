@@ -5,7 +5,6 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 use Domains\Categories\DataTransferObjects\CategoryData;
 use Domains\Categories\DataTransferObjects\CategoryPaginatedData;
 use Domains\Categories\Repositories\CategoryRepository as CategoryRepositoryContract;
-use Illuminate\Database\Query\Builder;
 use Infrastructure\Persistence\Eloquent\Models\Category;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Categories\DataTransferObjects\CategoryFormData;
@@ -28,18 +27,18 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
     public function find(int $id, array $with = []): CategoryData
     {
         return CategoryData::fromModel(
-            $this->model->with($with)->tenantUser()->findOrFail($id)
+            $this->model->with($with)->findOrFail($id)
         );
     }
 
     public function update(int $id, CategoryFormData $formData): bool
     {
-        return $this->model->tenantUser()->findOrFail($id)->update($formData->toArray());
+        return (bool) $this->model->findOrFail($id)->update($formData->toArray());
     }
 
     public function delete(int $id): bool
     {
-        return $this->model->tenantUser()->findOrFail($id)->delete();
+        return $this->model->findOrFail($id)->delete();
     }
 
     public function getAll(IndexCategoryRequestData $paginationData, array $with = []): CategoryPaginatedData
@@ -47,11 +46,7 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
         $categories = $this->model
             ->select()
             ->with($with)
-            ->tenantUser()
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
-            })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
@@ -62,13 +57,11 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
         $categories = $this->model
             ->select()
             ->with($with)
-            ->tenantUser()
-            ->where('name', 'ilike', "%{$paginationData->filter}%")
-            ->orWhere('description', 'ilike', "%{$paginationData->filter}%")
-            ->when($paginationData->order, function (Builder $query) use ($paginationData) {
-                $query->orderBy($paginationData->order, $paginationData->sort);
+            ->where(function ($query) use ($paginationData) {
+                $query->where('name', 'ilike', "%{$paginationData->filter}%")
+                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
             })
-            ->latest()
+            ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
@@ -79,12 +72,8 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
         $categories = $this->model
             ->select()
             ->with($with)
-            ->tenantUser()
             ->whereRelation('products', 'products.id', $id)
-            ->latest()
-            ->when($request->order, function (Builder $query) use ($request) {
-                $query->orderBy($request->order, $request->sort);
-            })
+            ->orderBy($request->order, $request->sort)
             ->paginate($request->per_page, $request->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
@@ -95,14 +84,8 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
         $categories = $this->model
             ->select()
             ->with($with)
-            ->tenantUser()
-            ->whereDoesntHave('products', function ($query) use ($id) {
-                $query->where('products.id', $id);
-            })
-            ->latest()
-            ->when($request->order, function (Builder $query) use ($request) {
-                $query->orderBy($request->order, $request->sort);
-            })
+            ->whereDoesntHave('products', fn ($query) => $query->where('products.id', $id))
+            ->orderBy($request->order, $request->sort)
             ->paginate($request->per_page, $request->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
@@ -113,18 +96,12 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
         $categories = $this->model
             ->select()
             ->with($with)
-            ->tenantUser()
-            ->whereHas('products', function ($query) use ($id) {
-                $query->where('products.id', $id);
-            })
+            ->whereHas('products', fn ($query) => $query->where('products.id', $id))
             ->where(function ($query) use ($request) {
                 $query->where('name', 'ilike', "%{$request->filter}%")
                     ->orWhere('description', 'ilike', "%{$request->filter}%");
             })
-            ->latest()
-            ->when($request->order, function (Builder $query) use ($request) {
-                $query->orderBy($request->order, $request->sort);
-            })
+            ->orderBy($request->order, $request->sort)
             ->paginate($request->per_page, $request->page);
 
         return CategoryPaginatedData::fromPaginator($categories);

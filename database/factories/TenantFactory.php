@@ -3,14 +3,14 @@
 namespace Database\Factories;
 
 use Domains\Tenants\Enums\TenantActiveEnum;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Infrastructure\Persistence\Eloquent\Models\Tenant;
+use Infrastructure\Shared\AbstractFactory;
 
-class TenantFactory extends Factory
+class TenantFactory extends AbstractFactory
 {
     protected $model = Tenant::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
             ...$this->mock(),
@@ -18,9 +18,10 @@ class TenantFactory extends Factory
         ];
     }
 
-    public function mock()
+    public function mock(array $extra = []): array
     {
-        return [
+        return $extra + [
+            'plan_id' => $this->faker->randomNumber(),
             'cnpj' => $this->faker->name(),
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
