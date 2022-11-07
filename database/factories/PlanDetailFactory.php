@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Infrastructure\Persistence\Eloquent\Models\Plan;
 use Infrastructure\Persistence\Eloquent\Models\PlanDetail;
+use Infrastructure\Shared\AbstractFactory;
 
-class PlanDetailFactory extends Factory
+class PlanDetailFactory extends AbstractFactory
 {
     protected $model = PlanDetail::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
             ...$this->mock(),
@@ -18,9 +18,10 @@ class PlanDetailFactory extends Factory
         ];
     }
 
-    public function mock()
+    public function mock(array $extra = []): array
     {
-        return [
+        return $extra + [
+            'plan_id' => $this->faker->randomNumber(),
             'name' => $this->faker->name(),
         ];
     }

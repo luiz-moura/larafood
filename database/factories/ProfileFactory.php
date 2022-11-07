@@ -2,21 +2,21 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Infrastructure\Persistence\Eloquent\Models\Profile;
+use Infrastructure\Shared\AbstractFactory;
 
-class ProfileFactory extends Factory
+class ProfileFactory extends AbstractFactory
 {
     protected $model = Profile::class;
 
-    public function definition()
+    public function definition(): array
     {
         return $this->mock();
     }
 
-    public function mock()
+    public function mock(array $extra = []): array
     {
-        return [
+        return $extra + [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(255),
         ];

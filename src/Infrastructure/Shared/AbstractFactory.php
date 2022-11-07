@@ -2,14 +2,9 @@
 
 namespace Infrastructure\Shared;
 
-abstract class AbstractFactory
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+abstract class AbstractFactory extends Factory
 {
-    abstract public function create(array $parameters = []): DataTransferObject;
-
-    abstract public function createMock(array $parameters = []): array;
-
-    public static function new(): self
-    {
-        return new static();
-    }
+    abstract public function mock(array $parameters = []): array;
 }
