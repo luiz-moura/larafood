@@ -2,7 +2,6 @@
 
 namespace Interfaces\Http\Users\DataTransferObjects;
 
-use Illuminate\Support\Facades\Hash;
 use Infrastructure\Shared\DataTransferObject;
 
 class UserFormData extends DataTransferObject
@@ -15,7 +14,7 @@ class UserFormData extends DataTransferObject
     {
         return new self([
             'password' => isset($data['password'])
-                ? Hash::make($data['password'])
+                ? bcrypt($data['password'])
                 : null,
         ] + $data);
     }
