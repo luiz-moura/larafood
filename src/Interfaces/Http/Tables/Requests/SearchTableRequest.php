@@ -7,12 +7,14 @@ use Interfaces\Http\Common\Traits\Paginable;
 
 class SearchTableRequest extends AbstractRequest
 {
-    use Paginable;
+    use Paginable {
+        rules as private rulesStandard;
+    }
 
     public function rules(): array
     {
         return [
-            ...self::paginationRules(),
+            ...self::rulesStandard(),
             'filter' => 'required|min:3',
         ];
     }

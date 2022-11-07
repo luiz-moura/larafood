@@ -8,9 +8,4 @@ use Interfaces\Http\Common\Traits\Paginable;
 class IndexCategoryRequest extends AbstractRequest
 {
     use Paginable;
-
-    public function rules(): array
-    {
-        return self::paginationRules();
-    }
 }
