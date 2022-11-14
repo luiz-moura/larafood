@@ -195,6 +195,7 @@ return [
         Application\Providers\EventServiceProvider::class,
         Application\Providers\HorizonServiceProvider::class,
         Application\Providers\RouteServiceProvider::class,
+        Application\Providers\TelescopeServiceProvider::class,
         Application\Providers\RepositoryServiceProvider::class,
     ],
 
