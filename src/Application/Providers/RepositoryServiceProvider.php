@@ -2,6 +2,7 @@
 
 namespace Application\Providers;
 
+use Domains\ACL\Clients\Contracts\ClientRepository as ClientRepositoryContract;
 use Domains\ACL\Permissions\Contracts\PermissionRepository as PermissionRepositoryContract;
 use Domains\ACL\Profiles\Contracts\ProfileRepository as RepositoriesProfileContract;
 use Domains\ACL\Roles\Contracts\RoleRepository as RoleRepositoryContract;
@@ -14,6 +15,7 @@ use Domains\Tables\Contracts\TableRepository as TableRepositoryContract;
 use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Illuminate\Support\ServiceProvider;
 use Infrastructure\Persistence\Eloquent\Repositories\CategoryRepository;
+use Infrastructure\Persistence\Eloquent\Repositories\ClientRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PermissionRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PlanDetailRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PlanRepository;
@@ -43,6 +45,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProductRepositoryContract::class, ProductRepository::class);
         $this->app->bind(TableRepositoryContract::class, TableRepository::class);
         $this->app->bind(RoleRepositoryContract::class, RoleRepository::class);
+        $this->app->bind(ClientRepositoryContract::class, ClientRepository::class);
     }
 
     /**
