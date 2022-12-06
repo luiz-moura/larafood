@@ -10,7 +10,7 @@ class StoreCategoryRequest extends AbstractRequest
     {
         return [
             'name' => 'required|string|min:3|max:255|unique:categories',
-            'description' => 'nullable|string|min:3|max:99999',
+            'description' => 'required|string|min:3|max:99999',
         ];
     }
 }

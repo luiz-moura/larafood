@@ -10,7 +10,7 @@ class StoreProductRequest extends AbstractRequest
     {
         return [
             'name' => 'required|string|min:3|max:255',
-            'description' => 'nullable|string|min:3|max:99999',
+            'description' => 'required|string|min:3|max:99999',
             'price' => 'required|numeric',
             'file' => 'required|image',
         ];

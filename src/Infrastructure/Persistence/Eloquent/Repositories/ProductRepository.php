@@ -32,6 +32,16 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
         );
     }
 
+    public function findBySlugAndTenantUuid(string $slug, string $companyToken): ProductData
+    {
+        return ProductData::fromModel(
+            $this->model->newQueryWithoutScopes()
+                ->where('flag', $slug)
+                ->whereRelation('tenant', 'uuid', $companyToken)
+                ->firstOrFail()
+        );
+    }
+
     public function update(int $id, ProductFormData $formData): bool
     {
         return $this->model->findOrFail($id)->update(
@@ -76,6 +86,17 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
             })
             ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
+
+        return ProductPaginatedData::fromPaginator($products);
+    }
+
+    public function queryByTenantUuid(string $companyToken, IndexProductRequestData $validatedRequest): ProductPaginatedData
+    {
+        $products = $this->model->newQueryWithoutScopes()
+            ->select()
+            ->whereRelation('tenant', 'uuid', $companyToken)
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return ProductPaginatedData::fromPaginator($products);
     }
