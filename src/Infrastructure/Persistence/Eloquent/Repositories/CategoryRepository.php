@@ -19,7 +19,7 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
     {
         return CategoryData::fromModel(
             $this->model->create(
-                $formData->toArray() + ['tenant_id' => $tenantId]
+                ['tenant_id' => $tenantId] + $formData->toArray()
             )
         );
     }
@@ -28,6 +28,16 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
     {
         return CategoryData::fromModel(
             $this->model->with($with)->findOrFail($id)
+        );
+    }
+
+    public function findBySlugAndTenantUuid(string $slug, string $companyToken): CategoryData
+    {
+        return CategoryData::fromModel(
+            $this->model->newQueryWithoutScopes()
+                ->where('url', $slug)
+                ->whereRelation('tenant', 'uuid', $companyToken)
+                ->firstOrFail()
         );
     }
 
@@ -103,6 +113,17 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
             })
             ->orderBy($request->order, $request->sort)
             ->paginate($request->per_page, $request->page);
+
+        return CategoryPaginatedData::fromPaginator($categories);
+    }
+
+    public function queryByTenantUuid(string $companyToken, IndexCategoryRequestData $validatedRequest): CategoryPaginatedData
+    {
+        $categories = $this->model->newQueryWithoutScopes()
+            ->select()
+            ->whereRelation('tenant', 'uuid', $companyToken)
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
     }

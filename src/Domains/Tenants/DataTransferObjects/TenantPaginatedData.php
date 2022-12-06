@@ -8,24 +8,16 @@ use Infrastructure\Shared\DataTransferObject;
 
 class TenantPaginatedData extends DataTransferObject
 {
-    public int $total;
-    public TenantDataCollection $data;
-    public ?View $pagination;
-
-    public static function fromArray(array $paginated): self
-    {
-        return new self(
-            data: TenantDataCollection::fromArray($paginated['data']),
-            total: $paginated['total'],
-        );
-    }
+    public ?TenantDataCollection $items;
+    public LengthAwarePaginator $paginated;
+    public View $links;
 
     public static function fromPaginator(LengthAwarePaginator $paginated): self
     {
         return new self(
-            data: TenantDataCollection::fromModelCollection($paginated->getCollection()),
-            total: $paginated->total(),
-            pagination: $paginated->withQueryString()->links(),
+            items: TenantDataCollection::fromModelCollection($paginated->getCollection()),
+            links: $paginated->withQueryString()->links(),
+            paginated: $paginated
         );
     }
 }

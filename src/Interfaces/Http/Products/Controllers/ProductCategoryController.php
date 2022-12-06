@@ -30,8 +30,8 @@ class ProductCategoryController extends Controller
 
         return view('admin.pages.products.categories.index', [
             'product' => $product,
-            'categories' => $categoriesPaginated->data,
-            'pagination' => $categoriesPaginated->pagination,
+            'categories' => $categoriesPaginated->items,
+            'pagination' => $categoriesPaginated->links,
         ]);
     }
 
@@ -48,8 +48,8 @@ class ProductCategoryController extends Controller
 
         return view('admin.pages.products.categories.available', [
             'product' => $product,
-            'categories' => $categoriesPaginated->data,
-            'pagination' => $categoriesPaginated->pagination,
+            'categories' => $categoriesPaginated->items,
+            'pagination' => $categoriesPaginated->links,
         ]);
     }
 
@@ -66,8 +66,8 @@ class ProductCategoryController extends Controller
 
         return view('admin.pages.products.categories.index', [
             'product' => $product,
-            'categories' => $categoriesPaginated->data,
-            'pagination' => $categoriesPaginated->pagination,
+            'categories' => $categoriesPaginated->items,
+            'pagination' => $categoriesPaginated->links,
         ]);
     }
 

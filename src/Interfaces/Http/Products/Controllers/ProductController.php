@@ -28,8 +28,8 @@ class ProductController extends Controller
         $paginatedData = $getAllProductsAction($paginationData);
 
         return view('admin.pages.products.index', [
-            'products' => $paginatedData->data,
-            'pagination' => $paginatedData->pagination,
+            'products' => $paginatedData->items,
+            'pagination' => $paginatedData->links,
         ]);
     }
 
@@ -100,8 +100,8 @@ class ProductController extends Controller
         $paginatedData = $searchProductsAction($paginationData);
 
         return view('admin.pages.products.index', [
-            'products' => $paginatedData->data,
-            'pagination' => $paginatedData->pagination,
+            'products' => $paginatedData->items,
+            'pagination' => $paginatedData->links,
         ]);
     }
 }

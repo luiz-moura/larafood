@@ -8,9 +8,9 @@ use Infrastructure\Shared\DataTransferObject;
 
 class TablePaginatedData extends DataTransferObject
 {
-    public int $total;
-    public TableDataCollection $data;
-    public ?View $pagination;
+    public TableDataCollection $items;
+    public LengthAwarePaginator $paginated;
+    public View $links;
 
     public static function fromArray(array $paginated): self
     {
@@ -23,9 +23,9 @@ class TablePaginatedData extends DataTransferObject
     public static function fromPaginator(LengthAwarePaginator $paginated): self
     {
         return new self(
-            data: TableDataCollection::fromModelCollection($paginated->getCollection()),
-            total: $paginated->total(),
-            pagination: $paginated->withQueryString()->links(),
+            items: TableDataCollection::fromModelCollection($paginated->getCollection()),
+            links: $paginated->withQueryString()->links(),
+            paginated: $paginated
         );
     }
 }

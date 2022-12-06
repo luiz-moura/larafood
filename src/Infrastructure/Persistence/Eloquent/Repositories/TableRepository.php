@@ -31,6 +31,16 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
         );
     }
 
+    public function findByIdentifyAndTenantUuid(string $identify, string $companyToken): TableData
+    {
+        return TableData::fromModel(
+            $this->model->newQueryWithoutScopes()
+                ->where('identify', $identify)
+                ->whereRelation('tenant', 'uuid', $companyToken)
+                ->firstOrFail()
+        );
+    }
+
     public function update(int $id, TableFormData $formData): bool
     {
         return $this->model->findOrFail($id)->update($formData->toArray());
@@ -63,5 +73,16 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
             ->paginate($paginationData->per_page, $paginationData->page);
 
         return TablePaginatedData::fromPaginator($tables);
+    }
+
+    public function queryByTenantUuid(string $companyToken, IndexTableRequestData $validatedRequest): TablePaginatedData
+    {
+        $tenants = $this->model->newQueryWithoutScopes()
+            ->select()
+            ->whereRelation('tenant', 'uuid', $companyToken)
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
+
+        return TablePaginatedData::fromPaginator($tenants);
     }
 }

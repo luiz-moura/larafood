@@ -22,8 +22,7 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
         int $planId,
         TenantFormData|UserTenantFormData $formData,
         DateTime $expires
-    ): TenantData
-    {
+    ): TenantData {
         return TenantData::fromModel(
             $this->model->create(
                 $formData->toArray() + ['plan_id' => $planId]
@@ -35,6 +34,13 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
     {
         return TenantData::fromModel(
             $this->model->with($with)->findOrFail($id)
+        );
+    }
+
+    public function findByUuid(string $uuid): TenantData
+    {
+        return TenantData::fromModel(
+            $this->model->where('uuid', $uuid)->firstOrFail()
         );
     }
 
@@ -52,22 +58,22 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
 
     public function getAll(IndexTenantRequestData $validatedRequest): TenantPaginatedData
     {
-        $products = $this->model
+        $tenants = $this->model
             ->select()
             ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
-        return TenantPaginatedData::fromPaginator($products);
+        return TenantPaginatedData::fromPaginator($tenants);
     }
 
     public function queryByName(SearchTenantRequestData $validatedRequest): TenantPaginatedData
     {
-        $products = $this->model
+        $tenants = $this->model
             ->select()
             ->where('name', 'ilike', "%{$validatedRequest->filter}%")
             ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
-        return TenantPaginatedData::fromPaginator($products);
+        return TenantPaginatedData::fromPaginator($tenants);
     }
 }
