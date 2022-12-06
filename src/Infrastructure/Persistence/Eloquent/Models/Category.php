@@ -13,7 +13,7 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'categories';
-    protected $fillable = ['name', 'description', 'url'];
+    protected $fillable = ['name', 'description', 'url', 'tenant_id'];
 
     public function products(): BelongsToMany
     {

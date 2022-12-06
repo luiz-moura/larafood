@@ -26,8 +26,8 @@ class TenantController extends Controller
         $tenantsPaginated = $getAllTenantsAction($validatedRequest);
 
         return view('admin.pages.tenants.index', [
-            'tenants' => $tenantsPaginated->data,
-            'pagination' => $tenantsPaginated->pagination,
+            'tenants' => $tenantsPaginated->items,
+            'pagination' => $tenantsPaginated->links,
         ]);
     }
 
@@ -78,8 +78,8 @@ class TenantController extends Controller
         $tenantsPaginated = $searchTenantsAction($validatedRequest);
 
         return view('admin.pages.tenants.index', [
-            'tenants' => $tenantsPaginated->data,
-            'pagination' => $tenantsPaginated->pagination,
+            'tenants' => $tenantsPaginated->items,
+            'pagination' => $tenantsPaginated->links,
         ]);
     }
 }

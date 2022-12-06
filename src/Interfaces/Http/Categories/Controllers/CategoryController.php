@@ -27,8 +27,8 @@ class CategoryController extends Controller
         $paginatedData = $getAllCategoriesAction($paginationData);
 
         return view('admin.pages.categories.index', [
-            'categories' => $paginatedData->data,
-            'pagination' => $paginatedData->pagination,
+            'categories' => $paginatedData->items,
+            'pagination' => $paginatedData->links,
         ]);
     }
 
@@ -83,8 +83,8 @@ class CategoryController extends Controller
         $paginatedData = $searchCategoryAction($paginationData);
 
         return view('admin.pages.categories.index', [
-            'categories' => $paginatedData->data,
-            'pagination' => $paginatedData->pagination,
+            'categories' => $paginatedData->items,
+            'pagination' => $paginatedData->links,
         ]);
     }
 }

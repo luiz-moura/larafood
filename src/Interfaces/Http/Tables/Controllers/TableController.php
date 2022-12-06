@@ -26,8 +26,8 @@ class TableController extends Controller
         $tables = $getAllTablesAction($validatedRequest);
 
         return view('admin.pages.tables.index', [
-            'tables' => $tables->data,
-            'pagination' => $tables->pagination,
+            'tables' => $tables->items,
+            'pagination' => $tables->links,
         ]);
     }
 
@@ -85,8 +85,8 @@ class TableController extends Controller
         $tables = $searchTableAction($validatedRequest);
 
         return view('admin.pages.tables.index', [
-            'tables' => $tables->data,
-            'pagination' => $tables->pagination,
+            'tables' => $tables->items,
+            'pagination' => $tables->links,
         ]);
     }
 }
