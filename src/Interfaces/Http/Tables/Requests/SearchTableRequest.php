@@ -15,7 +15,7 @@ class SearchTableRequest extends AbstractRequest
     {
         return [
             ...self::rulesStandard(),
-            'filter' => 'required|min:3',
+            'filter' => 'required|min:2|max:255',
         ];
     }
 }

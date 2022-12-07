@@ -15,7 +15,7 @@ class SearchTenantRequest extends AbstractRequest
     {
         return [
             ...self::rulesStandard(),
-            'filter' => 'required|min:3|max:255',
+            'filter' => 'required|min:2|max:255',
         ];
     }
 }

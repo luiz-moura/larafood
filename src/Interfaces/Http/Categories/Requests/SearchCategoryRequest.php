@@ -15,7 +15,7 @@ class SearchCategoryRequest extends AbstractRequest
     {
         return [
             ...self::rulesStandard(),
-            'filter' => 'nullable|min:3',
+            'filter' => 'nullable|min:2|max:255',
         ];
     }
 }
