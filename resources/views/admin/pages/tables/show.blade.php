@@ -3,6 +3,11 @@
 @section('title', "Detalhes da mesa $table->identify")
 
 @section('content_header')
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('tables.index') }}">Mesas</a></li>
+        <li class="breadcrumb-item">{{ $table->name }}</li>
+    </ol>
     <h1>Detalhes da mesa <b>{{ $table->identify }}</b></h1>
 @stop
 
@@ -19,8 +24,8 @@
             <form action="{{ route('tables.destroy', $table->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash">
-                    </i> Deletar a mesa <b>{{ $table->identify }}</b>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Deletar a mesa <b>{{ $table->identify }}</b>
                 </button>
             </form>
         </div>

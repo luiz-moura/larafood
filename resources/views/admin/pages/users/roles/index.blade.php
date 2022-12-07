@@ -5,17 +5,20 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Perfis</li>
+        <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Usuários</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('users.show', $user->url) }}">{{ $user->name }}</a></li>
+        <li class="breadcrumb-item active">Cargos</li>
     </ol>
-    <h1>Cargos do usuário {{ $user->name }} <a href="{{ route('users.roles.available', $user->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add novo cargo</a></h1>
+    <h1>
+        Cargos do usuário {{ $user->name }}
+        <a href="{{ route('users.roles.available', $user->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add novo cargo</a>
+    </h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('users.roles.search', $user->id) }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('users.roles.search', $user->id) }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -42,7 +45,7 @@
                             </td>
                         </tr>
                     @empty
-                        <p>No roles</p>
+                        <tr>Nenhum cargo encontrado.</tr>
                     @endforelse
                 </tbody>
             </table>

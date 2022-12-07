@@ -1,5 +1,7 @@
 <x-alert-errors :errors="$errors"/>
 
+@csrf
+
 <div class="form-group">
     <label for="identify">Identificação:</label>
     <input type="text"

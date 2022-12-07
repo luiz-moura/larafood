@@ -27,12 +27,14 @@
                 <tbody>
                     <form action="{{ route('products.categories.attach', $product->id) }}" method="post">
                         @csrf
-                        @foreach ($categories as $category)
+                        @forelse ($categories as $category)
                             <tr>
                                 <td><input type="checkbox" name="categories[]" value="{{ $category->id }}"></td>
                                 <td>{{ $category->name }}</td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>Nenhuma categoria encontrada.</tr>
+                        @endforelse
                         <tr>
                             <td colspan="500">
                                 <button type="submit" class="btn btn-success">Vincular</button>

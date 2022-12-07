@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('roles.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('roles.search') }}"  method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -34,18 +32,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($roles as $role)
+                    @forelse ($roles as $role)
                         <tr>
                             <td>{{ $role->name }}</td>
                             <td>
+                                <a href="{{ route('roles.permissions', $role->id) }}" class="btn btn-default">Permissões</a>
                                 <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('roles.show', $role->id) }}" class="btn btn-warning">Ver</a>
-                                <a href="{{ route('roles.permissions', $role->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-user-lock"></i>
-                                </a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhum cargo encontrado.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

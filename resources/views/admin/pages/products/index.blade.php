@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('products.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('products.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -36,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($products as $product)
+                    @forelse ($products as $product)
                         <tr>
                             <td>
                                 <img src="{{ url("storage/{$product->image}") }}"
@@ -51,7 +49,9 @@
                                 <a href="{{ route('products.show', $product->id) }}" class="btn btn-warning">Ver</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhum produto encontrado.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

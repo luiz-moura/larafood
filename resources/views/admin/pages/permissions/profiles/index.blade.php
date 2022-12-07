@@ -6,6 +6,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Permissões</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('permissions.show', $permission->id) }}">{{ $permission->name }}</a></li>
         <li class="breadcrumb-item active">Perfis da permissão</li>
     </ol>
     <h1>Perfis da permissão {{ $permission->name }}</h1>
@@ -30,7 +31,7 @@
                             </td>
                         </tr>
                     @empty
-                        <p>No profiles</p>
+                        <tr>Nenhum perfil encontrado.</tr>
                     @endforelse
                 </tbody>
             </table>

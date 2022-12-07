@@ -1,5 +1,7 @@
 <x-alert-errors :errors="$errors"/>
 
+@csrf
+
 <div class="form-group">
     <label for="name">Nome:</label>
     <input type="text"
@@ -7,7 +9,7 @@
            id="name"
            class="form-control"
            placeholder="Nome:"
-           @isset($plan) value="{{ $plan->name }}" @endisset>
+           value="{{ $plan->name ?? old('name') }}">
 </div>
 <div class="form-group">
     <label for="price">Preço:</label>
@@ -16,7 +18,7 @@
            id="price"
            class="form-control"
            placeholder="Preço:"
-           @isset($plan) value="{{ $plan->price }}" @endisset>
+           value="{{ $plan->price ?? old('price') }}">
 </div>
 <div class="form-group">
     <label for="description">Descrição:</label>
@@ -25,7 +27,7 @@
            id="description"
            class="form-control"
            placeholder="Descrição:"
-           @isset($plan) value="{{ $plan->description }}" @endisset>
+           value="{{ $plan->description ?? old('description') }}">
 </div>
 <div class="form-group">
     <button type="submit" class="btn btn-dark">Enviar</button>

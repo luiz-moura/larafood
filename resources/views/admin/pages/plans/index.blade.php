@@ -5,7 +5,7 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Plans</li>
+        <li class="breadcrumb-item active">Planos</li>
     </ol>
     <h1>Planos <a href="{{ route('plans.create') }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add</a></h1>
 @stop
@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('plans.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('plans.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -35,20 +33,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($plans as $plan)
+                    @forelse ($plans as $plan)
                         <tr>
                             <td>{{ $plan->name }}</td>
                             <td>{{ $plan->price }}</td>
                             <td>
-                                <a href="{{ route('plan_details.index', $plan->url) }}" class="btn btn-primary">Detalhes</a>
+                                <a href="{{ route('plan_details.index', $plan->url) }}" class="btn btn-default">Detalhes</a>
+                                <a href="{{ route('plans.profiles', $plan->url) }}" class="btn btn-default">Perfis</a>
                                 <a href="{{ route('plans.edit', $plan->url) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('plans.show', $plan->url) }}" class="btn btn-warning">Ver</a>
-                                <a href="{{ route('plans.profiles', $plan->url) }}" class="btn btn-warning">
-                                    <i class="fas fa-id-card-alt"></i>
-                                </a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhum perfil encontrado.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

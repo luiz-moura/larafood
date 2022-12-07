@@ -5,9 +5,11 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('plans.index') }}">Planos</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('plans.show', $plan->url) }}">{{ $plan->name }}</a></li>
         <li class="breadcrumb-item active">Perfis</li>
     </ol>
-    <h1>Perfis disponíveis - Plan {{ $plan->name }}</h1>
+    <h1>Perfis disponíveis - Plano: {{ $plan->name }}</h1>
 @stop
 
 @section('content')
@@ -38,12 +40,14 @@
                     <tbody>
                         <form action="{{ route('plans.profiles.attach', $plan->url) }}" method="post">
                             @csrf
-                            @foreach ($profiles as $profiles)
+                            @forelse ($profiles as $profiles)
                                 <tr>
                                     <td><input type="checkbox" name="profiles[]" value="{{ $profiles->id }}"></td>
                                     <td>{{ $profiles->name }}</td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>Nenhum perfil encontrado.</tr>
+                            @endforelse
                             <tr>
                                 <td colspan="500">
                                     <button type="submit" class="btn btn-success">Vincular</button>

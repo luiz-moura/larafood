@@ -1,5 +1,7 @@
 <x-alert-errors :errors="$errors"/>
 
+@csrf
+
 <div class="form-group">
     <label for="name">Nome:</label>
     <input type="text"
@@ -17,10 +19,7 @@
                    class="custom-file-input"
                    id="logo"
                    aria-describedby="upload">
-            <label for="logo"
-                   class="custom-file-label">
-                Choose file
-            </label>
+            <label for="logo" class="custom-file-label">Choose file</label>
         </div>
     </div>
 </div>
@@ -44,11 +43,9 @@
 </div>
 <div class="form-group">
     <label for="active">Ativo?</label>
-    <select name="active"
-            id="active"
-            class="form-control">
-            <option value="Y" @if(isset($tenant) && $tenant->active == 'Y') selected @endif>SIM</option>
-            <option value="N" @if(isset($tenant) && $tenant->active == 'N') selected @endif>Não</option>
+    <select name="active" id="active" class="form-control">
+        <option value="Y" @if(isset($tenant) && $tenant->active == 'Y') selected @endif>SIM</option>
+        <option value="N" @if(isset($tenant) && $tenant->active == 'N') selected @endif>Não</option>
     </select>
 </div>
 
@@ -81,18 +78,14 @@
 </div>
 <div class="form-group">
     <label for="subscription_active">Assinatura Ativa?</label>
-    <select name="subscription_active"
-            id="subscription_active"
-            class="form-control">
+    <select name="subscription_active" id="subscription_active" class="form-control">
         <option value="1" @if(isset($tenant) && $tenant->subscription_active) selected @endif>SIM</option>
         <option value="0" @if(isset($tenant) && !$tenant->subscription_active) selected @endif>Não</option>
     </select>
 </div>
 <div class="form-group">
     <label for="subscription_suspended">Assinatura Cancelada?</label>
-    <select name="subscription_suspended"
-            id="subscription_suspended"
-            class="form-control">
+    <select name="subscription_suspended" id="subscription_suspended" class="form-control">
         <option value="1" @if(isset($tenant) && $tenant->subscription_suspended) selected @endif>SIM</option>
         <option value="0" @if(isset($tenant) && !$tenant->subscription_suspended) selected @endif>Não</option>
     </select>

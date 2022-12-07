@@ -5,6 +5,8 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('plans.index') }}">Planos</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('plans.show', $plan->url) }}">{{ $plan->name }}</a></li>
         <li class="breadcrumb-item active">Planos</li>
     </ol>
     <h1>
@@ -18,9 +20,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('plans.profiles.search', $plan->url) }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('plans.profiles.search', $plan->url) }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -51,7 +51,7 @@
                             </td>
                         </tr>
                     @empty
-                        <p>No profiles</p>
+                        <tr>Nenhum plano encontrado.</tr>
                     @endforelse
                 </tbody>
             </table>

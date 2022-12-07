@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('tables.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('tables.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -35,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tables as $table)
+                    @forelse ($tables as $table)
                         <tr>
                             <td>{{ $table->identify }}</td>
                             <td>{{ $table->description }}</td>
@@ -44,7 +42,9 @@
                                 <a href="{{ route('tables.show', $table->id) }}" class="btn btn-warning">Ver</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhuma mesa encontrada.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

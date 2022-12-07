@@ -3,6 +3,11 @@
 @section('title', "Detalhes da empresa $tenant->name")
 
 @section('content_header')
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('tenants.index') }}">Empresas</a></li>
+        <li class="breadcrumb-item">{{ $tenant->name }}</li>
+    </ol>
     <h1>Detalhes da empresa <b>{{ $tenant->name }}</b></h1>
 @stop
 

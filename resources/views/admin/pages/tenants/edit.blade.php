@@ -3,6 +3,12 @@
 @section('title', "Editar a empresa {$tenant->name}")
 
 @section('content_header')
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('tenants.index') }}">Empresas</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('tenants.show', $tenant->url) }}">{{ $tenant->name }}</a></li>
+        <li class="breadcrumb-item active">Editar</li>
+    </ol>
     <h1>Editar a empresa {{ $tenant->name }}</h1>
 @stop
 
@@ -13,7 +19,6 @@
                   method="post"
                   class="form"
                   enctype="multipart/form-data">
-                @csrf
                 @method('PUT')
                 @include('admin.pages.tenants._partials.form')
             </form>

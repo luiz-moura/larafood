@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('categories.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('categories.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -35,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $category)
+                    @forelse ($categories as $category)
                         <tr>
                             <td>{{ $category->name }}</td>
                             <td>{{ $category->description }}</td>
@@ -44,7 +42,9 @@
                                 <a href="{{ route('categories.show', $category->id) }}" class="btn btn-warning">Ver</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhuma categoria encontrada.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

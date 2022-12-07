@@ -1,5 +1,7 @@
 <x-alert-errors :errors="$errors"/>
 
+@csrf
+
 <div class="form-group">
     <label for="name">Nome:</label>
     <input type="text"
@@ -18,7 +20,7 @@
            placeholder="Descrição"
            rows="5"
            ols="30"
-           >@isset($product){{ $product->description ?? old('description') }}@endisset</textarea>
+           >{{ $product->description ?? old('description') }}</textarea>
 </div>
 <div class="form-group">
     <label for="price">Preço:</label>

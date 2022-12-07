@@ -3,6 +3,11 @@
 @section('title', "Detalhes do produto $product->name")
 
 @section('content_header')
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
+        <li class="breadcrumb-item">{{ $product->name }}</li>
+    </ol>
     <h1>Detalhes do produto <b>{{ $product->name }}</b></h1>
 @stop
 
@@ -27,8 +32,8 @@
             <form action="{{ route('products.destroy', $product->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash">
-                    </i> Deletar o produto <b>{{ $product->name }}</b>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Deletar o produto <b>{{ $product->name }}</b>
                 </button>
             </form>
         </div>

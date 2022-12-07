@@ -3,6 +3,11 @@
 @section('title', "Detalhes do usuário $user->name")
 
 @section('content_header')
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Usuários</a></li>
+        <li class="breadcrumb-item active">{{ $user->name }}</li>
+    </ol>
     <h1>Detalhes do usuário <b>{{ $user->name }}</b></h1>
 @stop
 
@@ -20,7 +25,9 @@
             <form action="{{ route('users.destroy', $user->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Deletar o usuário <b>{{ $user->name }}</b></button>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Deletar o usuário <b>{{ $user->name }}</b>
+                </button>
             </form>
         </div>
     </div>
