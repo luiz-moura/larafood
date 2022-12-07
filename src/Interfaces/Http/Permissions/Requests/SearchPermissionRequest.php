@@ -15,7 +15,7 @@ class SearchPermissionRequest extends AbstractRequest
     {
         return [
             ...self::rulesStandard(),
-            'filter' => 'nullable|min:3',
+            'filter' => 'required|min:2|max:255',
         ];
     }
 }
