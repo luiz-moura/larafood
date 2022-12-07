@@ -5,7 +5,9 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Perfis</li>
+        <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Usuários</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('users.show', $user->url) }}">{{ $user->name }}</a></li>
+        <li class="breadcrumb-item active">Cargos</li>
     </ol>
     <h1>Cargos disponíveis - perfil {{ $user->name }}</h1>
 @stop
@@ -13,9 +15,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('users.roles.search', $user->id) }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('users.roles.search', $user->id) }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -38,12 +38,14 @@
                     <tbody>
                         <form action="{{ route('users.roles.attach', $user->id) }}" method="post">
                             @csrf
-                            @foreach ($roles as $role)
+                            @forelse ($roles as $role)
                                 <tr>
                                     <td><input type="checkbox" name="roles[]" value="{{ $role->id }}"></td>
                                     <td>{{ $role->name }}</td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>Nenhum cargo encontrado.</tr>
+                            @endforelse
                             <tr>
                                 <td colspan="500">
                                     <button type="submit" class="btn btn-success">Vincular</button>

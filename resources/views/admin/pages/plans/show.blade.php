@@ -3,6 +3,11 @@
 @section('title', "Detalhes do plano $plan->name")
 
 @section('content_header')
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('plans.index') }}">Planos</a></li>
+        <li class="breadcrumb-item active">{{ $plan->name }}</li>
+    </ol>
     <h1>Detalhes do plano <b>{{ $plan->name }}</b></h1>
 @stop
 
@@ -21,7 +26,9 @@
             <form action="{{ route('plans.destroy', $plan->url) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Deletar o plano <b>{{ $plan->name }}</b></button>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Deletar o plano <b>{{ $plan->name }}</b>
+                </button>
             </form>
         </div>
     </div>

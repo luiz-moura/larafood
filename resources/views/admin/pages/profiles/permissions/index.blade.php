@@ -5,17 +5,20 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Perfis</li>
+        <li class="breadcrumb-item"><a href="{{ route('profiles.index') }}">Perfis</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('profiles.show', $profile->url) }}">{{ $profile->name }}</a></li>
+        <li class="breadcrumb-item active">Permissões</li>
     </ol>
-    <h1>Permissões do perfil {{ $profile->name }} <a href="{{ route('profiles.permissions.available', $profile->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add nova permissão</a></h1>
+    <h1>
+        Permissões do perfil {{ $profile->name }}
+        <a href="{{ route('profiles.permissions.available', $profile->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add nova permissão</a>
+    </h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('profiles.permissions.search', $profile->id) }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('profiles.permissions.search', $profile->id) }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -42,7 +45,7 @@
                             </td>
                         </tr>
                     @empty
-                        <p>No permissions</p>
+                        <tr>Nenhuma permissão encontrada.</tr>
                     @endforelse
                 </tbody>
             </table>

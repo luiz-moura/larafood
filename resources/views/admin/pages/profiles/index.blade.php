@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('profiles.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('profiles.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -34,21 +32,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($profiles as $profile)
+                    @forelse ($profiles as $profile)
                         <tr>
                             <td>{{ $profile->name }}</td>
                             <td>
+                                <a href="{{ route('profiles.permissions', $profile->id) }}" class="btn btn-default">Permissões</a>
+                                <a href="{{ route('profiles.plans', $profile->id) }}" class="btn btn-default">Perfis</a>
                                 <a href="{{ route('profiles.edit', $profile->id) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('profiles.show', $profile->id) }}" class="btn btn-warning">Ver</a>
-                                <a href="{{ route('profiles.permissions', $profile->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-user-lock"></i>
-                                </a>
-                                <a href="{{ route('profiles.plans', $profile->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-mountain"></i>
-                                </a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhum perfil encontrado.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

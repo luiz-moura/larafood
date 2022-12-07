@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('users.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('users.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -35,17 +33,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @forelse ($users as $user)
                         <tr>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <a href="{{ route('users.roles', $user->id) }}" class="btn btn-info">Cargos</a>
+                                <a href="{{ route('users.roles', $user->id) }}" class="btn btn-default">Cargos</a>
                                 <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('users.show', $user->id) }}" class="btn btn-warning">Ver</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhum usuário encontrado.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

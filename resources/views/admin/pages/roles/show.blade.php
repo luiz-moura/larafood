@@ -3,6 +3,11 @@
 @section('title', "Detalhes do cargo $role->name")
 
 @section('content_header')
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('roles.index') }}">Cargos</a></li>
+        <li class="breadcrumb-item active">{{ $role->name }}</li>
+    </ol>
     <h1>Detalhes do cargo <b>{{ $role->name }}</b></h1>
 @stop
 
@@ -19,7 +24,9 @@
             <form action="{{ route('roles.destroy', $role->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Deletar o cargo <b>{{ $role->name }}</b></button>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Deletar o cargo <b>{{ $role->name }}</b>
+                </button>
             </form>
         </div>
     </div>

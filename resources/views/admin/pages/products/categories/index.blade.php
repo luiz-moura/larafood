@@ -9,15 +9,16 @@
         <li class="breadcrumb-item"><a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a></li>
         <li class="breadcrumb-item active">Categorias</li>
     </ol>
-    <h1>Categorias do produto {{ $product->name }} <a href="{{ route('products.categories.available', $product->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add nova categoria</a></h1>
+    <h1>
+        Categorias do produto {{ $product->name }}
+        <a href="{{ route('products.categories.available', $product->id) }}" class="btn btn-dark"><i class="fas fa-plus-square"></i> Add nova categoria</a>
+    </h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('products.categories.search', $product->id) }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('products.categories.search', $product->id) }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -48,7 +49,7 @@
                             </td>
                         </tr>
                     @empty
-                        <p>No categories</p>
+                        <tr>Nenhuma categoria encontrada.</tr>
                     @endforelse
                 </tbody>
             </table>

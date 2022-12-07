@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('permissions.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('permissions.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -34,16 +32,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($permissions as $permission)
+                    @forelse ($permissions as $permission)
                         <tr>
                             <td>{{ $permission->name }}</td>
                             <td>
+                                <a href="{{ route('permissions.profiles.index', $permission->id) }}" class="btn btn-default">Permissões</a>
                                 <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('permissions.show', $permission->id) }}" class="btn btn-warning">Ver</a>
-                                <a href="{{ route('permissions.profiles.index', $permission->id) }}" class="btn btn-info"><i class="fas fa-id-card-alt"></i></a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhuma permissão encontrada.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

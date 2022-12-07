@@ -13,9 +13,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('tenants.search') }}"
-                  method="GET"
-                  class="form form-inline">
+            <form action="{{ route('tenants.search') }}" method="GET" class="form form-inline">
                 <input type="text"
                        name="filter"
                        placeholder="Nome"
@@ -35,12 +33,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tenants as $tenant)
+                    @forelse ($tenants as $tenant)
                         <tr>
                             <td>
                                 <img src="{{ url("storage/{$tenant->logo}") }}"
-                                     alt="{{ $tenant->name }}"
-                                     style="max-width: 90px">
+                                    alt="{{ $tenant->name }}"
+                                    style="max-width: 90px">
                             </td>
                             <td>{{ $tenant->name }}</td>
                             <td>
@@ -48,7 +46,9 @@
                                 <a href="{{ route('tenants.show', $tenant->id) }}" class="btn btn-warning">Ver</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>Nenhuma empresa encontrada.</tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

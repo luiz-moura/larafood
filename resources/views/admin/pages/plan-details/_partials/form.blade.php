@@ -1,6 +1,7 @@
 <x-alert-errors/>
 
 @csrf
+
 <div class="form-group">
     <label for="name">Nome</label>
     <input type="text"
