@@ -11,7 +11,6 @@ use Infrastructure\Shared\DataTransferObject;
 class TenantData extends DataTransferObject
 {
     public int $id;
-    public string $uuid;
     public int $plan_id;
     public string $cnpj;
     public string $name;
@@ -26,7 +25,7 @@ class TenantData extends DataTransferObject
     public ?DateTime $expires_at;
     public DateTime $created_at;
     public ?DateTime $updated_at;
-    public ?PlanData $plan;
+    public PlanData $plan;
 
     public static function fromModel(Tenant $tenant): self
     {
@@ -36,7 +35,7 @@ class TenantData extends DataTransferObject
             'expires_at' => $tenant->expires_at,
             'created_at' => $tenant->created_at,
             'updated_at' => $tenant->updated_at,
-            'plan' => $tenant->relationLoaded('plan') ? PlanData::fromModel($tenant->plan) : null,
+            'plan' => PlanData::fromModel($tenant->plan),
         ] + $tenant->toArray());
     }
 
@@ -46,8 +45,8 @@ class TenantData extends DataTransferObject
             'active' => TenantActiveEnum::from($data['active']),
             'subscribed_at' => new DateTime($data['subscribed_at']),
             'created_at' => new DateTime($data['created_at']),
-            'expires_at' => $data['expires_at'] ? new DateTime($data['expires_at']) : null,
-            'updated_at' => $data['updated_at'] ? new DateTime($data['updated_at']) : null,
+            'updated_at' => isset($data['updated_at']) ? new DateTime($data['updated_at']) : null,
+            'expires_at' => isset($data['expires_at']) ? new DateTime($data['expires_at']) : null,
             'plan' => isset($data['plan']) ? PlanData::fromArray($data['plan']) : null,
         ] + $data);
     }
