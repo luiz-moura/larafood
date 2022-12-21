@@ -15,6 +15,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
+        "sebastian/phpcpd": "^6.0",
         "sentry/sentry-laravel": "^2.12",
         "spatie/data-transfer-object": "^3.8",
         "spatie/laravel-activitylog": "^4.7",
