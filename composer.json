@@ -16,7 +16,8 @@
         "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
         "sentry/sentry-laravel": "^2.12",
-        "spatie/data-transfer-object": "^3.8"
+        "spatie/data-transfer-object": "^3.8",
+        "spatie/laravel-health": "^1.16"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
