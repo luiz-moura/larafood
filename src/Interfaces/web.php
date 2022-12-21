@@ -19,6 +19,9 @@ use Interfaces\Http\Tables\Controllers\TableController;
 use Interfaces\Http\Tenant\Controllers\TenantController;
 use Interfaces\Http\Users\Controllers\RoleUserController;
 use Interfaces\Http\Users\Controllers\UserController;
+use Spatie\Health\Http\Controllers\HealthCheckResultsController;
+
+Route::get('health', HealthCheckResultsController::class);
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [PlanController::class, 'index'])->name('admin.index');
