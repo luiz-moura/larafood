@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Infrastructure\Persistence\Eloquent\Traits\LogTrait;
 
 class Plan extends Model
 {
     use HasFactory;
+    use LogTrait;
 
     protected $table = 'plans';
     protected $fillable = ['name', 'url', 'price', 'description'];

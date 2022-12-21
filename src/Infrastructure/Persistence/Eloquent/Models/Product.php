@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Infrastructure\Persistence\Eloquent\Scopes\TenantScope;
+use Infrastructure\Persistence\Eloquent\Traits\LogTrait;
 
 class Product extends Model
 {
     use HasFactory;
+    use LogTrait;
 
     protected $table = 'products';
 
