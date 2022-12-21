@@ -24,7 +24,7 @@ class AddRoleTenant
      */
     public function handle(TenantCreated $event)
     {
-        $roleId = (int) env('ROLE_ID_STANDARD');
+        $roleId = (int) env('ROLE_ID_DEFAULT');
         ($this->attachRolesInUserAction)($event->user->id, roles: [$roleId]);
     }
 }
