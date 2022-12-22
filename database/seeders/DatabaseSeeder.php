@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             PlansTableSeeder::class,
             TenantsTableSeeder::class,
             UsersTableSeeder::class,
-            ClientTableSeeder::class,
+            ClientsTableSeeder::class,
+            RolesTableSeeder::class,
         ]);
     }
 }
