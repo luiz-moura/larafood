@@ -11,7 +11,7 @@ use Interfaces\Http\Tenant\DataTransferObjects\TenantFormData;
 
 interface TenantRepository
 {
-    public function create(int $planId, TenantFormData $tenantData, DateTime $expires): TenantData;
+    public function create(int $planId, TenantFormData $tenantData): TenantData;
     public function find(int $id, array $with = []): TenantData;
     public function findByUuid(string $uuid): TenantData;
     public function update(int $id, TenantFormData $formData): bool;

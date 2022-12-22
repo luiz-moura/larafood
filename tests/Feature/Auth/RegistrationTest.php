@@ -1,12 +1,13 @@
 <?php
 
 use Application\Providers\RouteServiceProvider;
+use Database\Factories\PlanFactory;
+use Database\Factories\RoleFactory;
 use Illuminate\Http\Response;
-use Infrastructure\Persistence\Eloquent\Models\Plan;
 
 beforeEach(function () {
     $this->uri = '/register';
-    $plan = Plan::factory()->create();
+    $plan = PlanFactory::new()->create();
     $this->session(['plan' => $plan]);
 });
 
@@ -17,6 +18,8 @@ test('registration screen can be rendered', function () {
 });
 
 test('new users can register', function () {
+    RoleFactory::new()->create(['id' => env('ROLE_ID_DEFAULT')]);
+
     $response = $this->post("{$this->uri}/", [
         'name' => 'Test User',
         'company' => 'Test Company',

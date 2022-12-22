@@ -6,7 +6,6 @@ use DateTime;
 use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Domains\Tenants\DataTransferObjects\TenantData;
 use Domains\Tenants\DataTransferObjects\TenantPaginatedData;
-use Illuminate\Support\Arr;
 use Infrastructure\Persistence\Eloquent\Models\Tenant;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Authentication\DataTransferObjects\UserTenantFormData;
@@ -20,8 +19,7 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
 
     public function create(
         int $planId,
-        TenantFormData|UserTenantFormData $formData,
-        DateTime $expires
+        TenantFormData|UserTenantFormData $formData
     ): TenantData {
         return TenantData::fromModel(
             $this->model->create(
@@ -47,7 +45,7 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
     public function update(int $id, TenantFormData $formData): bool
     {
         return $this->model->findOrFail($id)->update(
-            Arr::whereNotNull($formData->toArray())
+            $formData->toArray()
         );
     }
 
