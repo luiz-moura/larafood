@@ -45,7 +45,7 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
     public function update(int $id, ProductFormData $formData): bool
     {
         return $this->model->findOrFail($id)->update(
-            Arr::whereNotNull($formData->toArray())
+            $formData->toArray()
         );
     }
 
