@@ -1,12 +1,13 @@
 <?php
 
 use Application\Providers\RouteServiceProvider;
+use Database\Factories\UserFactory;
 use Illuminate\Http\Response;
 use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
     $this->uri = '/login';
-    $this->user = User::factory()->create();
+    $this->user = UserFactory::new()->create();
 });
 
 test('login screen can be rendered', function () {
