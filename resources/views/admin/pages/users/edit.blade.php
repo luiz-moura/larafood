@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Usuários</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('users.show', $user->url) }}">{{ $user->name }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('users.show', $user->id) }}">{{ $user->name }}</a></li>
         <li class="breadcrumb-item active">Editar</li>
     </ol>
     <h1>Editar o usuário {{ $user->name }}</h1>
