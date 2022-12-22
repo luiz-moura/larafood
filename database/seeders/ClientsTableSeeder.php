@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Infrastructure\Persistence\Eloquent\Models\Client;
 
-class ClientTableSeeder extends Seeder
+class ClientsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
