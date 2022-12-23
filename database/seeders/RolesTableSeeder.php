@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Infrastructure\Persistence\Eloquent\Models\Plan;
+use Infrastructure\Persistence\Eloquent\Models\Role;
 
 class RolesTableSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        Plan::create([
+        Role::create([
             'name' => 'Standard',
             'description' => 'Standard plan',
         ]);
