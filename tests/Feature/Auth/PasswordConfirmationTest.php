@@ -1,11 +1,11 @@
 <?php
 
+use Database\Factories\UserFactory;
 use Illuminate\Http\Response;
-use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
     $this->uri = '/confirm-password';
-    $this->user = User::factory()->create();
+    $this->user = UserFactory::new()->create();
 });
 
 test('confirm password screen can be rendered', function () {

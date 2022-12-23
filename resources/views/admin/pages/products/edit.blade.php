@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('products.show', $product->url) }}">{{ $product->name }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a></li>
         <li class="breadcrumb-item active">Editar</li>
     </ol>
     <h1>Editar o produto {{ $product->name }}</h1>

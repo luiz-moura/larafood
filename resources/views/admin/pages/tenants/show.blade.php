@@ -25,7 +25,7 @@
                 </li>
                 <li><strong>Plano: </strong> {{ $tenant->plan->name }}</li>
                 <li><strong>Nome: </strong> {{ $tenant->name }}</li>
-                <li><strong>url: </strong> {{ $tenant->url }}</li>
+                <li><strong>url: </strong> {{ $tenant->id }}</li>
                 <li><strong>Email: </strong> {{ $tenant->email }}</li>
                 <li><strong>CNPJ: </strong> {{ $tenant->cnpj }}</li>
                 <li><strong>Ativo: </strong> {{ $tenant->active->value }}</li>

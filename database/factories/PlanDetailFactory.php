@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use Infrastructure\Persistence\Eloquent\Models\Plan;
 use Infrastructure\Persistence\Eloquent\Models\PlanDetail;
 use Infrastructure\Shared\AbstractFactory;
 
@@ -14,7 +13,7 @@ class PlanDetailFactory extends AbstractFactory
     {
         return [
             ...$this->mock(),
-            'plan_id' => Plan::factory()->create()->id,
+            'plan_id' => PlanFactory::new()->create()->id,
         ];
     }
 

@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('profiles.index') }}">Perfis</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('profiles.show', $profile->url) }}">{{ $profile->name }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('profiles.show', $profile->id) }}">{{ $profile->name }}</a></li>
         <li class="breadcrumb-item active">Permissões</li>
     </ol>
     <h1>Permissões disponíveis - perfil {{ $profile->name }}</h1>

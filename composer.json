@@ -6,7 +6,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "friendsofphp/php-cs-fixer": "^3.9",
         "guzzlehttp/guzzle": "^7.2",
         "jeroennoten/laravel-adminlte": "^3.8",
         "laravel/framework": "^9.11",
@@ -19,12 +18,13 @@
         "sebastian/phpcpd": "^6.0",
         "sentry/sentry-laravel": "^2.12",
         "spatie/data-transfer-object": "^3.8",
-        "spatie/laravel-activitylog": "^4.7",
+        "spatie/laravel-activitylog": "^4.7.2",
         "spatie/laravel-health": "^1.16"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
         "fakerphp/faker": "^1.9.1",
+        "friendsofphp/php-cs-fixer": "^3.9",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "pestphp/pest": "^1.21",

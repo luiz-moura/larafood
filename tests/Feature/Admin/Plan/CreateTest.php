@@ -1,10 +1,10 @@
 <?php
 
-use Infrastructure\Persistence\Eloquent\Models\User;
+use Database\Factories\UserFactory;
 
 beforeEach(function () {
     $this->uri = 'admin/plans/create';
-    $this->user = User::factory()->create();
+    $this->user = UserFactory::new()->create();
 });
 
 it('Should render create view', function () {

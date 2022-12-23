@@ -42,6 +42,13 @@ class Tenant extends Model
         'expires_at' => 'datetime',
     ];
 
+    protected $attributes = [
+        'active' => TenantActiveEnum::ACTIVE,
+        'subscription_active' => true,
+        'subscription_suspended' => false,
+        'subscribed_at' => 'now',
+    ];
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class);

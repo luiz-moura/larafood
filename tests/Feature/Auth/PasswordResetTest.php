@@ -1,12 +1,12 @@
 <?php
 
+use Database\Factories\UserFactory;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Notification;
-use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
-    $this->user = User::factory()->create();
+    $this->user = UserFactory::new()->create();
     $this->uri = '/forgot-password';
 });
 
