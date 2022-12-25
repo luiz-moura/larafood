@@ -16,9 +16,8 @@ class CreateTenantAction
 
     public function __invoke(
         int $planId,
-        TenantFormData|UserTenantFormData $formData,
-        DateTime $expires
+        TenantFormData|UserTenantFormData $formData
     ): TenantData {
-        return $this->tenantRepository->create($planId, $formData, $expires);
+        return $this->tenantRepository->create($planId, $formData);
     }
 }

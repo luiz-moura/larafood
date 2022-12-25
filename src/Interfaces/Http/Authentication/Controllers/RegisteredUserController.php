@@ -33,14 +33,12 @@ class RegisteredUserController extends Controller
 
         $validatedData = $request->validated();
 
-        $userTenantFormData = UserTenantFormData::fromRequest(
-            ['name' => $validatedData['company']] + $validatedData
-        );
-        $tenantData = $createTenantAction(
-            session('plan')->id,
-            $userTenantFormData,
-            expires: now()->addDays(7)
-        );
+        $userTenantFormData = UserTenantFormData::fromRequest([
+            ...$validatedData,
+            'name' => $validatedData['company'],
+            'expires' => now()->addDays(7)
+        ]);
+        $tenantData = $createTenantAction(session('plan')->id, $userTenantFormData);
 
         $userFormData = UserFormData::fromRequest($validatedData);
         $createUserAction($tenantData->id, $userFormData);
