@@ -8,9 +8,13 @@ on:
 
 jobs:
   laravel-tests:
-
-    runs-on: ubuntu-latest
-
+    name: Laravel (PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }})
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['8.1']
     env:
       DB_CONNECTION: pgsql
       DB_HOST: localhost
@@ -37,8 +41,8 @@ jobs:
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: '8.1'
-        extensions: mbstring, dom, fileinfo, pgsql
+        php-version: ${{ matrix.php-versions }}
+        extensions: mbstring, dom, fileinfo, pgsql, xml
         coverage: xdebug
     - uses: actions/checkout@v3
     - name: Copy .env
