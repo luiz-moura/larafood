@@ -17,11 +17,11 @@ abstract class AbstractPaginationData extends DataTransferObject
     public function __construct(array $data)
     {
         $sort = env('PAGINATION_SORT_DEFAULT');
-        $per_page = (int) env('PAGINATION_PER_PAGE_DEFAULT');
+        $perPage = (int) env('PAGINATION_PER_PAGE_DEFAULT');
 
         parent::__construct(...$data + [
             'sort' => $sort,
-            'per_page' => $per_page,
+            'per_page' => $perPage,
         ]);
     }
 }
