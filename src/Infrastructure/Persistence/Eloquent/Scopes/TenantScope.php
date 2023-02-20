@@ -10,6 +10,10 @@ class TenantScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('tenant_id', auth()->user()->tenant_id);
+        $tenant = auth()->user()?->tenant_id;
+
+        if ($tenant) {
+            $builder->where('tenant_id', $tenant);
+        }
     }
 }
