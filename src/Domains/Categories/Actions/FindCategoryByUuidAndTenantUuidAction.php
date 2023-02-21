@@ -5,14 +5,14 @@ namespace Domains\Categories\Actions;
 use Domains\Categories\DataTransferObjects\CategoryData;
 use Domains\Categories\Repositories\CategoryRepository;
 
-class FindCategoryBySlugAndTenantUuidAction
+class FindCategoryByUuidAndTenantUuidAction
 {
     public function __construct(private CategoryRepository $categoryRepository)
     {
     }
 
-    public function __invoke(string $slug, string $companyToken): CategoryData
+    public function __invoke(string $identify, string $companyToken): CategoryData
     {
-        return $this->categoryRepository->findBySlugAndTenantUuid($slug, $companyToken);
+        return $this->categoryRepository->findByUuidAndTenantUuid($identify, $companyToken);
     }
 }

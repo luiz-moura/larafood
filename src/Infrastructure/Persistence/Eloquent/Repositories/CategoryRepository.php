@@ -31,11 +31,11 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
         );
     }
 
-    public function findBySlugAndTenantUuid(string $slug, string $companyToken): CategoryData
+    public function findByUuidAndTenantUuid(string $identify, string $companyToken): CategoryData
     {
         return CategoryData::fromModel(
             $this->model->newQueryWithoutScopes()
-                ->where('url', $slug)
+                ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
         );

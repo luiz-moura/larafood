@@ -10,6 +10,7 @@ class ProductResource extends JsonResource
     {
         return [
             'tenant_id' => $this->tenant_id,
+            'identify' => $this->uuid,
             'flag' => $this->flag,
             'name' => $this->name,
             'image' => url("storage/{$this->image}"),

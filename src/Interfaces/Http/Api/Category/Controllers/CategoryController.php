@@ -2,7 +2,7 @@
 
 namespace Interfaces\Http\Api\Category\Controllers;
 
-use Domains\Categories\Actions\FindCategoryBySlugAndTenantUuidAction;
+use Domains\Categories\Actions\FindCategoryByUuidAndTenantUuidAction;
 use Domains\Categories\Actions\QueryCategoryByTenantUuidAction;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Api\Category\Resources\CategoryResource;
@@ -25,11 +25,10 @@ class CategoryController extends Controller
 
     public function show(
         string $companyToken,
-        $categorySlug,
-        FindCategoryBySlugAndTenantUuidAction $findCategoryBySlugAndTenantUuidAction
-    )
-    {
-        $category = $findCategoryBySlugAndTenantUuidAction($categorySlug, $companyToken);
+        string $identify,
+        FindCategoryByUuidAndTenantUuidAction $findCategoryByUuidAndTenantUuidAction
+    ) {
+        $category = $findCategoryByUuidAndTenantUuidAction($identify, $companyToken);
 
         return new CategoryResource($category);
     }

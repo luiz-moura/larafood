@@ -21,7 +21,7 @@ Route::prefix('v1')->group(function () {
         });
         Route::controller(CategoryController::class)->group(function () {
             Route::get('{uuid}/categories', 'index');
-            Route::get('{uuid}/categories/{slug}', 'show');
+            Route::get('{uuid}/categories/{identify}', 'show');
         });
         Route::controller(TableController::class)->group(function () {
             Route::get('{uuid}/tables', 'index');
@@ -29,7 +29,7 @@ Route::prefix('v1')->group(function () {
         });
         Route::controller(ProductController::class)->group(function () {
             Route::get('{uuid}/products', 'index');
-            Route::get('{uuid}/products/{flag}', 'show');
+            Route::get('{uuid}/products/{identify}', 'show');
         });
     });
 });

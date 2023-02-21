@@ -15,7 +15,7 @@ return new class() extends Migration {
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid();
             $table->foreignId('plan_id')
                 ->nullable()
                 ->constrained('plans')
