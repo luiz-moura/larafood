@@ -2,7 +2,7 @@
 
 namespace Interfaces\Http\Api\Table\Controllers;
 
-use Domains\Tables\Actions\FindTableByIdentifyActionAndTenantUuid;
+use Domains\Tables\Actions\FindTableByUuidAndTenantUuidAction;
 use Domains\Tables\Actions\QueryTableByTenantUuidAction;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Api\Table\Resources\TableResource;
@@ -26,9 +26,9 @@ class TableController extends Controller
     public function show(
         string $companyToken,
         string $identify,
-        FindTableByIdentifyActionAndTenantUuid $findTableByIdentifyActionAndTenantUuid
+        FindTableByUuidAndTenantUuidAction $findTableByUuidAndTenantUuidAction
     ) {
-        $table = $findTableByIdentifyActionAndTenantUuid($identify, $companyToken);
+        $table = $findTableByUuidAndTenantUuidAction($identify, $companyToken);
 
         return new TableResource($table);
     }

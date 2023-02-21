@@ -31,11 +31,11 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
         );
     }
 
-    public function findByIdentifyAndTenantUuid(string $identify, string $companyToken): TableData
+    public function findByUuidAndTenantUuid(string $identify, string $companyToken): TableData
     {
         return TableData::fromModel(
             $this->model->newQueryWithoutScopes()
-                ->where('identify', $identify)
+                ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
         );

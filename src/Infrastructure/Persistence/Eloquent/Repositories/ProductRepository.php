@@ -5,7 +5,6 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 use Domains\Products\DataTransferObjects\ProductData;
 use Domains\Products\DataTransferObjects\ProductPaginatedData;
 use Domains\Products\Repositories\ProductRepository as ProductRepositoryContract;
-use Illuminate\Support\Arr;
 use Infrastructure\Persistence\Eloquent\Models\Product;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Products\DataTransferObjects\IndexProductRequestData;
@@ -32,11 +31,11 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
         );
     }
 
-    public function findBySlugAndTenantUuid(string $slug, string $companyToken): ProductData
+    public function findByUuidAndTenantUuid(string $identify, string $companyToken): ProductData
     {
         return ProductData::fromModel(
             $this->model->newQueryWithoutScopes()
-                ->where('flag', $slug)
+                ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
         );

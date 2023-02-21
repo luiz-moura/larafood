@@ -2,7 +2,7 @@
 
 namespace Interfaces\Http\Api\Product\Controllers;
 
-use Domains\Products\Actions\FindProductBySlugAndTenantUuidAction;
+use Domains\Products\Actions\FindProductByUuidAndTenantUuidAction;
 use Domains\Products\Actions\QueryProductsByTenantUuidAction;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Api\Product\Resources\ProductResource;
@@ -25,10 +25,10 @@ class ProductController extends Controller
 
     public function show(
         string $companyToken,
-        string $productSlug,
-        FindProductBySlugAndTenantUuidAction $findProductBySlugAndTenantUuidAction
+        string $identify,
+        FindProductByUuidAndTenantUuidAction $findProductByUuidAndTenantUuidAction
     ) {
-        $product = $findProductBySlugAndTenantUuidAction($productSlug, $companyToken);
+        $product = $findProductByUuidAndTenantUuidAction($identify, $companyToken);
 
         return new ProductResource($product);
     }
