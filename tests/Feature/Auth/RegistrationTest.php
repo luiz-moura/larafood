@@ -24,7 +24,7 @@ test('new users can register', function () {
         'name' => 'Test User',
         'company' => 'Test Company',
         'email' => 'test@example.com',
-        'cnpj' => '12345678912345',
+        'cnpj' => '66.164.832/0001-51',
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
