@@ -10,6 +10,7 @@ use Infrastructure\Shared\DataTransferObject;
 class CategoryData extends DataTransferObject
 {
     public int $id;
+    public string $uuid;
     public string $name;
     public string $description;
     public string $url;

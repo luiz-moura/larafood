@@ -10,6 +10,7 @@ use Infrastructure\Shared\DataTransferObject;
 class ProductData extends DataTransferObject
 {
     public int $id;
+    public string $uuid;
     public int $tenant_id;
     public string $name;
     public string $description;

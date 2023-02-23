@@ -9,6 +9,7 @@ use Infrastructure\Shared\DataTransferObject;
 class TableData extends DataTransferObject
 {
     public int $id;
+    public string $uuid;
     public int $tenant_id;
     public string $identify;
     public ?string $description;

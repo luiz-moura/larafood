@@ -11,6 +11,7 @@ use Infrastructure\Shared\DataTransferObject;
 class TenantData extends DataTransferObject
 {
     public int $id;
+    public string $uuid;
     public int $plan_id;
     public string $cnpj;
     public string $name;
