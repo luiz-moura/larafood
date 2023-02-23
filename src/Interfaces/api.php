@@ -17,19 +17,19 @@ Route::prefix('v1')->group(function () {
     Route::prefix('tenants')->group(function () {
         Route::controller(TenantController::class)->group(function () {
             Route::get('/', 'index');
-            Route::get('{uuid}', 'show');
+            Route::get('{companyToken}', 'show')->whereUuid('companyToken');
         });
         Route::controller(CategoryController::class)->group(function () {
-            Route::get('{uuid}/categories', 'index');
-            Route::get('{uuid}/categories/{identify}', 'show');
+            Route::get('{companyToken}/categories', 'index')->whereUuid('companyToken');
+            Route::get('{companyToken}/categories/{identify}', 'show')->whereUuid(['companyToken', 'identify']);
         });
         Route::controller(TableController::class)->group(function () {
-            Route::get('{uuid}/tables', 'index');
-            Route::get('{uuid}/tables/{identify}', 'show');
+            Route::get('{companyToken}/tables', 'index')->whereUuid('companyToken');
+            Route::get('{companyToken}/tables/{identify}', 'show')->whereUuid(['companyToken', 'identify']);
         });
         Route::controller(ProductController::class)->group(function () {
-            Route::get('{uuid}/products', 'index');
-            Route::get('{uuid}/products/{identify}', 'show');
+            Route::get('{companyToken}/products', 'index')->whereUuid('companyToken');
+            Route::get('{companyToken}/products/{identify}', 'show')->whereUuid(['companyToken', 'identify']);
         });
     });
 });
