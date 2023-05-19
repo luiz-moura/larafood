@@ -19,6 +19,7 @@ interface ProductRepository
     public function getAll(IndexProductRequestData $paginationData, array $with = []): ProductPaginatedData;
     public function queryByName(SearchProductRequestData $paginationData, array $with = []): ProductPaginatedData;
     public function queryByTenantUuid(string $companyToken, IndexProductRequestData $paginationData): ProductPaginatedData;
+    public function queryThoseInTheUuid(array $ids): ProductCollection;
     public function attachCategories(int $id, array $categories): void;
     public function detachCategory(int $productId, int $categoryId): void;
 }

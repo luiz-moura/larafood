@@ -12,8 +12,8 @@ class ClientData extends DataTransferObject
     public string $name;
     public string $email;
     public string $password;
-    public ?DateTime $updated_at;
     public DateTime $created_at;
+    public ?DateTime $updated_at;
 
     public static function fromModel(Client $client): self
     {

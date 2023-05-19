@@ -8,6 +8,7 @@ use Domains\ACL\Profiles\Contracts\ProfileRepository as RepositoriesProfileContr
 use Domains\ACL\Roles\Contracts\RoleRepository as RoleRepositoryContract;
 use Domains\ACL\Users\Repositories\UserRepository as UserRepositoryContract;
 use Domains\Categories\Repositories\CategoryRepository as CategoryRepositoryContract;
+use Domains\Orders\Contracts\OrderRepository as OrderRepositoryContract;
 use Domains\Plans\Contracts\PlanDetailRepository as PlanDetailRepositoryContract;
 use Domains\Plans\Contracts\PlanRepository as PlanRepositoryContract;
 use Domains\Products\Repositories\ProductRepository as ProductRepositoryContract;
@@ -16,6 +17,7 @@ use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Illuminate\Support\ServiceProvider;
 use Infrastructure\Persistence\Eloquent\Repositories\CategoryRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\ClientRepository;
+use Infrastructure\Persistence\Eloquent\Repositories\OrderRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PermissionRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PlanDetailRepository;
 use Infrastructure\Persistence\Eloquent\Repositories\PlanRepository;
@@ -46,6 +48,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TableRepositoryContract::class, TableRepository::class);
         $this->app->bind(RoleRepositoryContract::class, RoleRepository::class);
         $this->app->bind(ClientRepositoryContract::class, ClientRepository::class);
+        $this->app->bind(OrderRepositoryContract::class, OrderRepository::class);
     }
 
     /**
