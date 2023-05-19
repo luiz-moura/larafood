@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
+use Domains\Products\DataTransferObjects\ProductCollection;
 use Domains\Products\DataTransferObjects\ProductData;
 use Domains\Products\DataTransferObjects\ProductPaginatedData;
 use Domains\Products\Repositories\ProductRepository as ProductRepositoryContract;
@@ -98,5 +99,15 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return ProductPaginatedData::fromPaginator($products);
+    }
+
+    public function queryThoseInTheUuid(array $uuid): ProductCollection
+    {
+        $products = $this->model->newQueryWithoutScopes()
+            ->select()
+            ->whereIn('uuid', $uuid)
+            ->get();
+
+        return ProductCollection::fromModelCollection($products);
     }
 }
