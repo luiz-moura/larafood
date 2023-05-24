@@ -4,6 +4,7 @@ namespace Domains\Orders\DataTransferObjects;
 
 use DateTime;
 use Domains\ACL\Clients\DataTransferObjects\ClientData;
+use Domains\Evaluations\DataTransferObjects\EvaluationCollection;
 use Domains\Orders\Enums\OrderStatusEnum;
 use Domains\Products\DataTransferObjects\ProductCollection;
 use Domains\Tables\DataTransferObjects\TableData;
@@ -23,6 +24,7 @@ class OrderData extends DataTransferObject
     public ?ClientData $client;
     public ?TableData $table;
     public ?ProductCollection $products;
+    public ?EvaluationCollection $evaluations;
     public DateTime $created_at;
     public ?DateTime $updated_at;
 
@@ -33,6 +35,7 @@ class OrderData extends DataTransferObject
             'client' => $model->client ? ClientData::fromModel($model->client) : null,
             'table' => $model->table ? TableData::fromModel($model->table) : null,
             'products' => $model->products ? ProductCollection::fromModelCollection($model->products) : null,
+            'evaluations' => $model->evaluations ? EvaluationCollection::fromModelCollection($model->evaluations) : null,
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at,
         ] + $model->toArray());

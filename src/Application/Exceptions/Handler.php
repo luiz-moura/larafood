@@ -3,10 +3,8 @@
 namespace Application\Exceptions;
 
 use Domains\Shared\Exceptions\ResponseException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -59,33 +57,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if ($request->is('api/*')) {
-            $custom = fn ($err) => [
-                'message' => $err->getMessage(),
-                'errors' => $err->getErrors(),
-                'code' => $err->getCode(),
-            ];
-
-            $modelNotFound = [
-                'message' => __('exceptions.common.registry_not_found'),
-                'code' => Response::HTTP_NOT_FOUND,
-            ];
-
-            $notFoundHttp = [
-                'message' => 'Rota inválida.',
-                'code' => Response::HTTP_NOT_FOUND,
-            ];
-
-            $response = match (true) {
-                $e instanceof ResponseException => $custom($e),
-                $e instanceof ModelNotFoundException => $modelNotFound,
-                $e instanceof NotFoundHttpException => $notFoundHttp,
-                default => $notFoundHttp
-            };
-
-            return response()->json($response, $response['code']);
-        }
-
         return parent::render($request, $e);
     }
 }

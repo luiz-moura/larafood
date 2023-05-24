@@ -2,7 +2,6 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
-use DateTime;
 use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Domains\Tenants\DataTransferObjects\TenantData;
 use Domains\Tenants\DataTransferObjects\TenantPaginatedData;

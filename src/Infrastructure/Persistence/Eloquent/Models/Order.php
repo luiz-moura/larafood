@@ -49,6 +49,11 @@ class Order extends Model
         return $this->belongsToMany(Product::class);
     }
 
+    public function evaluations(): BelongsTo
+    {
+        return $this->belongsTo(OrderEvaluation::class);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope(new TenantScope());
