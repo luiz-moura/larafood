@@ -51,68 +51,68 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
         return $this->model->findOrFail($id)->delete();
     }
 
-    public function getAll(IndexCategoryRequestData $paginationData, array $with = []): CategoryPaginatedData
+    public function getAll(IndexCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData
     {
         $categories = $this->model
             ->select()
             ->with($with)
-            ->orderBy($paginationData->order, $paginationData->sort)
-            ->paginate($paginationData->per_page, $paginationData->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
     }
 
-    public function queryByName(SearchCategoryRequestData $paginationData, array $with = []): CategoryPaginatedData
+    public function queryByName(SearchCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData
     {
         $categories = $this->model
             ->select()
             ->with($with)
-            ->where(function ($query) use ($paginationData) {
-                $query->where('name', 'ilike', "%{$paginationData->filter}%")
-                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            ->where(function ($query) use ($validatedRequest) {
+                $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
+                    ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
             })
-            ->orderBy($paginationData->order, $paginationData->sort)
-            ->paginate($paginationData->per_page, $paginationData->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
     }
 
-    public function queryByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData
+    public function queryByProductId(int $id, IndexCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData
     {
         $categories = $this->model
             ->select()
             ->with($with)
             ->whereRelation('products', 'products.id', $id)
-            ->orderBy($request->order, $request->sort)
-            ->paginate($request->per_page, $request->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
     }
 
-    public function queryAvailableByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData
+    public function queryAvailableByProductId(int $id, IndexCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData
     {
         $categories = $this->model
             ->select()
             ->with($with)
             ->whereDoesntHave('products', fn ($query) => $query->where('products.id', $id))
-            ->orderBy($request->order, $request->sort)
-            ->paginate($request->per_page, $request->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
     }
 
-    public function queryByNameAndByProductId(int $id, SearchCategoryRequestData $request, array $with = []): CategoryPaginatedData
+    public function queryByNameAndByProductId(int $id, SearchCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData
     {
         $categories = $this->model
             ->select()
             ->with($with)
             ->whereHas('products', fn ($query) => $query->where('products.id', $id))
-            ->where(function ($query) use ($request) {
-                $query->where('name', 'ilike', "%{$request->filter}%")
-                    ->orWhere('description', 'ilike', "%{$request->filter}%");
+            ->where(function ($query) use ($validatedRequest) {
+                $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
+                    ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
             })
-            ->orderBy($request->order, $request->sort)
-            ->paginate($request->per_page, $request->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return CategoryPaginatedData::fromPaginator($categories);
     }

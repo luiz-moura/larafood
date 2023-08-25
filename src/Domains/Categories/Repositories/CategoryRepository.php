@@ -15,10 +15,10 @@ interface CategoryRepository
     public function findByUuidAndTenantUuid(string $identify, string $companyToken): CategoryData;
     public function update(int $id, CategoryFormData $formData): bool;
     public function delete(int $id): bool;
-    public function getAll(IndexCategoryRequestData $paginationData, array $with = []): CategoryPaginatedData;
-    public function queryByName(SearchCategoryRequestData $paginationData, array $with = []): CategoryPaginatedData;
-    public function queryByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData;
-    public function queryAvailableByProductId(int $id, IndexCategoryRequestData $request, array $with = []): CategoryPaginatedData;
-    public function queryByNameAndByProductId(int $id, SearchCategoryRequestData $request, array $with = []): CategoryPaginatedData;
+    public function getAll(IndexCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData;
+    public function queryByName(SearchCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData;
+    public function queryByProductId(int $id, IndexCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData;
+    public function queryAvailableByProductId(int $id, IndexCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData;
+    public function queryByNameAndByProductId(int $id, SearchCategoryRequestData $validatedRequest, array $with = []): CategoryPaginatedData;
     public function queryByTenantUuid(string $companyToken, IndexCategoryRequestData $validatedRequest): CategoryPaginatedData;
 }
