@@ -10,7 +10,7 @@ beforeEach(function () {
     $this->plan = PlanFactory::new()->has(ProfileFactory::new(['name' => 'Test']))->create();
 });
 
-it('Should see profile in search', function () {
+it('should see profile in search', function () {
     $response = $this->actingAs($this->user)->get(
         "{$this->uri}/{$this->plan->url}/profiles?filter=Test"
     );

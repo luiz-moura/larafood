@@ -11,7 +11,7 @@ beforeEach(function () {
     $this->plan = PlanFactory::new()->has(PlanDetailFactory::new(), 'details')->create();
 });
 
-it('Should create detail for plan', function () {
+it('should create detail for plan', function () {
     $response = $this->actingAs($this->user)->post("{$this->uri}/{$this->plan->url}/details", PlanDetailFactory::new()->mock());
 
     $response->assertSessionHasNoErrors();

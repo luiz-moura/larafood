@@ -9,7 +9,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should show details plan', function () {
+it('should show details plan', function () {
     $plan = PlanFactory::new()->create();
     $detail = PlanDetailFactory::new()->for($plan)->create();
 

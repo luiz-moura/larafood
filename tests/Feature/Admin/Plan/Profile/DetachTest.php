@@ -10,7 +10,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should detach profile in plan', function () {
+it('should detach profile in plan', function () {
     $plan = PlanFactory::new()->create();
     $profile = ProfileFactory::new()->create();
 

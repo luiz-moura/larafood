@@ -9,7 +9,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should show plan', function () {
+it('should show plan', function () {
     $plan = PlanFactory::new()->create();
 
     $response = $this->actingAs($this->user)->get("{$this->uri}/{$plan->url}");
@@ -19,7 +19,7 @@ it('Should show plan', function () {
     $response->assertSee($plan->description);
 });
 
-it('Should return 404 status code when not found', function () {
+it('should return 404 status code when not found', function () {
     $response = $this->actingAs($this->user)->get("{$this->uri}/zzzzzz");
 
     $response->assertNotFound();

@@ -8,7 +8,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should find by name', function () {
+it('should find by name', function () {
     ProductFactory::new()->create([
         'name' => 'Chair',
         'tenant_id' => $this->user->tenant->id,

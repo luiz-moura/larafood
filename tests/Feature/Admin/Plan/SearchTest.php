@@ -8,7 +8,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should return only plan1', function () {
+it('should return only plan1', function () {
     PlanFactory::new()->create(['name' => 'Teste']);
     PlanFactory::new()->create();
 

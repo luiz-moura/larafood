@@ -9,7 +9,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should show profiles of plan', function () {
+it('should show profiles of plan', function () {
     $profile = ProfileFactory::new(['name' => 'Test']);
     $plan = PlanFactory::new()->has($profile)->create();
 
