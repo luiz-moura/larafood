@@ -12,14 +12,13 @@ use Interfaces\Http\Api\OrderEvaluation\Resources\OrderEvaluationResource;
 class OrderEvaluationController extends Controller
 {
     public function store(
-        string $companyToken,
         string $orderIdentify,
         StoreOrderEvaluationRequest $request,
         CreateEvaluationAction $createEvaluationAction,
         FindOrderByUuidAndTenantUuidAction $findOrderByUuidAndTenantUuidAction
     ) {
         $evaluation = OrderEvaluationFormData::fromRequest($request->validated());
-        $order = $findOrderByUuidAndTenantUuidAction($orderIdentify, $companyToken);
+        $order = $findOrderByUuidAndTenantUuidAction($orderIdentify, $request->companyToken);
         $clientId = auth()->user()->id;
 
         $evaluation = $createEvaluationAction($evaluation, $order->id, $clientId);
