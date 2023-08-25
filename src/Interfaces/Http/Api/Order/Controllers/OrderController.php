@@ -4,6 +4,7 @@ namespace Interfaces\Http\Api\Order\Controllers;
 
 use Domains\Orders\Actions\FindOrderByUuidAndTenantUuidAction;
 use Domains\Orders\UseCases\CreateOrderUseCase;
+use Illuminate\Http\Request;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Api\Order\DataTransferObjects\OrderFormData;
 use Interfaces\Http\Api\Order\Requests\StoreOrderRequest;
@@ -15,21 +16,22 @@ class OrderController extends Controller
         StoreOrderRequest $request,
         CreateOrderUseCase $createOrderUseCase,
     ) {
+        $clientId = auth()->user()?->id;
         $orderForm = OrderFormData::fromRequest($request->validated());
 
-        $order = $createOrderUseCase($orderForm, $request->companyToken);
+        $order = $createOrderUseCase($orderForm, $request->companyToken, $clientId);
 
         return OrderResource::make($order);
     }
 
     public function show(
-        string $companyToken,
         string $identify,
+        Request $request,
         FindOrderByUuidAndTenantUuidAction $findOrderByUuidAndTenantUuidAction
     ) {
         $order = $findOrderByUuidAndTenantUuidAction(
             $identify,
-            $companyToken,
+            $request->companyToken,
             with: ['client', 'products', 'table']
         );
 
