@@ -3,7 +3,8 @@
 namespace Domains\Orders\Actions;
 
 use Domains\Orders\Contracts\OrderRepository;
-use Interfaces\Http\Api\Order\DataTransferObjects\OrderProductFormCollection;
+use Domains\Orders\DataTransferObjects\OrderProductCollection;
+use Domains\Orders\DataTransferObjects\ProductWithQuantityCollection;
 
 class AttachProductsToOrderAction
 {
@@ -11,8 +12,18 @@ class AttachProductsToOrderAction
     {
     }
 
-    public function __invoke(int $orderId, OrderProductFormCollection $orderProducts): void
+    public function __invoke(int $orderId, ProductWithQuantityCollection $productsWithQuantity): void
     {
+        $orderProducts = OrderProductCollection::fromArray(
+            $productsWithQuantity->mapWithKeys(function ($productWithQuantity) {
+                return [$productWithQuantity->product->id => [
+                    'product_id' => $productWithQuantity->product->id,
+                    'price' => $productWithQuantity->product->price,
+                    'quantity' => $productWithQuantity->quantity,
+                ]];
+            })->toArray()
+        );
+
         $this->orderRepository->attachProducts($orderId, $orderProducts);
     }
 }
