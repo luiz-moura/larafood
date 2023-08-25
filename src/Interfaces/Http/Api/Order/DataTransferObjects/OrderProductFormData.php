@@ -6,16 +6,14 @@ use Infrastructure\Shared\DataTransferObject;
 
 class OrderProductFormData extends DataTransferObject
 {
-    public int $product_id;
+    public string $identify;
     public int $quantity;
-    public float $price;
 
     public static function fromArray(array $data): self
     {
         return new self([
-            'product_id' => $data['product_id'],
+            'identify' => $data['identify'],
             'quantity' => $data['quantity'],
-            'price' => $data['price'],
         ]);
     }
 }

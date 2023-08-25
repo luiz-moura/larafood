@@ -5,32 +5,28 @@ namespace Infrastructure\Persistence\Eloquent\Repositories;
 use Domains\Orders\Contracts\OrderRepository as OrderRepositoryContract;
 use Domains\Orders\DataTransferObjects\OrderCollection;
 use Domains\Orders\DataTransferObjects\OrderData;
+use Domains\Orders\DataTransferObjects\OrderProductCollection;
+use Domains\Orders\DataTransferObjects\StoreOrderData;
 use Infrastructure\Persistence\Eloquent\Models\Order;
 use Infrastructure\Shared\AbstractRepository;
-use Interfaces\Http\Api\Order\DataTransferObjects\OrderFormData;
-use Interfaces\Http\Api\Order\DataTransferObjects\OrderProductFormCollection;
 
 class OrderRepository extends AbstractRepository implements OrderRepositoryContract
 {
     protected $modelClass = Order::class;
 
-    public function create(OrderFormData $order): OrderData
+    public function create(StoreOrderData $order): OrderData
     {
         return OrderData::fromModel(
             $this->model->create($order->toArray())
         );
     }
 
-    public function attachProducts(int $orderId, OrderProductFormCollection $orderProducts): bool
+    public function attachProducts(int $orderId, OrderProductCollection $orderProducts): bool
     {
-        $orderProducts = $orderProducts->mapWithKeys(
-            fn ($orderProduct) => [$orderProduct->product_id => $orderProduct->toArray()]
-        )->toArray();
-
         return (bool) $this->model->newQueryWithoutScopes()
             ->find($orderId)
             ->products()
-            ->attach($orderProducts);
+            ->attach($orderProducts->map->toArray()->all());
     }
 
     public function findByIdentifyAndTenantUuid(
