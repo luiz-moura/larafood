@@ -5,14 +5,14 @@ namespace Domains\Products\Actions;
 use Domains\Products\DataTransferObjects\ProductCollection;
 use Domains\Products\Repositories\ProductRepository;
 
-class QueryProductsByUuidAction
+class QueryProductsByUuidAndTenantUuidAction
 {
     public function __construct(private ProductRepository $productRepository)
     {
     }
 
-    public function __invoke(array $ids): ProductCollection
+    public function __invoke(array $ids, string $companyToken): ProductCollection
     {
-        return $this->productRepository->queryThoseInTheUuid($ids);
+        return $this->productRepository->queryThoseInTheUuidAndTenantUuid($ids, $companyToken);
     }
 }

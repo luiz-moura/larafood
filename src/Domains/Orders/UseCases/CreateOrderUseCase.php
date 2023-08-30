@@ -10,7 +10,7 @@ use Domains\Orders\DataTransferObjects\OrderData;
 use Domains\Orders\DataTransferObjects\ProductWithQuantityCollection;
 use Domains\Orders\DataTransferObjects\StoreOrderData;
 use Domains\Orders\Enums\OrderStatusEnum;
-use Domains\Products\Actions\QueryProductsByUuidAction;
+use Domains\Products\Actions\QueryProductsByUuidAndTenantUuidAction;
 use Domains\Tables\Actions\FindTableByUuidAndTenantUuidAction;
 use Domains\Tenants\Actions\FindTenantByUuidAction;
 use Interfaces\Http\Api\Order\DataTransferObjects\OrderFormData;
@@ -20,7 +20,7 @@ class CreateOrderUseCase
     public function __construct(
         private FindTenantByUuidAction $findTenantByUuidAction,
         private FindTableByUuidAndTenantUuidAction $findTableByUuidAndTenantUuidAction,
-        private QueryProductsByUuidAction $queryProductsByUuidAction,
+        private QueryProductsByUuidAndTenantUuidAction $queryProductsByUuidAction,
         private GenerateUniqueIdentifierAction $generateUniqueIdentifierAction,
         private CalculateOrderTotalAction $calculateOrderTotalAction,
         private StoreOrderAction $storeOrderAction,
@@ -30,8 +30,12 @@ class CreateOrderUseCase
 
     public function __invoke(OrderFormData $orderForm, string $companyToken, ?int $clientId = null): OrderData
     {
-        $products = ($this->queryProductsByUuidAction)($orderForm->products->pluck('identify')->toArray());
+        $tenantId = ($this->findTenantByUuidAction)($companyToken)->id;
+        $tableId = $orderForm->tableUuid
+            ? ($this->findTableByUuidAndTenantUuidAction)($orderForm->tableUuid, $companyToken)->id
+            : null;
 
+        $products = ($this->queryProductsByUuidAction)($orderForm->products->pluck('identify')->toArray(), $companyToken);
         $productsWithQuantity = ProductWithQuantityCollection::fromArray(
             $products->map(fn ($product) => [
                 'product' => $product,
@@ -39,12 +43,8 @@ class CreateOrderUseCase
             ])->toArray()
         );
 
-        $tenantId = ($this->findTenantByUuidAction)($companyToken)->id;
-        $total = ($this->calculateOrderTotalAction)($productsWithQuantity);
         $identify = ($this->generateUniqueIdentifierAction)();
-        $tableId = $orderForm->table_id
-            ? ($this->findTableByUuidAndTenantUuidAction)($orderForm->table_id, $companyToken)->id
-            : null;
+        $total = ($this->calculateOrderTotalAction)($productsWithQuantity);
 
         $createOrderData = new StoreOrderData(
             tenant_id: $tenantId,
@@ -57,8 +57,8 @@ class CreateOrderUseCase
         );
 
         $order = ($this->storeOrderAction)($createOrderData);
-
         ($this->attachProductsToOrderAction)($order->id, $productsWithQuantity);
+        $order->products = $products;
 
         return $order;
     }

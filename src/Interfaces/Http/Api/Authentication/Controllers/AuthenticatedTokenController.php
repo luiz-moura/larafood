@@ -27,11 +27,13 @@ class AuthenticatedTokenController extends Controller
         $dto->email = $client->email;
         $dto->token = $token;
 
-        return new AuthenticatedResource($dto);
+        return AuthenticatedResource::make($dto);
     }
 
     public function destroy(Request $request)
     {
+        $request->user()->tokens()->delete();
+
         return response()->noContent();
     }
 }

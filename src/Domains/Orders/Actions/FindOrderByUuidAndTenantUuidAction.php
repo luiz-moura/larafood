@@ -11,8 +11,8 @@ class FindOrderByUuidAndTenantUuidAction
     {
     }
 
-    public function __invoke(string $identify, string $companyToken, array $with = []): OrderData
+    public function __invoke(string $orderIdentify, string $companyToken, array $withRelations = []): OrderData
     {
-        return $this->orderRepository->findByIdentifyAndTenantUuid($identify, $companyToken, $with);
+        return $this->orderRepository->findByIdentifyAndTenantUuid($orderIdentify, $companyToken, $withRelations);
     }
 }

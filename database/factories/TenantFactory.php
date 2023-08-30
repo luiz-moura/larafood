@@ -21,8 +21,9 @@ class TenantFactory extends AbstractFactory
     public function mock(array $extra = []): array
     {
         return $extra + [
-            'plan_id' => $this->faker->randomNumber(),
-            'cnpj' => $this->faker->name(),
+            'plan_id' => $this->faker->randomDigit(),
+            'uuid' => $this->faker->uuid(),
+            'cnpj' => $this->faker->cnpj(),
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'url' => $this->faker->url(),
@@ -32,6 +33,8 @@ class TenantFactory extends AbstractFactory
             'subscription_suspended' => $this->faker->boolean(),
             'subscribed_at' => $this->faker->dateTime(),
             'expires_at' => $this->faker->dateTime(),
+            'created_at' => now()->format('Y-m-d H:i:s'),
+            'updated_at' => null,
         ];
     }
 }

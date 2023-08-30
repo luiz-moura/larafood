@@ -15,9 +15,9 @@ class OrderResource extends JsonResource
             'identify' => $this->identify,
             'total' => $this->total,
             'status' => $this->status,
-            'client' => $this->client ? new ClientResource($this->client) : null,
-            'table' => $this->table ? new TableResource($this->table) : null,
-            'products' => $this->products?->map(fn ($product) => new ProductResource($product)),
+            'client' => $this->client ? ClientResource::make($this->client) : null,
+            'table' => $this->table ? TableResource::make($this->table) : null,
+            'products' => $this->products ? ProductResource::collection($this->products) : null,
         ];
     }
 }

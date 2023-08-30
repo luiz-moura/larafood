@@ -3,6 +3,7 @@
 namespace Interfaces\Http\Api\Order\Controllers;
 
 use Domains\Orders\Actions\FindOrderByUuidAndTenantUuidAction;
+use Domains\Orders\Exceptions\OrderIsNotFromTheCustomerException;
 use Domains\Orders\UseCases\CreateOrderUseCase;
 use Illuminate\Http\Request;
 use Infrastructure\Shared\Controller;
@@ -32,8 +33,11 @@ class OrderController extends Controller
         $order = $findOrderByUuidAndTenantUuidAction(
             $identify,
             $request->companyToken,
-            with: ['client', 'products', 'table']
+            withRelations: ['client', 'products', 'table']
         );
+
+        $clientId = auth()->user()?->id;
+        throw_if($order->client_id && $order->client_id !== $clientId, OrderIsNotFromTheCustomerException::class);
 
         return OrderResource::make($order);
     }

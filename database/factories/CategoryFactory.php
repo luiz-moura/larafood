@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use Infrastructure\Persistence\Eloquent\Models\Product;
+use Infrastructure\Persistence\Eloquent\Models\Category;
 use Infrastructure\Shared\AbstractFactory;
 
-class ProductFactory extends AbstractFactory
+class CategoryFactory extends AbstractFactory
 {
-    protected $model = Product::class;
+    protected $model = Category::class;
 
     public function definition(): array
     {
@@ -22,11 +22,9 @@ class ProductFactory extends AbstractFactory
         return $extra + [
             'tenant_id' => $this->faker->randomDigit(),
             'uuid' => $this->faker->uuid(),
-            'name' => $this->faker->name(),
+            'name' => $this->faker->unique()->name,
+            'url' => $this->faker->url(),
             'description' => $this->faker->sentence(),
-            'price' => $this->faker->randomNumber(),
-            'image' => $this->faker->filePath(),
-            'flag' => $this->faker->boolean(),
             'created_at' => now()->format('Y-m-d H:i:s'),
             'updated_at' => null,
         ];
