@@ -16,10 +16,10 @@ interface ProductRepository
     public function findByUuidAndTenantUuid(string $identify, string $companyToken): ProductData;
     public function update(int $id, ProductFormData $formData): bool;
     public function delete(int $id): bool;
-    public function getAll(IndexProductRequestData $paginationData, array $with = []): ProductPaginatedData;
-    public function queryByName(SearchProductRequestData $paginationData, array $with = []): ProductPaginatedData;
-    public function queryByTenantUuid(string $companyToken, IndexProductRequestData $paginationData): ProductPaginatedData;
-    public function queryThoseInTheUuid(array $ids): ProductCollection;
+    public function getAll(IndexProductRequestData $validatedRequest, array $with = []): ProductPaginatedData;
+    public function queryByName(SearchProductRequestData $validatedRequest, array $with = []): ProductPaginatedData;
+    public function queryByTenantUuid(string $companyToken, IndexProductRequestData $validatedRequest): ProductPaginatedData;
+    public function queryThoseInTheUuidAndTenantUuid(array $ids, string $companyToken): ProductCollection;
     public function attachCategories(int $id, array $categories): void;
     public function detachCategory(int $productId, int $categoryId): void;
 }

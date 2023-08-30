@@ -20,8 +20,10 @@ class PlanDetailFactory extends AbstractFactory
     public function mock(array $extra = []): array
     {
         return $extra + [
-            'plan_id' => $this->faker->randomNumber(),
+            'plan_id' => $this->faker->randomDigit(),
             'name' => $this->faker->name(),
+            'created_at' => now()->format('Y-m-d H:i:s'),
+            'updated_at' => null,
         ];
     }
 }

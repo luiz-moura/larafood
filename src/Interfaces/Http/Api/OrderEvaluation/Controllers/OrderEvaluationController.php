@@ -2,8 +2,7 @@
 
 namespace Interfaces\Http\Api\OrderEvaluation\Controllers;
 
-use Domains\Evaluations\Actions\CreateEvaluationAction;
-use Domains\Orders\Actions\FindOrderByUuidAndTenantUuidAction;
+use Domains\Evaluations\UseCases\StoreEvalutionUseCase;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Api\OrderEvaluation\DataTransferObjects\OrderEvaluationFormData;
 use Interfaces\Http\Api\OrderEvaluation\Requests\StoreOrderEvaluationRequest;
@@ -14,14 +13,12 @@ class OrderEvaluationController extends Controller
     public function store(
         string $orderIdentify,
         StoreOrderEvaluationRequest $request,
-        CreateEvaluationAction $createEvaluationAction,
-        FindOrderByUuidAndTenantUuidAction $findOrderByUuidAndTenantUuidAction
+        StoreEvalutionUseCase $useCase,
     ) {
         $evaluation = OrderEvaluationFormData::fromRequest($request->validated());
-        $order = $findOrderByUuidAndTenantUuidAction($orderIdentify, $request->companyToken);
-        $clientId = auth()->user()->id;
 
-        $evaluation = $createEvaluationAction($evaluation, $order->id, $clientId);
+        $clientId = auth()->user()->id;
+        $evaluation = $useCase($evaluation, $orderIdentify, $request->companyToken, $clientId);
 
         return OrderEvaluationResource::make($evaluation);
     }

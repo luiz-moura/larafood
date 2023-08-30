@@ -64,28 +64,28 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
         $this->model->findOrFail($productId)->categories()->detach($categoryId);
     }
 
-    public function getAll(IndexProductRequestData $paginationData, array $with = []): ProductPaginatedData
+    public function getAll(IndexProductRequestData $validatedRequest, array $with = []): ProductPaginatedData
     {
         $products = $this->model
             ->select()
             ->with($with)
-            ->orderBy($paginationData->order, $paginationData->sort)
-            ->paginate($paginationData->per_page, $paginationData->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return ProductPaginatedData::fromPaginator($products);
     }
 
-    public function queryByName(SearchProductRequestData $paginationData, array $with = []): ProductPaginatedData
+    public function queryByName(SearchProductRequestData $validatedRequest, array $with = []): ProductPaginatedData
     {
         $products = $this->model
             ->select()
             ->with($with)
-            ->where(function ($query) use ($paginationData) {
-                $query->where('name', 'ilike', "%{$paginationData->filter}%")
-                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            ->where(function ($query) use ($validatedRequest) {
+                $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
+                    ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
             })
-            ->orderBy($paginationData->order, $paginationData->sort)
-            ->paginate($paginationData->per_page, $paginationData->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return ProductPaginatedData::fromPaginator($products);
     }
@@ -101,11 +101,12 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
         return ProductPaginatedData::fromPaginator($products);
     }
 
-    public function queryThoseInTheUuid(array $uuid): ProductCollection
+    public function queryThoseInTheUuidAndTenantUuid(array $uuid, string $companyToken): ProductCollection
     {
         $products = $this->model->newQueryWithoutScopes()
             ->select()
             ->whereIn('uuid', $uuid)
+            ->whereRelation('tenant', 'uuid', $companyToken)
             ->get();
 
         return ProductCollection::fromModelCollection($products);
