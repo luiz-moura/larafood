@@ -11,8 +11,8 @@ class FindPlanDetailAction
     {
     }
 
-    public function __invoke(int $id): PlanDetailData
+    public function __invoke(int $id, array $withRelations = []): PlanDetailData
     {
-        return $this->planDetailRepository->findById($id);
+        return $this->planDetailRepository->findById($id, $withRelations);
     }
 }

@@ -25,9 +25,9 @@ class PlanDetailController extends Controller
         $planData = $findPlanByUrlAction($planUrl);
 
         $paginationData = IndexPlanDetailRequestData::fromRequest($request->validated());
-        $paginatedData = ($getAllPlanDetailsByPlanAction)($planData->id, $paginationData);
+        $paginatedData = $getAllPlanDetailsByPlanAction($planData->id, $paginationData);
 
-        return view('admin.pages.plan-details.index', [
+        return view('admin.pages.plans.plan-details.index', [
             'plan' => $planData,
             'details' => $paginatedData->details,
             'pagination' => $paginatedData->pagination,
@@ -38,7 +38,7 @@ class PlanDetailController extends Controller
     {
         $plan = $findPlanByUrlAction($planUrl);
 
-        return view('admin.pages.plan-details.create', compact('plan'));
+        return view('admin.pages.plans.plan-details.create', compact('plan'));
     }
 
     public function store(
@@ -58,13 +58,11 @@ class PlanDetailController extends Controller
     public function edit(
         string $planUrl,
         int $planDetailId,
-        FindPlanByUrlAction $findPlanByUrlAction,
         FindPlanDetailAction $findPlanDetailAction
     ) {
-        $plan = $findPlanByUrlAction($planUrl);
-        $detail = $findPlanDetailAction($planDetailId);
+        $planDetail = $findPlanDetailAction($planDetailId, withRelations: ['plan']);
 
-        return view('admin.pages.plan-details.edit', compact('plan', 'detail'));
+        return view('admin.pages.plans.plan-details.edit', compact('planDetail'));
     }
 
     public function update(
@@ -92,12 +90,10 @@ class PlanDetailController extends Controller
     public function show(
         string $planUrl,
         int $planDetailId,
-        FindPlanByUrlAction $findPlanByUrlAction,
         FindPlanDetailAction $findPlanDetailAction
     ) {
-        $plan = $findPlanByUrlAction($planUrl);
-        $detail = $findPlanDetailAction($planDetailId);
+        $planDetail = $findPlanDetailAction($planDetailId, withRelations: ['plan']);
 
-        return view('admin.pages.plan-details.show', compact('plan', 'detail'));
+        return view('admin.pages.plans.plan-details.show', compact('planDetail'));
     }
 }

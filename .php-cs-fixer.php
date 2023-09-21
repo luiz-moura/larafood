@@ -121,7 +121,7 @@ return $config
         'simplified_if_return' => true,
         'simplified_null_return' => true,
         'single_blank_line_at_eof' => true,
-        'single_blank_line_before_namespace' => true,
+        // 'single_blank_line_before_namespace' => true,
         'single_class_element_per_statement' => true,
         'single_line_after_imports' => true,
         'single_line_comment_spacing' => true,

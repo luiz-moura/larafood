@@ -7,7 +7,8 @@
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
         <li class="breadcrumb-item"><a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a></li>
-        <li class="breadcrumb-item active">Categorias</li>
+        <li class="breadcrumb-item"><a href="{{ route('products.categories', $product->id) }}">Categorias</a></li>
+        <li class="breadcrumb-item active">Vincular</li>
     </ol>
     <h1>Categorias disponíveis - Produto {{ $product->name }}</h1>
 @stop

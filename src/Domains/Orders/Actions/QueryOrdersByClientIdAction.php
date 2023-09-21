@@ -11,8 +11,8 @@ class QueryOrdersByClientIdAction
     {
     }
 
-    public function __invoke(string $clientId, string $companyToken): OrderCollection
+    public function __invoke(string $clientId, array $withRelations = []): OrderCollection
     {
-        return $this->orderRepository->queryByClientId($clientId, $companyToken);
+        return $this->orderRepository->queryByClientId($clientId, $withRelations);
     }
 }

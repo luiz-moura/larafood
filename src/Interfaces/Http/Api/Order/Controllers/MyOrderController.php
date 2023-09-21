@@ -15,7 +15,7 @@ class MyOrderController extends Controller
     ) {
         $clientId = auth()->user()->id;
 
-        $orders = $queryOrdersByClientIdAction($clientId, $request->companyToken);
+        $orders = $queryOrdersByClientIdAction($clientId, withRelations: ['products', 'table']);
 
         return OrderResource::collection($orders);
     }

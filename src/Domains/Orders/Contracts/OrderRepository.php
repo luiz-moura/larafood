@@ -13,5 +13,5 @@ interface OrderRepository
     public function checksIfOrderExistsByIdentifier(string $identify): bool;
     public function attachProducts(int $id, OrderProductCollection $orderProducts): bool;
     public function findByIdentifyAndTenantUuid(string $identify, string $companyToken, array $with = []): OrderData;
-    public function queryByClientId(int $clientId): OrderCollection;
+    public function queryByClientId(int $clientId, array $withRelations = []): OrderCollection;
 }

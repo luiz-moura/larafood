@@ -12,10 +12,10 @@ class OrderProductData extends DataTransferObject
 
     public static function fromArray(array $data): self
     {
-        return new self([
-            'product_id' => $data['product_id'],
-            'quantity' => $data['quantity'],
-            'price' => $data['price'],
-        ]);
+        return new self(
+            product_id: $data['product_id'],
+            quantity: $data['quantity'],
+            price: $data['price'],
+        );
     }
 }

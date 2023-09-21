@@ -37,5 +37,5 @@
            placeholder="Senha:">
 </div>
 <div class="form-group">
-    <button type="submit" class="btn btn-dark">Enviar</button>
+    <button type="submit" class="btn btn-dark">@isset($user) Editar @else Cadastrar @endisset</button>
 </div>

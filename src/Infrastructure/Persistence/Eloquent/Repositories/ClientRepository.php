@@ -14,15 +14,15 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryCon
 
     public function create(ClientRequestData $requestData): ClientData
     {
-        return ClientData::fromModel(
-            $this->model->create($requestData->toArray())
+        return ClientData::fromArray(
+            $this->model->create($requestData->toArray())->toArray()
         );
     }
 
     public function findByEmail(string $email): ClientData
     {
-        return ClientData::fromModel(
-            $this->model->where('email', $email)->firstOrFail()
+        return ClientData::fromArray(
+            $this->model->where('email', $email)->firstOrFail()->toArray()
         );
     }
 

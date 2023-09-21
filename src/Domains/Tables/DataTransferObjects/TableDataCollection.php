@@ -3,15 +3,13 @@
 namespace Domains\Tables\DataTransferObjects;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as SupportCollection;
-use Infrastructure\Persistence\Eloquent\Models\Table;
 
 class TableDataCollection extends Collection
 {
-    public static function fromModelCollection(Collection|SupportCollection $collection): self
+    public static function fromArray(array $data): self
     {
         return new self(
-            $collection->map(fn (Table $item) => TableData::fromModel($item))
+            array_map(fn (array $item) => TableData::fromArray($item), $data)
         );
     }
 }

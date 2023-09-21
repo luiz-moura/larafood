@@ -33,10 +33,10 @@ class PlanDetailRepository extends AbstractRepository implements PlanDetailRepos
         return $this->model->findOrFail($id)->delete();
     }
 
-    public function findById(int $id): PlanDetailData
+    public function findById(int $id, array $withRelations = []): PlanDetailData
     {
-        return PlanDetailData::fromModel(
-            $this->model->findOrFail($id)
+        return PlanDetailData::fromArray(
+            $this->model->with($withRelations)->findOrFail($id)->toArray()
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace Interfaces\Http\Api\Order\Controllers;
 
+use Domains\ACL\Clients\DataTransferObjects\ClientData;
 use Domains\Orders\Actions\FindOrderByUuidAndTenantUuidAction;
 use Domains\Orders\Exceptions\OrderIsNotFromTheCustomerException;
 use Domains\Orders\UseCases\CreateOrderUseCase;
@@ -17,10 +18,10 @@ class OrderController extends Controller
         StoreOrderRequest $request,
         CreateOrderUseCase $createOrderUseCase,
     ) {
-        $clientId = auth()->user()?->id;
+        $client = auth()->hasUser() ? ClientData::fromArray($request->user()->toArray()) : null;
         $orderForm = OrderFormData::fromRequest($request->validated());
 
-        $order = $createOrderUseCase($orderForm, $request->companyToken, $clientId);
+        $order = $createOrderUseCase($orderForm, $request->companyToken, $client);
 
         return OrderResource::make($order);
     }

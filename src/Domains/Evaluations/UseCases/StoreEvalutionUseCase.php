@@ -20,10 +20,14 @@ class StoreEvalutionUseCase
         string $companyToken,
         int $clientId
     ) {
-        $order = ($this->findOrderByUuidAndTenantUuidAction)($orderIdentify, $companyToken);
+        $order = ($this->findOrderByUuidAndTenantUuidAction)($orderIdentify, $companyToken, ['client', 'products', 'table']);
 
         throw_if($order->client_id && $order->client_id !== $clientId, OrderIsNotFromTheCustomerException::class);
 
-        return ($this->createEvaluationAction)($evaluation, $order->id, $clientId);
+        $evaluation = ($this->createEvaluationAction)($evaluation, $order->id, $clientId);
+        $evaluation->order = $order;
+        $evaluation->client = $order->client;
+
+        return $evaluation;
     }
 }

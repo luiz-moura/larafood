@@ -2,8 +2,8 @@
 
 namespace Domains\ACL\Users\Actions;
 
+use Domains\ACL\Users\Contracts\UserRepository;
 use Domains\ACL\Users\DataTransferObjects\UserPaginatedData;
-use Domains\ACL\Users\Repositories\UserRepository;
 use Interfaces\Http\Users\DataTransferObjects\IndexUserRequestData;
 
 class GetAllUsersAction

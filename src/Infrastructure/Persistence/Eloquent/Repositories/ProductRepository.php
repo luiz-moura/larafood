@@ -18,27 +18,28 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
 
     public function create(int $tenantId, ProductFormData $formData): ProductData
     {
-        return ProductData::fromModel(
+        return ProductData::fromArray(
             $this->model->create(
                 $formData->toArray() + ['tenant_id' => $tenantId]
-            )
+            )->fresh()->toArray()
         );
     }
 
     public function find(int $id, array $with = []): ProductData
     {
-        return ProductData::fromModel(
-            $this->model->with($with)->findOrFail($id)
+        return ProductData::fromArray(
+            $this->model->with($with)->findOrFail($id)->toArray()
         );
     }
 
     public function findByUuidAndTenantUuid(string $identify, string $companyToken): ProductData
     {
-        return ProductData::fromModel(
+        return ProductData::fromArray(
             $this->model->newQueryWithoutScopes()
                 ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
+                ->toArray()
         );
     }
 
@@ -107,8 +108,9 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
             ->select()
             ->whereIn('uuid', $uuid)
             ->whereRelation('tenant', 'uuid', $companyToken)
-            ->get();
+            ->get()
+            ->toArray();
 
-        return ProductCollection::fromModelCollection($products);
+        return ProductCollection::fromArray($products);
     }
 }

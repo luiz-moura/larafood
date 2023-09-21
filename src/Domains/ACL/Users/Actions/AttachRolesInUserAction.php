@@ -2,7 +2,7 @@
 
 namespace Domains\ACL\Users\Actions;
 
-use Domains\ACL\Users\Repositories\UserRepository;
+use Domains\ACL\Users\Contracts\UserRepository;
 
 class AttachRolesInUserAction
 {

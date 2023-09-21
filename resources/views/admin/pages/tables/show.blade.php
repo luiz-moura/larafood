@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('tables.index') }}">Mesas</a></li>
-        <li class="breadcrumb-item">{{ $table->name }}</li>
+        <li class="breadcrumb-item">{{ $table->identify }}</li>
     </ol>
     <h1>Detalhes da mesa <b>{{ $table->identify }}</b></h1>
 @stop

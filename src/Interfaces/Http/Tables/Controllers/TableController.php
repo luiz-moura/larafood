@@ -15,6 +15,7 @@ use Interfaces\Http\Tables\DataTransferObjects\TableFormData;
 use Interfaces\Http\Tables\Requests\IndexTableRequest;
 use Interfaces\Http\Tables\Requests\SearchTableRequest;
 use Interfaces\Http\Tables\Requests\StoreTableRequest;
+use Interfaces\Http\Tables\Requests\UpdateTableRequest;
 
 class TableController extends Controller
 {
@@ -56,7 +57,7 @@ class TableController extends Controller
 
     public function update(
         int $id,
-        StoreTableRequest $request,
+        UpdateTableRequest $request,
         UpdateTableAction $updateTableAction
     ) {
         $formData = TableFormData::fromRequest($request->validated());

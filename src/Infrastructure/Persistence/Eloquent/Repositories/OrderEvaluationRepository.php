@@ -14,13 +14,13 @@ class OrderEvaluationRepository extends AbstractRepository implements Evaluation
 
     public function create(OrderEvaluationFormData $evaluation, int $orderId, int $clientId): EvaluationData
     {
-        return EvaluationData::fromModel(
+        return EvaluationData::fromArray(
             $this->model->create(
                 array_merge($evaluation->toArray(), [
                     'order_id' => $orderId,
                     'client_id' => $clientId,
                 ])
-            )
+            )->toArray()
         );
     }
 }

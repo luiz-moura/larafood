@@ -47,7 +47,6 @@ it('should successfully store order evaluation', function () {
                     ],
                     'products' => [
                         [
-                            'company_token' => $this->echoDot->tenant->uuid,
                             'identify' => $this->echoDot->uuid,
                             'flag' => $this->echoDot->flag,
                             'name' => $this->echoDot->name,

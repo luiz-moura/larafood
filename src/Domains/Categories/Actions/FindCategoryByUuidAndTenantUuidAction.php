@@ -2,8 +2,8 @@
 
 namespace Domains\Categories\Actions;
 
+use Domains\Categories\Contracts\CategoryRepository;
 use Domains\Categories\DataTransferObjects\CategoryData;
-use Domains\Categories\Repositories\CategoryRepository;
 
 class FindCategoryByUuidAndTenantUuidAction
 {

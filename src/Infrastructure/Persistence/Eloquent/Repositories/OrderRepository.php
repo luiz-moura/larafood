@@ -16,8 +16,8 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryContr
 
     public function create(StoreOrderData $order): OrderData
     {
-        return OrderData::fromModel(
-            $this->model->create($order->toArray())
+        return OrderData::fromArray(
+            $this->model->create($order->toArray())->toArray()
         );
     }
 
@@ -34,22 +34,25 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryContr
         string $companyToken,
         array $with = []
     ): OrderData {
-        return OrderData::fromModel(
+        return OrderData::fromArray(
             $this->model->newQueryWithoutScopes()
                 ->with($with)
                 ->where('identify', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
+                ->toArray()
         );
     }
 
-    public function queryByClientId(int $clientId): OrderCollection
+    public function queryByClientId(int $clientId, array $withRelations = []): OrderCollection
     {
-        return OrderCollection::fromModelCollection(
+        return OrderCollection::fromArray(
             $this->model->newQueryWithoutScopes()
                 ->select()
+                ->with($withRelations)
                 ->where('client_id', $clientId)
                 ->get()
+                ->toArray()
         );
     }
 

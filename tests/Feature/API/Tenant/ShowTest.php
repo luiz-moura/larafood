@@ -15,7 +15,7 @@ it('should show tenant', function () {
     $response->assertOk()
         ->assertJsonStructure([
             'data' => [
-                'uuid',
+                'token',
                 'name',
                 'image',
                 'flag',

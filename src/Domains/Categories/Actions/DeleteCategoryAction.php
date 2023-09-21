@@ -2,7 +2,7 @@
 
 namespace Domains\Categories\Actions;
 
-use Domains\Categories\Repositories\CategoryRepository;
+use Domains\Categories\Contracts\CategoryRepository;
 
 class DeleteCategoryAction
 {

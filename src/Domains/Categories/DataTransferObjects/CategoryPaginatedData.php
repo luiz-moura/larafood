@@ -15,7 +15,7 @@ class CategoryPaginatedData extends DataTransferObject
     public static function fromPaginator(LengthAwarePaginator $paginated): self
     {
         return new self(
-            data: CategoryCollection::fromModelCollection($paginated->getCollection()),
+            items: CategoryCollection::fromArray($paginated->toArray()['data']),
             links: $paginated->withQueryString()->links(),
             paginated: $paginated,
         );

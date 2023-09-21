@@ -6,10 +6,10 @@ use Illuminate\Support\Collection;
 
 class PlanCollection extends Collection
 {
-    public static function fromArray(array $plans): self
+    public static function fromArray(array $data): self
     {
         return new self(
-            array_map(fn (array $plan) => PlanData::fromArray($plan), $plans)
+            array_map(fn (array $item) => PlanData::fromArray($item), $data)
         );
     }
 }

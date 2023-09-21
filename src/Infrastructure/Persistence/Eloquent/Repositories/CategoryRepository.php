@@ -2,9 +2,9 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
+use Domains\Categories\Contracts\CategoryRepository as CategoryRepositoryContract;
 use Domains\Categories\DataTransferObjects\CategoryData;
 use Domains\Categories\DataTransferObjects\CategoryPaginatedData;
-use Domains\Categories\Repositories\CategoryRepository as CategoryRepositoryContract;
 use Infrastructure\Persistence\Eloquent\Models\Category;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Categories\DataTransferObjects\CategoryFormData;
@@ -17,27 +17,28 @@ class CategoryRepository extends AbstractRepository implements CategoryRepositor
 
     public function create(int $tenantId, CategoryFormData $formData): CategoryData
     {
-        return CategoryData::fromModel(
+        return CategoryData::fromArray(
             $this->model->create(
                 ['tenant_id' => $tenantId] + $formData->toArray()
-            )
+            )->fresh()->toArray()
         );
     }
 
     public function find(int $id, array $with = []): CategoryData
     {
-        return CategoryData::fromModel(
-            $this->model->with($with)->findOrFail($id)
+        return CategoryData::fromArray(
+            $this->model->with($with)->findOrFail($id)->toArray()
         );
     }
 
     public function findByUuidAndTenantUuid(string $identify, string $companyToken): CategoryData
     {
-        return CategoryData::fromModel(
+        return CategoryData::fromArray(
             $this->model->newQueryWithoutScopes()
                 ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
+                ->toArray()
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Domains\ACL\Users\Repositories;
+namespace Domains\ACL\Users\Contracts;
 
 use Domains\ACL\Users\DataTransferObjects\UserData;
 use Domains\ACL\Users\DataTransferObjects\UserPaginatedData;

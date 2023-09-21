@@ -21,7 +21,6 @@ it('should return product successfully', function () {
     $response->assertOk()
         ->assertJsonStructure([
             'data' => [
-                'company_token',
                 'identify',
                 'flag',
                 'name',

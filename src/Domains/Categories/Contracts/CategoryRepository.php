@@ -1,6 +1,6 @@
 <?php
 
-namespace Domains\Categories\Repositories;
+namespace Domains\Categories\Contracts;
 
 use Domains\Categories\DataTransferObjects\CategoryData;
 use Domains\Categories\DataTransferObjects\CategoryPaginatedData;

@@ -9,8 +9,8 @@
            placeholder="Nome"
            id="name"
            class="form-control"
-           value="{{ $detail->name ?? old('name') }}">
+           value="{{ $planDetail->name ?? old('name') }}">
 </div>
 <div class="form-group">
-    <button type="submit" class="btn btn-info">Enviar</button>
+    <button type="submit" class="btn btn-info">@isset($planDetail) Editar @else Cadastrar @endisset</button>
 </div>

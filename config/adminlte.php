@@ -228,11 +228,6 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
@@ -240,7 +235,7 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Procurar',
         ],
         [
             'text' => 'Empresas',
@@ -251,50 +246,56 @@ return [
         [
             'text' => 'Planos',
             'url' => 'admin/plans',
-            'icon' => 'fas fa-mountain',
+            'icon' => 'fas fa-marker',
             'can' => 'plans',
-        ],
-        [
-            'text' => 'Perfis',
-            'url' => 'admin/profiles',
-            'icon' => 'fas fa-id-card-alt',
-            'can' => 'profiles',
-        ],
-        [
-            'text' => 'Permissões',
-            'url' => 'admin/permissions',
-            'icon' => 'fas fa-user-lock',
-            'can' => 'permissions',
-        ],
-        [
-            'text' => 'Cargos',
-            'url' => 'admin/roles',
-            'icon' => 'fas fa-table',
-            'can' => 'roles',
-        ],
-        [
-            'text' => 'Usuários',
-            'url' => 'admin/users',
-            'icon' => 'fas fa-users',
-            'can' => 'users',
-        ],
-        [
-            'text' => 'Categorias',
-            'url' => 'admin/categories',
-            'icon' => 'fas fa-layer-group',
-            'can' => 'categories',
         ],
         [
             'text' => 'Produtos',
             'url' => 'admin/products',
-            'icon' => 'fab fa-product-hunt',
+            'icon' => 'fas fa-box',
             'can' => 'products',
         ],
         [
             'text' => 'Mesas',
             'url' => 'admin/tables',
-            'icon' => 'fas fa-table',
+            'icon' => 'fas fa-scroll',
             'can' => 'tables',
+        ],
+        [
+            'text' => 'Categorias',
+            'url' => 'admin/categories',
+            'icon' => 'fas fa-tag',
+            'can' => 'categories',
+        ],
+        [
+            'text' => 'Controle de acesso',
+            'icon' => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'Perfis',
+                    'url' => 'admin/profiles',
+                    'icon' => 'fas fa-id-card-alt',
+                    'can' => 'profiles',
+                ],
+                [
+                    'text' => 'Permissões',
+                    'url' => 'admin/permissions',
+                    'icon' => 'fas fa-user-lock',
+                    'can' => 'permissions',
+                ],
+                [
+                    'text' => 'Cargos',
+                    'url' => 'admin/roles',
+                    'icon' => 'fas fa-user-tag',
+                    'can' => 'roles',
+                ],
+                [
+                    'text' => 'Usuários',
+                    'url' => 'admin/users',
+                    'icon' => 'fas fa-users',
+                    'can' => 'users',
+                ],
+            ],
         ],
     ],
 

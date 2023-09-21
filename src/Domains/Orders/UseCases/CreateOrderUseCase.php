@@ -2,6 +2,7 @@
 
 namespace Domains\Orders\UseCases;
 
+use Domains\ACL\Clients\DataTransferObjects\ClientData;
 use Domains\Orders\Actions\AttachProductsToOrderAction;
 use Domains\Orders\Actions\CalculateOrderTotalAction;
 use Domains\Orders\Actions\GenerateUniqueIdentifierAction;
@@ -28,37 +29,37 @@ class CreateOrderUseCase
     ) {
     }
 
-    public function __invoke(OrderFormData $orderForm, string $companyToken, ?int $clientId = null): OrderData
+    public function __invoke(OrderFormData $orderForm, string $companyToken, ?ClientData $client = null): OrderData
     {
-        $tenantId = ($this->findTenantByUuidAction)($companyToken)->id;
-        $tableId = $orderForm->tableUuid
-            ? ($this->findTableByUuidAndTenantUuidAction)($orderForm->tableUuid, $companyToken)->id
-            : null;
-
-        $products = ($this->queryProductsByUuidAction)($orderForm->products->pluck('identify')->toArray(), $companyToken);
+        $productIdentification = $orderForm->products->pluck('identify')->toArray();
+        $products = ($this->queryProductsByUuidAction)($productIdentification, $companyToken);
         $productsWithQuantity = ProductWithQuantityCollection::fromArray(
             $products->map(fn ($product) => [
                 'product' => $product,
                 'quantity' => $orderForm->products->firstWhere('identify', $product->uuid)->quantity,
             ])->toArray()
         );
+        $orderAmount = ($this->calculateOrderTotalAction)($productsWithQuantity);
 
+        $tenantId = ($this->findTenantByUuidAction)($companyToken)->id;
+        $table = $orderForm->tableUuid ? ($this->findTableByUuidAndTenantUuidAction)($orderForm->tableUuid, $companyToken) : null;
         $identify = ($this->generateUniqueIdentifierAction)();
-        $total = ($this->calculateOrderTotalAction)($productsWithQuantity);
 
         $createOrderData = new StoreOrderData(
             tenant_id: $tenantId,
-            table_id: $tableId,
-            client_id: $clientId,
+            table_id: $table?->id,
+            client_id: $client?->id,
             comment: $orderForm->comment,
             identify: $identify,
-            total: $total,
+            total: $orderAmount,
             status: OrderStatusEnum::OPEN,
         );
 
         $order = ($this->storeOrderAction)($createOrderData);
         ($this->attachProductsToOrderAction)($order->id, $productsWithQuantity);
         $order->products = $products;
+        $order->table = $table;
+        $order->client = $client;
 
         return $order;
     }

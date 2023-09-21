@@ -12,9 +12,9 @@ class ProductWithQuantityData extends DataTransferObject
 
     public static function fromArray(array $data): self
     {
-        return new self([
-            'product' => $data['product'],
-            'quantity' => $data['quantity'],
-        ]);
+        return new self(
+            product: $data['product'],
+            quantity: $data['quantity'],
+        );
     }
 }

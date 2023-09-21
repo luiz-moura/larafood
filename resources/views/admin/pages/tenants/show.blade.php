@@ -36,8 +36,8 @@
             <h3>Assinatura</h3>
 
             <ul>
-                <li><strong>Data Assinatura: </strong> {{ $tenant->subscribed_at }}</li>
-                <li><strong>Data Expiração: </strong> {{ $tenant->expires_at }}</li>
+                <li><strong>Data Assinatura: </strong> {{ $tenant->subscribed_at->format('Y-m-d') }}</li>
+                <li><strong>Data Expiração: </strong> {{ $tenant->expires_at?->format('Y-m-d') }}</li>
                 <li><strong>Identifacador: </strong> {{ $tenant->subscription_id }}</li>
                 <li><strong>Ativo: </strong> {{ $tenant->subscription_active }}</li>
                 <li><strong>Cancelou: </strong> {{ $tenant->subscription_suspended }}</li>

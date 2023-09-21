@@ -39,10 +39,7 @@ it('should successfully store order with client', function () {
 
     $response->assertOk()
         ->assertJsonFragment([
-            'client' => [
-                'name' => $client->name,
-                'email' => $client->email,
-            ],
+            'client' => null,
             'status' => 'open',
             'table' => [
                 'identify' => $firstOrder->table->uuid,
@@ -51,7 +48,6 @@ it('should successfully store order with client', function () {
             ],
             'products' => [
                 [
-                    'company_token' => $this->company->uuid,
                     'identify' => $bike->uuid,
                     'name' => $bike->name,
                     'flag' => $bike->flag,
@@ -63,10 +59,7 @@ it('should successfully store order with client', function () {
             'total' => $firstOrder->total,
         ])->assertJsonFragment([
             'status' => 'open',
-            'client' => [
-                'name' => $client->name,
-                'email' => $client->email,
-            ],
+            'client' => null,
             'table' => [
                 'identify' => $secondOrder->table->uuid,
                 'name' => $secondOrder->table->identify,
@@ -74,7 +67,6 @@ it('should successfully store order with client', function () {
             ],
             'products' => [
                 [
-                    'company_token' => $this->company->uuid,
                     'identify' => $car->uuid,
                     'name' => $car->name,
                     'flag' => $car->flag,

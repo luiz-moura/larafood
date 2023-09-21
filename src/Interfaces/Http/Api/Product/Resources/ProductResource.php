@@ -9,7 +9,6 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'company_token' => $this->tenant->uuid,
             'identify' => $this->uuid,
             'flag' => $this->flag,
             'name' => $this->name,

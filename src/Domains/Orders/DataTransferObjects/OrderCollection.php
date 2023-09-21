@@ -3,14 +3,13 @@
 namespace Domains\Orders\DataTransferObjects;
 
 use Illuminate\Support\Collection;
-use Infrastructure\Persistence\Eloquent\Models\Order;
 
 class OrderCollection extends Collection
 {
-    public static function fromModelCollection(Collection $collection): self
+    public static function fromArray(array $data): self
     {
         return new self(
-            $collection->map(fn (Order $item) => OrderData::fromModel($item))
+            array_map(fn (array $item) => OrderData::fromArray($item), $data)
         );
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Domains\Plans\DataTransferObjects;
 
-use Infrastructure\Persistence\Eloquent\Models\Plan;
 use Infrastructure\Shared\DataTransferObject;
 
 class PlanData extends DataTransferObject
@@ -12,31 +11,17 @@ class PlanData extends DataTransferObject
     public float $price;
     public ?string $description;
     public string $url;
-    public string $created_at;
-    public ?string $updated_at;
     public ?PlanDetailCollection $details;
 
-    public static function fromModel(Plan $model)
+    public static function fromArray(array $data): self
     {
-        return new self([
-            'plan' => $model->plan
-                ? PlanDetailCollection::fromModel($model->plan)
-                : null,
-            'details' => $model->details
-                ? PlanDetailCollection::fromModel($model->details)
-                : null,
-        ] + $model->toArray());
-    }
-
-    public static function fromArray(array $data)
-    {
-        return new self([
-            'plan' => isset($data['plan'])
-                ? self::fromArray($data['plan'])
-                : null,
-            'details' => isset($data['details'])
-                ? PlanDetailCollection::fromArray($data['details'])
-                : null,
-        ] + $data);
+        return new self(
+            id: $data['id'],
+            name: $data['name'],
+            price: $data['price'],
+            description: $data['description'] ?? null,
+            url: $data['url'],
+            plan: isset($data['details']) ? PlanDetailCollection::fromArray($data['details']) : null,
+        );
     }
 }

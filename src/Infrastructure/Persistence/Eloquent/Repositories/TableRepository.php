@@ -17,27 +17,28 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
 
     public function create(int $tenantId, TableFormData $formData): TableData
     {
-        return TableData::fromModel(
+        return TableData::fromArray(
             $this->model->create(
                 $formData->toArray() + ['tenant_id' => $tenantId]
-            )
+            )->fresh()->toArray()
         );
     }
 
     public function find(int $id): TableData
     {
-        return TableData::fromModel(
-            $this->model->findOrFail($id)
+        return TableData::fromArray(
+            $this->model->findOrFail($id)->toArray()
         );
     }
 
     public function findByUuidAndTenantUuid(string $identify, string $companyToken): TableData
     {
-        return TableData::fromModel(
+        return TableData::fromArray(
             $this->model->newQueryWithoutScopes()
                 ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
+                ->toArray()
         );
     }
 

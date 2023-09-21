@@ -35,7 +35,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>Nenhuma detalhe encontrado.</tr>
+                        <tr>Nenhum detalhe encontrado.</tr>
                     @endforelse
                 </tbody>
             </table>
