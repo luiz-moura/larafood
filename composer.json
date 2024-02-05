@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "darkaonline/l5-swagger": "^8.5",
         "guzzlehttp/guzzle": "^7.2",
         "jeroennoten/laravel-adminlte": "^3.8",
         "laravel/framework": "^9.11",
@@ -19,7 +20,8 @@
         "sentry/sentry-laravel": "^2.12",
         "spatie/data-transfer-object": "^3.8",
         "spatie/laravel-activitylog": "^4.7.2",
-        "spatie/laravel-health": "^1.16"
+        "spatie/laravel-health": "^1.16",
+        "swagger-api/swagger-ui": "^5.9"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
@@ -40,7 +42,8 @@
             "Support\\": "src/Support",
             "Application\\": "src/Application",
             "Infrastructure\\": "src/Infrastructure",
-            "Interfaces\\": "src/Interfaces"
+            "Interfaces\\": "src/Interfaces",
+            "Docs\\": "docs"
         }
     },
     "autoload-dev": {
@@ -75,7 +78,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "dev",

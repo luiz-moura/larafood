@@ -13,9 +13,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-    }
+    public function register() {}
 
     /**
      * Bootstrap any application services.
@@ -29,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Paginator::useBootstrapFour();
+
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
     }
 }
