@@ -3,6 +3,8 @@
 use Database\Factories\TenantFactory;
 use Illuminate\Support\Str;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/tenants';
 });
@@ -17,8 +19,8 @@ it('should show tenant', function () {
             'data' => [
                 'token',
                 'name',
-                'image',
-                'flag',
+                'image_url',
+                'slug',
                 'contact',
                 'created_at',
             ],

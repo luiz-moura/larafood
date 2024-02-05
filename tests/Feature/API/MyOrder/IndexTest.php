@@ -5,6 +5,8 @@ use Database\Factories\OrderFactory;
 use Database\Factories\ProductFactory;
 use Database\Factories\TenantFactory;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/my-orders';
     $this->company = TenantFactory::new()->create();
@@ -39,7 +41,10 @@ it('should successfully store order with client', function () {
 
     $response->assertOk()
         ->assertJsonFragment([
-            'client' => null,
+            'client' => [
+                'email' => $firstOrder->client->email,
+                'name' => $firstOrder->client->name,
+            ],
             'status' => 'open',
             'table' => [
                 'identify' => $firstOrder->table->uuid,
@@ -51,7 +56,7 @@ it('should successfully store order with client', function () {
                     'identify' => $bike->uuid,
                     'name' => $bike->name,
                     'flag' => $bike->flag,
-                    'image' => url("storage/{$bike->image}"),
+                    'image_url' => url("storage/{$bike->image}"),
                     'price' => $bike->price,
                     'description' => $bike->description,
                 ],
@@ -59,7 +64,10 @@ it('should successfully store order with client', function () {
             'total' => $firstOrder->total,
         ])->assertJsonFragment([
             'status' => 'open',
-            'client' => null,
+            'client' => [
+                'email' => $firstOrder->client->email,
+                'name' => $firstOrder->client->name,
+            ],
             'table' => [
                 'identify' => $secondOrder->table->uuid,
                 'name' => $secondOrder->table->identify,
@@ -70,7 +78,7 @@ it('should successfully store order with client', function () {
                     'identify' => $car->uuid,
                     'name' => $car->name,
                     'flag' => $car->flag,
-                    'image' => url("storage/{$car->image}"),
+                    'image_url' => url("storage/{$car->image}"),
                     'price' => $car->price,
                     'description' => $car->description,
                 ],

@@ -3,6 +3,8 @@
 use Database\Factories\ClientFactory;
 use Illuminate\Support\Facades\Hash;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = '/api/auth/authenticate';
 });

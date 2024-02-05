@@ -6,6 +6,8 @@ use Database\Factories\ProductFactory;
 use Database\Factories\TenantFactory;
 use Illuminate\Support\Str;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/orders';
     $this->company = TenantFactory::new()->create();
@@ -50,7 +52,7 @@ it('should successfully store order evaluation', function () {
                             'identify' => $this->echoDot->uuid,
                             'flag' => $this->echoDot->flag,
                             'name' => $this->echoDot->name,
-                            'image' => url("storage/{$this->echoDot->image}"),
+                            'image_url' => url("storage/{$this->echoDot->image}"),
                             'price' => $this->echoDot->price,
                             'description' => $this->echoDot->description,
                         ],

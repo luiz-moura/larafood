@@ -1,5 +1,7 @@
 <?php
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = '/api/auth/register';
 });

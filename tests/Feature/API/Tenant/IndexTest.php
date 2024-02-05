@@ -2,6 +2,8 @@
 
 use Database\Factories\TenantFactory;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/tenants';
 });

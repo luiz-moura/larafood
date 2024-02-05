@@ -2,6 +2,8 @@
 
 use Database\Factories\ClientFactory;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = '/api/auth/logout';
 });

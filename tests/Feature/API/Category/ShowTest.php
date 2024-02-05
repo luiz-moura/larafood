@@ -4,6 +4,8 @@ use Database\Factories\CategoryFactory;
 use Database\Factories\TenantFactory;
 use Illuminate\Support\Str;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/categories';
     $this->company = TenantFactory::new()->create();

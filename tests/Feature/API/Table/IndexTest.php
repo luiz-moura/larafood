@@ -3,6 +3,8 @@
 use Database\Factories\TableFactory;
 use Database\Factories\TenantFactory;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/tables';
     $this->company = TenantFactory::new()->create();

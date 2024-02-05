@@ -2,6 +2,8 @@
 
 use Database\Factories\ClientFactory;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = '/api/auth/me';
 });
@@ -23,8 +25,8 @@ it('should successfully return client', function () {
     $response->assertOk()
         ->assertExactJson([
             'data' => [
-                'email' => $client->email,
                 'name' => $client->name,
+                'email' => $client->email,
             ],
         ]);
 });

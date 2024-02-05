@@ -4,6 +4,8 @@ use Database\Factories\ProductFactory;
 use Database\Factories\TenantFactory;
 use Illuminate\Support\Str;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/products';
     $this->company = TenantFactory::new()->create();
@@ -24,7 +26,7 @@ it('should return product successfully', function () {
                 'identify',
                 'flag',
                 'name',
-                'image',
+                'image_url',
                 'price',
                 'description',
             ],

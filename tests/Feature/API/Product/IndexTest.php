@@ -3,6 +3,8 @@
 use Database\Factories\ProductFactory;
 use Database\Factories\TenantFactory;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/products';
     $this->company = TenantFactory::new()->create();

@@ -6,13 +6,15 @@ use Database\Factories\TableFactory;
 use Database\Factories\TenantFactory;
 use Illuminate\Support\Str;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/orders';
     $this->company = TenantFactory::new()->create();
     $this->header = ['company_token' => $this->company->uuid];
 });
 
-it('should successfully store order without client', function () {
+it('should fail when creating without client', function () {
     $product = ProductFactory::new()->create(['tenant_id' => $this->company->id]);
 
     $payload = [
@@ -23,27 +25,11 @@ it('should successfully store order without client', function () {
     ];
     $response = $this->withHeaders($this->header)->postJson($this->uri, $payload);
 
-    $response->assertOk()
-        ->assertJsonFragment([
-            'total' => $product->price * $payload['products'][0]['quantity'],
-            'status' => 'open',
-            'client' => null,
-            'table' => null,
-            'products' => [
-                [
-                    'identify' => $product->uuid,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'image' => url("storage/{$product->image}"),
-                    'flag' => $product->flag,
-                    'description' => $product->description,
-                ],
-            ],
-        ]);
-    expect($response->getData()->data)->toHaveProperty('identify');
+    $response->assertUnauthorized();
 });
 
 it('should fail when product identify is invalid', function () {
+    $client = ClientFactory::new()->create();
     $invalidProductIdentifier = Str::uuid();
     $payload = [
         'products' => [[
@@ -51,7 +37,10 @@ it('should fail when product identify is invalid', function () {
             'quantity' => 3,
         ]],
     ];
-    $response = $this->withHeaders($this->header)->postJson($this->uri, $payload);
+
+    $response = $this->actingAs($client)
+        ->withHeaders($this->header)
+        ->postJson($this->uri, $payload);
 
     $response->assertUnprocessable()
         ->assertJsonFragment([
@@ -90,7 +79,7 @@ it('should successfully store order with client', function () {
                     'identify' => $product->uuid,
                     'name' => $product->name,
                     'price' => $product->price,
-                    'image' => url("storage/{$product->image}"),
+                    'image_url' => url("storage/{$product->image}"),
                     'flag' => $product->flag,
                     'description' => $product->description,
                 ],
@@ -100,6 +89,7 @@ it('should successfully store order with client', function () {
 });
 
 it('should successfully store order with table and comment', function () {
+    $client = ClientFactory::new()->create();
     $table = TableFactory::new()->create(['tenant_id' => $this->company->id]);
     $product = ProductFactory::new()->create(['tenant_id' => $this->company->id]);
 
@@ -112,13 +102,18 @@ it('should successfully store order with table and comment', function () {
         ]],
     ];
 
-    $response = $this->withHeaders($this->header)->postJson($this->uri, $payload);
+    $response = $this->actingAs($client)
+        ->withHeaders($this->header)
+        ->postJson($this->uri, $payload);
 
     $response->assertOk()
         ->assertJsonFragment([
             'total' => $product->price * $payload['products'][0]['quantity'],
             'status' => 'open',
-            'client' => null,
+            'client' => [
+                'name' => $client->name,
+                'email' => $client->email,
+            ],
             'table' => [
                 'identify' => $table->uuid,
                 'name' => $table->identify,
@@ -129,7 +124,7 @@ it('should successfully store order with table and comment', function () {
                     'identify' => $product->uuid,
                     'name' => $product->name,
                     'price' => $product->price,
-                    'image' => url("storage/{$product->image}"),
+                    'image_url' => url("storage/{$product->image}"),
                     'flag' => $product->flag,
                     'description' => $product->description,
                 ],
@@ -139,6 +134,7 @@ it('should successfully store order with table and comment', function () {
 });
 
 it('should fail when table identify is invalid', function () {
+    $client = ClientFactory::new()->create();
     $tableInvalid = Str::uuid();
     $product = ProductFactory::new()->create(['tenant_id' => $this->company->id]);
 
@@ -151,7 +147,9 @@ it('should fail when table identify is invalid', function () {
         ]],
     ];
 
-    $response = $this->withHeaders($this->header)->postJson($this->uri, $payload);
+    $response = $this->actingAs($client)
+        ->withHeaders($this->header)
+        ->postJson($this->uri, $payload);
 
     $response->assertUnprocessable()
         ->assertJsonFragment([

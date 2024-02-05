@@ -4,18 +4,20 @@ use Database\Factories\ClientFactory;
 use Database\Factories\OrderFactory;
 use Database\Factories\TenantFactory;
 
+uses()->group('api');
+
 beforeEach(function () {
     $this->uri = 'api/v1/orders';
     $this->company = TenantFactory::new()->create();
     $this->header = ['company_token' => $this->company->uuid];
 });
 
-it('should successfully return order without client', function () {
+it('should fail when accessing order without userlient', function () {
     $order = OrderFactory::new()->create(['tenant_id' => $this->company->id, 'client_id' => null]);
 
     $response = $this->withHeaders($this->header)->getJson("{$this->uri}/{$order->identify}");
 
-    $response->assertOk();
+    $response->assertUnauthorized();
 });
 
 it('should successfully return order', function () {
@@ -39,8 +41,9 @@ it('should fail when the order is from another client', function () {
         ->withHeaders($this->header)
         ->getJson("{$this->uri}/{$order->identify}");
 
-    $response->assertUnauthorized()
+    $response->assertForbidden()
         ->assertJsonFragment([
-            'message' => 'O pedido é de outro cliente.',
+            'message' => 'O pedido não pertence a você.',
+            'errors' => [],
         ]);
 });
