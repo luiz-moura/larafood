@@ -1,6 +1,6 @@
 <?php
 
-namespace Support\Authentication\Actions;
+namespace Domains\Authentication\Actions;
 
 use Domains\ACL\Clients\Contracts\ClientRepository;
 

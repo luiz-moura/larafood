@@ -1,6 +1,6 @@
 <?php
 
-namespace Support\Authentication\Actions;
+namespace Domains\Authentication\Actions;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
@@ -11,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class AuthenticateAction
 {
+    private $request;
+
     public function __invoke(Request $request): void
     {
         $this->request = $request;
