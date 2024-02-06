@@ -2,8 +2,8 @@
 
 namespace Domains\ACL\Users\Actions;
 
+use Domains\ACL\Users\Contracts\UserRepository;
 use Domains\ACL\Users\DataTransferObjects\UserData;
-use Domains\ACL\Users\Repositories\UserRepository;
 
 class FindUserAction
 {

@@ -3,7 +3,6 @@
 use Application\Providers\RouteServiceProvider;
 use Database\Factories\UserFactory;
 use Illuminate\Http\Response;
-use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
     $this->uri = '/login';

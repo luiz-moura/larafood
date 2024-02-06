@@ -9,7 +9,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should delete product', function () {
+it('should delete product', function () {
     $product = ProductFactory::new([
         'tenant_id' => $this->user->tenant_id,
     ])->create();
@@ -20,7 +20,7 @@ it('Should delete product', function () {
     $response->assertStatus(Response::HTTP_FOUND);
 });
 
-it('Should return status code 404 when not found', function () {
+it('should return status code 404 when not found', function () {
     $response = $this->actingAs($this->user)->delete("{$this->uri}/9999999");
 
     $response->assertNotFound();

@@ -13,7 +13,7 @@ beforeEach(function () {
     )->create();
 });
 
-it('Should create detail for plan', function () {
+it('should create detail for plan', function () {
     $response = $this->actingAs($this->user)->get(
         "{$this->uri}/{$this->plan->url}/details/{$this->plan->details->first()->id}",
         PlanDetailFactory::new()->mock()

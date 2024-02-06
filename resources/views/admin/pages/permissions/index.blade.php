@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{ $permission->name }}</td>
                             <td>
-                                <a href="{{ route('permissions.profiles.index', $permission->id) }}" class="btn btn-default">Permissões</a>
+                                <a href="{{ route('permissions.profiles.index', $permission->id) }}" class="btn btn-default">Perfis</a>
                                 <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-info">Editar</a>
                                 <a href="{{ route('permissions.show', $permission->id) }}" class="btn btn-warning">Ver</a>
                             </td>

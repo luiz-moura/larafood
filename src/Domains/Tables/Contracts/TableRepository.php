@@ -11,7 +11,7 @@ use Interfaces\Http\Tables\DataTransferObjects\TableFormData;
 interface TableRepository
 {
     public function find(int $id): TableData;
-    public function findByIdentifyAndTenantUuid(string $identify, string $companyToken): TableData;
+    public function findByUuidAndTenantUuid(string $identify, string $companyToken): TableData;
     public function update(int $id, TableFormData $formData): bool;
     public function create(int $tenantId, TableFormData $formData): TableData;
     public function delete(int $id): bool;

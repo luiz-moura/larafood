@@ -17,27 +17,28 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
 
     public function create(int $tenantId, TableFormData $formData): TableData
     {
-        return TableData::fromModel(
+        return TableData::fromArray(
             $this->model->create(
                 $formData->toArray() + ['tenant_id' => $tenantId]
-            )
+            )->fresh()->toArray()
         );
     }
 
     public function find(int $id): TableData
     {
-        return TableData::fromModel(
-            $this->model->findOrFail($id)
+        return TableData::fromArray(
+            $this->model->findOrFail($id)->toArray()
         );
     }
 
-    public function findByIdentifyAndTenantUuid(string $identify, string $companyToken): TableData
+    public function findByUuidAndTenantUuid(string $identify, string $companyToken): TableData
     {
-        return TableData::fromModel(
+        return TableData::fromArray(
             $this->model->newQueryWithoutScopes()
-                ->where('identify', $identify)
+                ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
+                ->toArray()
         );
     }
 
@@ -72,17 +73,19 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
             ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
+        // dd($tables);
+
         return TablePaginatedData::fromPaginator($tables);
     }
 
     public function queryByTenantUuid(string $companyToken, IndexTableRequestData $validatedRequest): TablePaginatedData
     {
-        $tenants = $this->model->newQueryWithoutScopes()
+        $tables = $this->model->newQueryWithoutScopes()
             ->select()
             ->whereRelation('tenant', 'uuid', $companyToken)
             ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
-        return TablePaginatedData::fromPaginator($tenants);
+        return TablePaginatedData::fromPaginator($tables);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Interfaces\Http\Tenant\DataTransferObjects;
 
+use Application\Rules\Cnpj;
 use Interfaces\Http\Common\Requests\AbstractRequest;
 
 class UpdateTenantRequest extends AbstractRequest
@@ -13,7 +14,7 @@ class UpdateTenantRequest extends AbstractRequest
         return [
             'name' => "required|min:3|max:255|unique:tenants,name,{$id},id",
             'email' => "required|min:3|max:255|unique:tenants,email,{$id},id",
-            'cnpj' => 'required|string',
+            'cnpj' => ['required', new Cnpj()],
             'logo' => 'nullable|image',
             'active' => 'required|string',
             'subscribed_at' => 'required|date',

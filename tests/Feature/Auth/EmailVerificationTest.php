@@ -1,14 +1,14 @@
 <?php
 
 use Application\Providers\RouteServiceProvider;
+use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
-use Infrastructure\Persistence\Eloquent\Models\User;
 
 beforeEach(function () {
-    $this->user = User::factory()->create([
+    $this->user = UserFactory::new()->create([
         'email_verified_at' => null,
     ]);
 });

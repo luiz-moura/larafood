@@ -2,8 +2,8 @@
 
 namespace Domains\Categories\Actions;
 
+use Domains\Categories\Contracts\CategoryRepository;
 use Domains\Categories\DataTransferObjects\CategoryPaginatedData;
-use Domains\Categories\Repositories\CategoryRepository;
 use Interfaces\Http\Categories\DataTransferObjects\IndexCategoryRequestData;
 
 class GetAllCategoriesAction

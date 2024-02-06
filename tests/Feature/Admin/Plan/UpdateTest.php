@@ -11,7 +11,7 @@ beforeEach(function () {
     $this->formData = PlanFactory::new()->mock();
 });
 
-it('Should update plan', function () {
+it('should update plan', function () {
     $response = $this->actingAs($this->user)->put(
         "{$this->uri}/{$this->plan->url}",
         $this->formData
@@ -27,7 +27,7 @@ it('should return errors when there are no required params', function () {
     $response->assertSessionHasErrors(['name', 'description', 'price']);
 });
 
-it('Should return status code 404 when not found', function () {
+it('should return status code 404 when not found', function () {
     $response = $this->actingAs($this->user)->put(
         "{$this->uri}/url-not-found",
         $this->formData

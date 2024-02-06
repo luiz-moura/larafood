@@ -12,6 +12,7 @@ class TenantFormData extends DataTransferObject
     public ?string $logo;
     public string $email;
     public string $cnpj;
+    public ?string $image;
     public TenantActiveEnum $active;
     public DateTime $subscribed_at;
     public DateTime $expires_at;

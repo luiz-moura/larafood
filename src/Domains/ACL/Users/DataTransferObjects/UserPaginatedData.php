@@ -23,7 +23,7 @@ class UserPaginatedData extends DataTransferObject
     public static function fromPaginator(LengthAwarePaginator $paginated): self
     {
         return new self(
-            data: UserCollection::fromModelCollection(collect($paginated->items())),
+            data: UserCollection::fromArray($paginated->toArray()['data']),
             total: $paginated->total(),
             pagination: $paginated->withQueryString()->links(),
         );

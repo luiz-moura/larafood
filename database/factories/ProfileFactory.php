@@ -19,6 +19,8 @@ class ProfileFactory extends AbstractFactory
         return $extra + [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(255),
+            'created_at' => now()->format('Y-m-d H:i:s'),
+            'updated_at' => null,
         ];
     }
 }

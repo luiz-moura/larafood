@@ -18,8 +18,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use ACLTrait;
     use HasApiTokens;
     use HasFactory;
-    use Notifiable;
     use LogTrait;
+    use Notifiable;
 
     protected $table = 'users';
 

@@ -1,0 +1,1378 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Larafood API",
+        "version": "1"
+    },
+    "paths": {
+        "/api/auth/authenticate": {
+            "post": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "Client authenticate",
+                "operationId": "d6828f3a1b2646545d750fb024dd55ef",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthenticationBodyProperties"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/AuthenticationResponseProperties"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "get": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "Client Logout",
+                "operationId": "2c0920bc3f92c6261148dac88874f681",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "api": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "Client information",
+                "operationId": "6a1272ac66b540e65856093b982b1a35",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/RegisterResponseProperties"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated401",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated401"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "Client register",
+                "operationId": "a258c463418e57b9e263d4a2c9de929c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterBodyProperties"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/RegisterResponseProperties"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "List of categories",
+                "operationId": "3aaf33de84c9f11f18db04a9a9cc678d",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/company_token"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/per_page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/sort"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CategoryResponse"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginationUnprocessableContent422"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/categories/{identify}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Show category details",
+                "operationId": "e16811cd0d1e3af053dd4ce2652d76fa",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/company_token"
+                    },
+                    {
+                        "$ref": "#/components/parameters/identify"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CategoryResponse"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NotFound404",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFound404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/{identify}/evaluations": {
+            "post": {
+                "tags": [
+                    "Evaluations"
+                ],
+                "summary": "Evaluate order",
+                "operationId": "1f3fc25fa38950aeae9f42890d399457",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/identify"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EvaluationBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/EvaluationResponse"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden403",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Forbidden403"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NotFound404",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFound404"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Evaluation422Response"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/my-orders": {
+            "get": {
+                "tags": [
+                    "MyOrders"
+                ],
+                "summary": "List of my orders",
+                "operationId": "cd40a406ac2d79a37a4d4d565d45aeb6",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/per_page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/sort"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/OrderResponse"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginationUnprocessableContent422"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/{identify}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Show order",
+                "operationId": "5928067cef0e04f2cae4a1c73c1476e3",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/identify"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/per_page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/sort"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrderResponse"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden403",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Forbidden403"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginationUnprocessableContent422"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create order",
+                "operationId": "088ea3520855214d82bd52062a0868ba",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/company_token"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrderResponse"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginationUnprocessableContent422"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "List of products",
+                "operationId": "77a5bb5cf649d1cecb81473aeb3591cd",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/company_token"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/per_page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/sort"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ProductResponse"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginationUnprocessableContent422"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/{identify}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Show product details",
+                "operationId": "4b5c5983f4f8ec3c9948ede8a9978769",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/company_token"
+                    },
+                    {
+                        "$ref": "#/components/parameters/identify"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ProductResponse"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NotFound404",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFound404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tables": {
+            "get": {
+                "tags": [
+                    "Tables"
+                ],
+                "summary": "List of tables",
+                "operationId": "8494bfb52bc380fd808a8c6bb3c22d17",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/company_token"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/per_page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/sort"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TableResponse"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginationUnprocessableContent422"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tables/{identify}": {
+            "get": {
+                "tags": [
+                    "Tables"
+                ],
+                "summary": "Show table details",
+                "operationId": "d83d97efbeeef26b0f3d846b815d5489",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/company_token"
+                    },
+                    {
+                        "$ref": "#/components/parameters/identify"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/TableResponse"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "MissingCompanyToken400",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MissingCompanyToken400"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NotFound404",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFound404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tenants": {
+            "get": {
+                "tags": [
+                    "Tenants"
+                ],
+                "summary": "List of tenants",
+                "operationId": "f3fe18c133ce64c5ac9691883b667018",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/per_page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/sort"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TenantResponse"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "PaginationUnprocessableContent422",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginationUnprocessableContent422"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tenants/{identify}": {
+            "get": {
+                "tags": [
+                    "Tenants"
+                ],
+                "summary": "Show tenant details",
+                "operationId": "047e4d8b32d0f5c459f74d9a4a76efac",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/identify"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/TenantResponse"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NotFound404",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFound404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthenticationBodyProperties": {
+                "title": "Client body properties",
+                "description": "Client body properties",
+                "properties": {
+                    "email": {
+                        "description": "Client email.",
+                        "type": "string",
+                        "example": "client@rgb.com.br"
+                    },
+                    "password": {
+                        "description": "Client password.",
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "device_name": {
+                        "description": "Client device.",
+                        "type": "string",
+                        "example": "Smartphone"
+                    }
+                },
+                "type": "object"
+            },
+            "AuthenticationResponseProperties": {
+                "title": "Client response properties",
+                "description": "Client response properties",
+                "properties": {
+                    "email": {
+                        "description": "Client email.",
+                        "type": "string",
+                        "example": "client@rgb.com.br"
+                    },
+                    "token": {
+                        "description": "Client token.",
+                        "type": "string",
+                        "example": "1a648577-a56e-4ab4-8db4-e5af25122dd7"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterBodyProperties": {
+                "title": "Client body properties",
+                "description": "Client body properties",
+                "properties": {
+                    "name": {
+                        "description": "Client name.",
+                        "type": "string",
+                        "example": "The delivery man shook the soda"
+                    },
+                    "email": {
+                        "description": "Client email.",
+                        "type": "string",
+                        "example": "client@rgb.com.br"
+                    },
+                    "password": {
+                        "description": "Client password.",
+                        "type": "string",
+                        "example": "12345678"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterResponseProperties": {
+                "title": "Order response properties",
+                "description": "Order response properties",
+                "properties": {
+                    "name": {
+                        "description": "Client name.",
+                        "type": "string",
+                        "example": "The delivery man shook the soda"
+                    },
+                    "email": {
+                        "description": "Client email.",
+                        "type": "string",
+                        "example": "client@rgb.com.br"
+                    }
+                },
+                "type": "object"
+            },
+            "Forbidden403": {
+                "title": "Forbidden",
+                "description": "Forbidden",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "O pedido não pertence a você."
+                    }
+                },
+                "type": "object"
+            },
+            "MissingCompanyToken400": {
+                "title": "Missing Company Token",
+                "description": "Missing Company Token in the header",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Company token not found in the header."
+                    }
+                },
+                "type": "object"
+            },
+            "NotFound404": {
+                "title": "Register not found",
+                "description": "Register not found",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Register not found."
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationUnprocessableContent422": {
+                "title": "Pagination Unprocessable Content",
+                "description": "Pagination Unprocessable Content",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "The page must be an integer. (and 2 more errors)."
+                    },
+                    "errors": {
+                        "properties": {
+                            "page": {
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
+                                "items": {
+                                    "example": "The page must be an integer."
+                                }
+                            },
+                            "per_page": {
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
+                                "items": {
+                                    "example": "The per page must be an integer."
+                                }
+                            },
+                            "sort": {
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
+                                "items": {
+                                    "example": "The selected sort is invalid."
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "Unauthenticated401": {
+                "title": "Unauthenticated",
+                "description": "Unauthenticated",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "CategoryResponse": {
+                "title": "Category response properties",
+                "description": "Category response properties",
+                "properties": {
+                    "identify": {
+                        "description": "Identify of the category.",
+                        "type": "string",
+                        "example": "1a648577-a56e-4ab4-8db4-e5af25122dd7"
+                    },
+                    "name": {
+                        "description": "Name of the category.",
+                        "type": "string",
+                        "example": "Pizza"
+                    },
+                    "description": {
+                        "description": "Description of the category.",
+                        "type": "string",
+                        "example": "Any"
+                    },
+                    "url": {
+                        "description": "Url of the category.",
+                        "type": "string",
+                        "example": "http://url.com/category/action"
+                    }
+                },
+                "type": "object"
+            },
+            "Evaluation422Response": {
+                "title": "Pagination Unprocessable Content",
+                "description": "Pagination Unprocessable Content",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "The stars field is required."
+                    },
+                    "errors": {
+                        "properties": {
+                            "stars": {
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
+                                "items": {
+                                    "example": "The stars field is required."
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "EvaluationBody": {
+                "title": "Client body properties",
+                "description": "Client body properties",
+                "properties": {
+                    "stars": {
+                        "description": "Order stars.",
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "comment": {
+                        "description": "Order evaluation comment.",
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "example": "The delivery man shook the soda"
+                    }
+                },
+                "type": "object"
+            },
+            "EvaluationResponse": {
+                "title": "Evaluation response properties",
+                "description": "Evaluation response properties",
+                "properties": {
+                    "stars": {
+                        "description": "Order stars.",
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "comment": {
+                        "description": "Order evaluation comment.",
+                        "type": "string",
+                        "example": "Limited intelligence"
+                    },
+                    "client": {
+                        "$ref": "#/components/schemas/ClientResponse",
+                        "description": "Order client."
+                    }
+                },
+                "type": "object"
+            },
+            "ClientResponse": {
+                "title": "Client response properties",
+                "description": "Client response properties",
+                "properties": {
+                    "name": {
+                        "description": "Client name.",
+                        "type": "string",
+                        "example": "Aurelio"
+                    },
+                    "email": {
+                        "description": "Client email.",
+                        "type": "string",
+                        "example": "aurelio@google.com"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderBody": {
+                "title": "Client body properties",
+                "description": "Client body properties",
+                "properties": {
+                    "comment": {
+                        "description": "Order comment.",
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "example": "The delivery man shook the soda"
+                    },
+                    "table": {
+                        "description": "Order table.",
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "example": "1a648577-a56e-4ab4-8db4-e5af25122dd7"
+                    },
+                    "products": {
+                        "description": "Order products.",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "identify": {
+                                    "description": "Product identify.",
+                                    "type": "string",
+                                    "example": "1a648577-a56e-4ab4-8db4-e5af25122dd7"
+                                },
+                                "quantity": {
+                                    "description": "Product quantity.",
+                                    "type": "integer",
+                                    "example": 3
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "OrderResponse": {
+                "title": "Order response properties",
+                "description": "Order response properties",
+                "properties": {
+                    "identify": {
+                        "description": "Order identify.",
+                        "type": "string",
+                        "example": "KTbV4hTLLe"
+                    },
+                    "total": {
+                        "description": "Order total.",
+                        "type": "number",
+                        "example": 56.21
+                    },
+                    "status": {
+                        "description": "Order status.",
+                        "type": "string",
+                        "example": "open"
+                    },
+                    "products": {
+                        "description": "Order products.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductResponse"
+                        }
+                    },
+                    "table": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/TableResponse",
+                                "description": "Order table."
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "client": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ClientResponse",
+                                "description": "Order client."
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "ProductResponse": {
+                "title": "Product response properties",
+                "description": "Product response properties",
+                "properties": {
+                    "identify": {
+                        "description": "Product identify.",
+                        "type": "string",
+                        "example": "1a648577-a56e-4ab4-8db4-e5af25122dd7"
+                    },
+                    "flag": {
+                        "description": "Product flag.",
+                        "type": "string",
+                        "example": "coca"
+                    },
+                    "name": {
+                        "description": "Product name.",
+                        "type": "string",
+                        "example": "Coca cola zero"
+                    },
+                    "image_url": {
+                        "description": "Product image url.",
+                        "type": "string",
+                        "example": "http://base-url/image.png"
+                    },
+                    "price": {
+                        "description": "Price of the product.",
+                        "type": "number",
+                        "example": 76.4
+                    },
+                    "description": {
+                        "description": "Description of the product.",
+                        "type": "string",
+                        "example": "Zero sugar"
+                    }
+                },
+                "type": "object"
+            },
+            "TableResponse": {
+                "title": "Table response properties",
+                "description": "Table response properties",
+                "properties": {
+                    "identify": {
+                        "description": "Identify of the table.",
+                        "type": "string",
+                        "example": "1a648577-a56e-4ab4-8db4-e5af25122dd7"
+                    },
+                    "name": {
+                        "description": "Name of the table.",
+                        "type": "string",
+                        "example": "Yellow table"
+                    },
+                    "description": {
+                        "description": "Description of the table.",
+                        "type": "string",
+                        "example": "Any"
+                    }
+                },
+                "type": "object"
+            },
+            "TenantResponse": {
+                "title": "Tenant response properties",
+                "description": "Tenant response properties",
+                "properties": {
+                    "token": {
+                        "description": "Tenant token.",
+                        "type": "string",
+                        "example": "1a648577-a56e-4ab4-8db4-e5af25122dd7"
+                    },
+                    "name": {
+                        "description": "Tenant name.",
+                        "type": "string",
+                        "example": "Limited intelligence"
+                    },
+                    "image_url": {
+                        "description": "Tenant image url.",
+                        "type": "string",
+                        "example": "http://site.com/image.png"
+                    },
+                    "slug": {
+                        "description": "Tenant slug.",
+                        "type": "string",
+                        "example": "limited-intelligence"
+                    },
+                    "contact": {
+                        "description": "Tenant contact.",
+                        "type": "string",
+                        "example": "limitedintelligences@test.com.br"
+                    },
+                    "created_at": {
+                        "description": "Tenant creation date.",
+                        "type": "string",
+                        "example": "22\\/02\\/2023"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "parameters": {
+            "company_token": {
+                "name": "company_token",
+                "in": "header",
+                "description": "Company token",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "identify": {
+                "name": "identify",
+                "in": "path",
+                "description": "Identify.",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "page": {
+                "name": "page",
+                "in": "query",
+                "description": "Current page",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "per_page": {
+                "name": "per_page",
+                "in": "query",
+                "description": "Quantity of records per page",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "sort": {
+                "name": "sort",
+                "in": "query",
+                "description": "Sort records",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        },
+        "securitySchemes": {
+            "api": {
+                "type": "apiKey",
+                "description": "Login with email and password to get the authentication token",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}

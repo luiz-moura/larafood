@@ -8,7 +8,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should show product', function () {
+it('should show product', function () {
     $product = ProductFactory::new()->create([
         'tenant_id' => $this->user->tenant->id,
     ]);
@@ -23,7 +23,7 @@ it('Should show product', function () {
     $response->assertSee($product->image);
 });
 
-it('Should return 404 status code when not found', function () {
+it('should return 404 status code when not found', function () {
     $response = $this->actingAs($this->user)->get("{$this->uri}/999999");
 
     $response->assertNotFound();

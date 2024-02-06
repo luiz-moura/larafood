@@ -53,7 +53,7 @@ class RolePermissionController extends Controller
         ]);
     }
 
-    public function search(
+    public function searchAvailable(
         int $roleId,
         SearchPermissionRequest $request,
         FindRoleAction $findRoleAction,

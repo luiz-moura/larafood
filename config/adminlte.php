@@ -15,9 +15,9 @@ return [
     |
     */
 
-    'title' => 'LaraFood',
+    'title' => 'Larafood',
     'title_prefix' => '',
-    'title_postfix' => '',
+    'title_postfix' => '- Larafood',
 
     /*
     |--------------------------------------------------------------------------
@@ -46,12 +46,12 @@ return [
     |
     */
 
-    'logo' => '<b>Lara</b>Food',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>Lara</b>food',
+    'logo_img' => 'logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'LaraFood',
+    'logo_img_alt' => 'Larafood',
 
     /*
     |--------------------------------------------------------------------------
@@ -89,7 +89,7 @@ return [
     'layout_fixed_sidebar' => null,
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
-    'layout_dark_mode' => null,
+    'layout_dark_mode' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -130,7 +130,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-black navbar-dark',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -151,7 +151,7 @@ return [
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
-    'sidebar_scrollbar_theme' => 'os-theme-light',
+    'sidebar_scrollbar_theme' => 'os-theme-dark',
     'sidebar_scrollbar_auto_hide' => 'l',
     'sidebar_nav_accordion' => true,
     'sidebar_nav_animation_speed' => 300,
@@ -173,7 +173,7 @@ return [
     'right_sidebar_theme' => 'dark',
     'right_sidebar_slide' => true,
     'right_sidebar_push' => true,
-    'right_sidebar_scrollbar_theme' => 'os-theme-light',
+    'right_sidebar_scrollbar_theme' => 'os-theme-dark',
     'right_sidebar_scrollbar_auto_hide' => 'l',
 
     /*
@@ -228,11 +228,6 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
@@ -240,61 +235,82 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Procurar',
         ],
         [
             'text' => 'Empresas',
             'url' => 'admin/tenants',
             'icon' => 'fas fa-building',
             'can' => 'tables',
-        ],
-        [
-            'text' => 'Planos',
-            'url' => 'admin/plans',
-            'icon' => 'fas fa-mountain',
-            'can' => 'plans',
-        ],
-        [
-            'text' => 'Perfis',
-            'url' => 'admin/profiles',
-            'icon' => 'fas fa-id-card-alt',
-            'can' => 'profiles',
-        ],
-        [
-            'text' => 'Permissões',
-            'url' => 'admin/permissions',
-            'icon' => 'fas fa-user-lock',
-            'can' => 'permissions',
-        ],
-        [
-            'text' => 'Cargos',
-            'url' => 'admin/roles',
-            'icon' => 'fas fa-table',
-            'can' => 'roles',
-        ],
-        [
-            'text' => 'Usuários',
-            'url' => 'admin/users',
-            'icon' => 'fas fa-users',
-            'can' => 'users',
-        ],
-        [
-            'text' => 'Categorias',
-            'url' => 'admin/categories',
-            'icon' => 'fas fa-layer-group',
-            'can' => 'categories',
+            'active' => ['admin/tenants*']
         ],
         [
             'text' => 'Produtos',
             'url' => 'admin/products',
-            'icon' => 'fab fa-product-hunt',
+            'icon' => 'fas fa-box',
             'can' => 'products',
+            'active' => ['admin/products*']
         ],
         [
             'text' => 'Mesas',
             'url' => 'admin/tables',
-            'icon' => 'fas fa-table',
+            'icon' => 'fas fa-receipt',
             'can' => 'tables',
+            'active' => ['admin/tables*']
+        ],
+        [
+            'text' => 'Categorias',
+            'url' => 'admin/categories',
+            'icon' => 'fas fa-tag',
+            'can' => 'categories',
+            'active' => ['admin/categories*']
+        ],
+        [
+            'text' => 'Controle do usuário',
+            'icon' => 'fas fa-user',
+            'submenu' => [
+                [
+                    'text' => 'Usuários',
+                    'url' => 'admin/users',
+                    'icon' => 'fas fa-users',
+                    'can' => 'users',
+                    'active' => ['admin/users*']
+                ],
+                [
+                    'text' => 'Cargos',
+                    'url' => 'admin/roles',
+                    'icon' => 'fas fa-user-tag',
+                    'can' => 'roles',
+                    'active' => ['admin/roles*']
+                ],
+                [
+                    'text' => 'Permissões',
+                    'url' => 'admin/permissions',
+                    'icon' => 'fas fa-user-lock',
+                    'can' => 'permissions',
+                    'active' => ['admin/permissions*']
+                ],
+            ],
+        ],
+        [
+            'text' => 'Controle do plano',
+            'icon' => 'fas fa-hand-holding-usd',
+            'submenu' => [
+                [
+                    'text' => 'Planos',
+                    'url' => 'admin/plans',
+                    'icon' => 'fas fa-marker',
+                    'can' => 'plans',
+                    'active' => ['admin/plans*']
+                ],
+                [
+                    'text' => 'Perfis',
+                    'url' => 'admin/profiles',
+                    'icon' => 'fas fa-id-card-alt',
+                    'can' => 'profiles',
+                    'active' => ['admin/profiles*']
+                ],
+            ],
         ],
     ],
 

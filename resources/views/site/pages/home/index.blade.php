@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-        @foreach ($plans as $plan)
+        @forelse ($plans as $plan)
             <div class="col">
                 <div class="card rounded-3 border-primary mb-4 shadow-sm">
                     <div class="card-header bg-primary border-primary py-3 text-white">
@@ -14,12 +14,14 @@
                             <small class="text-muted fw-light">/mo</small>
                         </h1>
                         <ul class="list-unstyled mt-3 mb-4">
-                            @foreach ($plan->details as $detail)
-                                <li>{{ $detail->name }}</li>
-                            @endforeach
+                            @if ($plan->details)
+                                @foreach ($plan->details as $detail)
+                                    <li>{{ $detail->name }}</li>
+                                @endforeach
+                            @endif
                         </ul>
                         <a href="{{ route('site.choose_plan', $plan->url) }}" class="w-100 btn btn-lg btn-outline-primary">
-                            Assinar
+                            {{ __('site.subscribe') }}
                         </a>
                     </div>
                 </div>

@@ -3,7 +3,6 @@
 namespace Domains\ACL\Clients\DataTransferObjects;
 
 use DateTime;
-use Infrastructure\Persistence\Eloquent\Models\Client;
 use Infrastructure\Shared\DataTransferObject;
 
 class ClientData extends DataTransferObject
@@ -12,14 +11,18 @@ class ClientData extends DataTransferObject
     public string $name;
     public string $email;
     public string $password;
-    public ?DateTime $updated_at;
     public DateTime $created_at;
+    public ?DateTime $updated_at;
 
-    public static function fromModel(Client $client): self
+    public static function fromArray(array $data)
     {
-        return new self([
-            'created_at' => $client->created_at,
-            'updated_at' => $client->updated_at,
-        ] + $client->toArray());
+        return new self(
+            id: $data['id'],
+            name: $data['name'],
+            email: $data['email'],
+            password: $data['password'],
+            created_at: date_create($data['created_at']),
+            updated_at: $data['updated_at'] ? date_create($data['updated_at']) : null,
+        );
     }
 }

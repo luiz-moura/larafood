@@ -20,9 +20,9 @@ class TenantController extends Controller
         return TenantResource::collection($tenants->paginated);
     }
 
-    public function show(string $uuid, FindTenantByUuidAction $findTenantByUuidAction)
+    public function show(string $companyToken, FindTenantByUuidAction $findTenantByUuidAction)
     {
-        $tenant = $findTenantByUuidAction($uuid);
+        $tenant = $findTenantByUuidAction($companyToken);
 
         return new TenantResource($tenant);
     }

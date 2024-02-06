@@ -7,13 +7,25 @@
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
         <li class="breadcrumb-item"><a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a></li>
-        <li class="breadcrumb-item active">Categorias</li>
+        <li class="breadcrumb-item"><a href="{{ route('products.categories', $product->id) }}">Categorias</a></li>
+        <li class="breadcrumb-item active">Vincular</li>
     </ol>
     <h1>Categorias disponíveis - Produto {{ $product->name }}</h1>
 @stop
 
 @section('content')
     <div class="card">
+        <div class="card-header">
+            <form action="{{ route('products.categories.search', $product->id) }}" method="GET" class="form form-inline">
+                <input type="text"
+                       name="filter"
+                       placeholder="Nome"
+                       class="form-control"
+                       value="{{ request()->filter }}"
+                       minlength="2">
+                <button type="submit" class="btn btn-dark">Filtrar</button>
+            </form>
+        </div>
         <div class="card-body">
             <x-alert-errors/>
 
@@ -35,11 +47,14 @@
                         @empty
                             <tr>Nenhuma categoria encontrada.</tr>
                         @endforelse
-                        <tr>
-                            <td colspan="500">
-                                <button type="submit" class="btn btn-success">Vincular</button>
-                            </td>
-                        </tr>
+
+                        @if ($categories->isNotEmpty())
+                            <tr>
+                                <td colspan="500">
+                                    <button type="submit" class="btn btn-success">Vincular</button>
+                                </td>
+                            </tr>
+                        @endif
                     </form>
                 </tbody>
             </table>

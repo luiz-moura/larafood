@@ -40,9 +40,9 @@ class PlanRepository extends AbstractRepository implements PlanRepositoryContrac
         );
     }
 
-    public function hasDetail(string $url): bool
+    public function hasTenants(string $url): bool
     {
-        return $this->model->firstOrFail('url', $url)->details()->exists();
+        return $this->model->where('url', $url)->firstOrFail()->tenants()->exists();
     }
 
     public function attachProfilesInPlan(string $planUrl, array $profiles): bool

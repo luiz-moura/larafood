@@ -2,7 +2,6 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
-use DateTime;
 use Domains\Tenants\Contracts\TenantRepository as TenantRepositoryContract;
 use Domains\Tenants\DataTransferObjects\TenantData;
 use Domains\Tenants\DataTransferObjects\TenantPaginatedData;
@@ -21,24 +20,24 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryCon
         int $planId,
         TenantFormData|UserTenantFormData $formData
     ): TenantData {
-        return TenantData::fromModel(
+        return TenantData::fromArray(
             $this->model->create(
                 $formData->toArray() + ['plan_id' => $planId]
-            )
+            )->fresh()->toArray()
         );
     }
 
     public function find(int $id, array $with = []): TenantData
     {
-        return TenantData::fromModel(
-            $this->model->with($with)->findOrFail($id)
+        return TenantData::fromArray(
+            $this->model->with($with)->findOrFail($id)->toArray()
         );
     }
 
     public function findByUuid(string $uuid): TenantData
     {
-        return TenantData::fromModel(
-            $this->model->where('uuid', $uuid)->firstOrFail()
+        return TenantData::fromArray(
+            $this->model->where('uuid', $uuid)->firstOrFail()->toArray()
         );
     }
 

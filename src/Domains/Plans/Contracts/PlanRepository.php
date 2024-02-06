@@ -15,7 +15,7 @@ interface PlanRepository
     public function updateByUrl(string $url, PlanFormData $formData): bool;
     public function deleteByUrl(string $url): bool;
     public function findByUrl(string $url): PlanData;
-    public function hasDetail(string $url): bool;
+    public function hasTenants(string $url): bool;
     public function attachProfilesInPlan(string $planUrl, array $profiles): bool;
     public function detachPlanProfile(string $planUrl, int $profileId): bool;
     public function getAll(array $with = []): PlanCollection;

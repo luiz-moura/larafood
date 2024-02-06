@@ -53,7 +53,7 @@ class ProductCategoryController extends Controller
         ]);
     }
 
-    public function search(
+    public function searchAvailable(
         int $productId,
         SearchCategoryRequest $request,
         FindProductAction $findProductAction,
@@ -64,7 +64,7 @@ class ProductCategoryController extends Controller
         $request = SearchCategoryRequestData::fromRequest($request->validated());
         $categoriesPaginated = $searchCategoriesByProductAction($productId, $request);
 
-        return view('admin.pages.products.categories.index', [
+        return view('admin.pages.products.categories.available', [
             'product' => $product,
             'categories' => $categoriesPaginated->items,
             'pagination' => $categoriesPaginated->links,

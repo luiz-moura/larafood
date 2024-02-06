@@ -15,7 +15,7 @@ class TenantPaginatedData extends DataTransferObject
     public static function fromPaginator(LengthAwarePaginator $paginated): self
     {
         return new self(
-            items: TenantDataCollection::fromModelCollection($paginated->getCollection()),
+            items: TenantDataCollection::fromArray($paginated->toArray()['data']),
             links: $paginated->withQueryString()->links(),
             paginated: $paginated
         );

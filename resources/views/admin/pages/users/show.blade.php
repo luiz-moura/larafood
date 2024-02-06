@@ -21,8 +21,10 @@
             </ul>
 
             <x-alert-errors/>
-
-            <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+        </div>
+        <div class="card-footer">
+            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info mr-2">Editar</a>
+            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">

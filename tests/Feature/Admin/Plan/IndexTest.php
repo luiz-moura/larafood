@@ -8,7 +8,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should return all plans', function () {
+it('should return all plans', function () {
     $plan1 = PlanFactory::new()->create();
     $plan2 = PlanFactory::new()->create();
 

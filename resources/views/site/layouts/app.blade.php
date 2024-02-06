@@ -15,19 +15,15 @@
         <header>
             <div class="d-flex flex-column flex-md-row align-items-center border-bottom mb-4 pb-3">
                 <a class="d-flex align-items-center text-dark text-decoration-none" href="/">
-                    <span class="fs-4">Pricing</span>
+                    <span class="fs-4">Larafood</span>
                 </a>
                 <nav class="d-inline-flex mt-md-0 ms-md-auto mt-2">
-                    <a class="text-dark text-decoration-none py-2" href="#">Pricing</a>
+                    <a class="text-dark text-decoration-none py-2" href="{{ route('login') }}">{{ __('site.login') }}</a>
                 </nav>
             </div>
             <div class="pricing-header pb-md-4 mx-auto p-3 text-center">
-                <h1 class="display-4 fw-normal">Pricing</h1>
-                <p class="fs-5 text-muted">
-                    Quickly build an effective pricing table for your potential customers with
-                    this Bootstrap example. It’s built with default Bootstrap components and utilities with little
-                    customization.
-                </p>
+                <h1 class="display-4 fw-normal">{{ __('site.explore_our_plans') }}</h1>
+                <p class="fs-5 text-muted">{{ __('site.summary_of_plans') }}</p>
             </div>
         </header>
         <main>
@@ -36,37 +32,7 @@
         <footer class="my-md-5 pt-md-5 border-top pt-4">
             <div class="row">
                 <div class="col-12 col-md">
-                    <small class="d-block text-muted mb-3">&copy; 2017–2021</small>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Features</h5>
-                    <ul class="list-unstyled text-small">
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Last time</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>Resources</h5>
-                    <ul class="list-unstyled text-small">
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resourcename</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md">
-                    <h5>About</h5>
-                    <ul class="list-unstyled text-small">
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
-                        <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
-                    </ul>
+                    <small class="d-block text-muted mb-3">&copy; 2022-2023</small>
                 </div>
             </div>
         </footer>

@@ -29,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Paginator::useBootstrapFour();
+
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
     }
 }

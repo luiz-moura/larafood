@@ -2,10 +2,10 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
+use Domains\Products\DataTransferObjects\ProductCollection;
 use Domains\Products\DataTransferObjects\ProductData;
 use Domains\Products\DataTransferObjects\ProductPaginatedData;
 use Domains\Products\Repositories\ProductRepository as ProductRepositoryContract;
-use Illuminate\Support\Arr;
 use Infrastructure\Persistence\Eloquent\Models\Product;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Products\DataTransferObjects\IndexProductRequestData;
@@ -18,27 +18,28 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
 
     public function create(int $tenantId, ProductFormData $formData): ProductData
     {
-        return ProductData::fromModel(
+        return ProductData::fromArray(
             $this->model->create(
                 $formData->toArray() + ['tenant_id' => $tenantId]
-            )
+            )->fresh()->toArray()
         );
     }
 
     public function find(int $id, array $with = []): ProductData
     {
-        return ProductData::fromModel(
-            $this->model->with($with)->findOrFail($id)
+        return ProductData::fromArray(
+            $this->model->with($with)->findOrFail($id)->toArray()
         );
     }
 
-    public function findBySlugAndTenantUuid(string $slug, string $companyToken): ProductData
+    public function findByUuidAndTenantUuid(string $identify, string $companyToken): ProductData
     {
-        return ProductData::fromModel(
+        return ProductData::fromArray(
             $this->model->newQueryWithoutScopes()
-                ->where('flag', $slug)
+                ->where('uuid', $identify)
                 ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
+                ->toArray()
         );
     }
 
@@ -64,28 +65,28 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
         $this->model->findOrFail($productId)->categories()->detach($categoryId);
     }
 
-    public function getAll(IndexProductRequestData $paginationData, array $with = []): ProductPaginatedData
+    public function getAll(IndexProductRequestData $validatedRequest, array $with = []): ProductPaginatedData
     {
         $products = $this->model
             ->select()
             ->with($with)
-            ->orderBy($paginationData->order, $paginationData->sort)
-            ->paginate($paginationData->per_page, $paginationData->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return ProductPaginatedData::fromPaginator($products);
     }
 
-    public function queryByName(SearchProductRequestData $paginationData, array $with = []): ProductPaginatedData
+    public function queryByName(SearchProductRequestData $validatedRequest, array $with = []): ProductPaginatedData
     {
         $products = $this->model
             ->select()
             ->with($with)
-            ->where(function ($query) use ($paginationData) {
-                $query->where('name', 'ilike', "%{$paginationData->filter}%")
-                    ->orWhere('description', 'ilike', "%{$paginationData->filter}%");
+            ->where(function ($query) use ($validatedRequest) {
+                $query->where('name', 'ilike', "%{$validatedRequest->filter}%")
+                    ->orWhere('description', 'ilike', "%{$validatedRequest->filter}%");
             })
-            ->orderBy($paginationData->order, $paginationData->sort)
-            ->paginate($paginationData->per_page, $paginationData->page);
+            ->orderBy($validatedRequest->order, $validatedRequest->sort)
+            ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return ProductPaginatedData::fromPaginator($products);
     }
@@ -99,5 +100,17 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryC
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
         return ProductPaginatedData::fromPaginator($products);
+    }
+
+    public function queryThoseInTheUuidAndTenantUuid(array $uuid, string $companyToken): ProductCollection
+    {
+        $products = $this->model->newQueryWithoutScopes()
+            ->select()
+            ->whereIn('uuid', $uuid)
+            ->whereRelation('tenant', 'uuid', $companyToken)
+            ->get()
+            ->toArray();
+
+        return ProductCollection::fromArray($products);
     }
 }

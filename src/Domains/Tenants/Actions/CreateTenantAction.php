@@ -2,7 +2,6 @@
 
 namespace Domains\Tenants\Actions;
 
-use DateTime;
 use Domains\Tenants\Contracts\TenantRepository;
 use Domains\Tenants\DataTransferObjects\TenantData;
 use Interfaces\Http\Authentication\DataTransferObjects\UserTenantFormData;

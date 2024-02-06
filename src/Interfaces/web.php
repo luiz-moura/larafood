@@ -41,7 +41,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
             Route::controller(PlanProfileController::class)->group(function () {
                 Route::get('{url}/profiles', 'index')->name('plans.profiles');
-                Route::get('{url}/profiles/search', 'search')->name('plans.profiles.search');
                 Route::get('{url}/profiles/available', 'available')->name('plans.profiles.available');
                 Route::get('{url}/profiles/available/search', 'searchAvailable')->name('plans.profiles.search-available');
                 Route::post('{url}/profiles', 'attachProfiles')->name('plans.profiles.attach');
@@ -59,7 +58,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('{id}/plans', [ProfilePlanController::class, 'index'])->name('profiles.plans');
             Route::controller(PermissionProfileController::class)->group(function () {
                 Route::get('{id}/permissions', 'index')->name('profiles.permissions');
-                Route::get('{id}/permissions/search', 'search')->name('profiles.permissions.search');
                 Route::get('{id}/permissions/available', 'available')->name('profiles.permissions.available');
                 Route::get('{id}/permissions/available/search', 'searchAvailable')->name('profiles.permissions.search-available');
                 Route::post('{id}/permissions', 'attachPermissions')->name('profiles.permissions.attach');
@@ -84,7 +82,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::prefix('users')->controller(RoleUserController::class)->group(function () {
             Route::get('{id}/roles', 'index')->name('users.roles');
             Route::get('{id}/roles/available', 'available')->name('users.roles.available');
-            Route::get('{id}/roles/available/search', 'search')->name('users.roles.search');
+            Route::get('{id}/roles/available/search', 'searchAvailable')->name('users.roles.search');
             Route::post('{id}/roles', 'attachRoles')->name('users.roles.attach');
             Route::get('{id}/roles/{roleId}', 'detachRole')->name('users.roles.detach');
         });
@@ -102,7 +100,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::prefix('products')->group(function () {
             Route::controller(ProductCategoryController::class)->group(function () {
                 Route::get('{id}/categories', 'index')->name('products.categories');
-                Route::get('{id}/categories/search', 'search')->name('products.categories.search');
+                Route::get('{id}/categories/search', 'searchAvailable')->name('products.categories.search');
                 Route::get('{id}/categories/available', 'available')->name('products.categories.available');
                 Route::post('{id}/categories', 'attachCategories')->name('products.categories.attach');
                 Route::delete('{id}/categories/{categoryId}', 'detachCategory')->name('products.categories.detach');
@@ -116,7 +114,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::middleware('can:tenants')->group(function () {
         Route::get('tenants/search', [TenantController::class, 'search'])->name('tenants.search');
-        Route::resource('tenants', TenantController::class);
+        Route::resource('tenants', TenantController::class)->except('destroy');
     });
 
     Route::middleware('can:tables')->group(function () {

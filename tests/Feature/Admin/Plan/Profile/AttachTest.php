@@ -10,7 +10,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should attach profile in plan', function () {
+it('should attach profile in plan', function () {
     $plan = PlanFactory::new()->create();
     $profile = ProfileFactory::new()->create();
 
@@ -22,7 +22,7 @@ it('Should attach profile in plan', function () {
     $response->assertStatus(Response::HTTP_FOUND);
 });
 
-it('Should return 404 status code when not found', function () {
+it('should return 404 status code when not found', function () {
     $response = $this->actingAs($this->user)->post("{$this->uri}/zzz/profiles", [
         'profiles' => [1],
     ]);

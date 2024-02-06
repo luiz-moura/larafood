@@ -7,7 +7,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should render create view', function () {
+it('should render create view', function () {
     $response = $this->actingAs($this->user)->get($this->uri);
 
     $response->assertOk();

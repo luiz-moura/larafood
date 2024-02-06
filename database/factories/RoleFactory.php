@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use DateTime;
 use Infrastructure\Persistence\Eloquent\Models\Role;
 use Infrastructure\Shared\AbstractFactory;
 
@@ -12,21 +11,16 @@ class RoleFactory extends AbstractFactory
 
     public function definition(): array
     {
-        return [
-            'name' => $this->faker->name(),
-            'description' => $this->faker->text(255),
-        ];
+        return $this->mock();
     }
 
     public function mock(array $extra = []): array
     {
-        return array_merge(
-            $this->definition(),
-            [
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime(),
-            ],
-            $extra
-        );
+        return $extra + [
+            'name' => $this->faker->name(),
+            'description' => $this->faker->text(255),
+            'created_at' => now()->format('Y-m-d H:i:s'),
+            'updated_at' => null,
+        ];
     }
 }

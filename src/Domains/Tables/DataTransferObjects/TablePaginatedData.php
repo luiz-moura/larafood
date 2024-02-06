@@ -15,7 +15,7 @@ class TablePaginatedData extends DataTransferObject
     public static function fromArray(array $paginated): self
     {
         return new self(
-            data: TableDataCollection::fromArray($paginated['data']),
+            items: TableDataCollection::fromArray($paginated['data']),
             total: $paginated['total'],
         );
     }
@@ -23,7 +23,7 @@ class TablePaginatedData extends DataTransferObject
     public static function fromPaginator(LengthAwarePaginator $paginated): self
     {
         return new self(
-            items: TableDataCollection::fromModelCollection($paginated->getCollection()),
+            items: TableDataCollection::fromArray($paginated->toArray()['data']),
             links: $paginated->withQueryString()->links(),
             paginated: $paginated
         );

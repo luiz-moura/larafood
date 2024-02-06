@@ -2,7 +2,6 @@
 
 namespace Domains\ACL\Permissions\DataTransferObjects;
 
-use Illuminate\Support\Arr;
 use Infrastructure\Shared\DataTransferObject;
 
 class PermissionData extends DataTransferObject
@@ -16,7 +15,7 @@ class PermissionData extends DataTransferObject
         return new self(
             id: $data['id'],
             name: $data['name'],
-            description: Arr::get($data, 'description'),
+            description: $data['description'] ?? null,
         );
     }
 }

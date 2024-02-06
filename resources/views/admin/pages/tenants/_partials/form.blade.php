@@ -65,7 +65,7 @@
            name="expires_at"
            id="expires_at"
            class="form-control"
-           value="{{ $tenant->expires_at->format('Y-m-d') ?? old('expires_at') }}">
+           value="{{ $tenant->expires_at?->format('Y-m-d') }}">
 </div>
 <div class="form-group">
     <label for="subscription_id">Identificador:</label>
@@ -92,5 +92,5 @@
 </div>
 
 <div class="form-group">
-    <button type="submit" class="btn btn-dark">Enviar</button>
+    <button type="submit" class="btn btn-dark">@isset($tenant) Editar @else Cadastrar @endisset</button>
 </div>

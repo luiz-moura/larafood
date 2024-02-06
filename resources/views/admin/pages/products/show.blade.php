@@ -23,13 +23,15 @@
                     <strong>Imagem: </strong>
                     <img src="{{ url("storage/{$product->image}") }}"
                          alt="{{ $product->name }}"
-                         style="max-width: 90px">
+                         style="max-width: 250px">
                 </li>
             </ul>
 
             <x-alert-errors/>
-
-            <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+        </div>
+        <div class="card-footer">
+            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-info mr-2">Editar</a>
+            <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">

@@ -136,7 +136,7 @@ return [
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
-    'cpf' => 'The :attribute is not valid',
+    'cnpj' => 'The :attribute is not valid',
 
     /*
     |--------------------------------------------------------------------------

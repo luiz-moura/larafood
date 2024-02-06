@@ -8,7 +8,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should return all products', function () {
+it('should return all products', function () {
     $bike = ProductFactory::new()->create([
         'name' => 'Bike',
         'tenant_id' => $this->user->tenant->id,

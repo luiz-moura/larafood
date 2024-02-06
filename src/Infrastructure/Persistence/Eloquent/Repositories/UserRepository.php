@@ -2,9 +2,9 @@
 
 namespace Infrastructure\Persistence\Eloquent\Repositories;
 
+use Domains\ACL\Users\Contracts\UserRepository as UserRepositoryContract;
 use Domains\ACL\Users\DataTransferObjects\UserData;
 use Domains\ACL\Users\DataTransferObjects\UserPaginatedData;
-use Domains\ACL\Users\Repositories\UserRepository as UserRepositoryContract;
 use Infrastructure\Persistence\Eloquent\Models\User;
 use Infrastructure\Shared\AbstractRepository;
 use Interfaces\Http\Users\DataTransferObjects\IndexUserRequestData;
@@ -17,25 +17,30 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
 
     public function create(int $tenantId, UserFormData $userFormData): UserData
     {
-        return UserData::fromModel(
+        return UserData::fromArray(
             $this->model->create(
                 $userFormData->toArray() + ['tenant_id' => $tenantId]
-            )
+            )->toArray()
         );
     }
 
     public function find(int $id, array $with = []): UserData
     {
-        return UserData::fromModel(
-            $this->model->with($with)->tenantUser()->findOrFail($id)
+        return UserData::fromArray(
+            $this->model->with($with)->tenantUser()->findOrFail($id)->toArray()
         );
     }
 
     public function update(int $id, UserFormData $userFormData): bool
     {
+        $user = $userFormData->toArray();
+        if (!$user['password']) {
+            unset($user['password']);
+        }
+
         return (bool) $this->model->tenantUser()
             ->findOrFail($id)
-            ->update($userFormData->toArray());
+            ->update($user);
     }
 
     public function delete(int $id): bool

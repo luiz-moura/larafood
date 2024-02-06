@@ -2,7 +2,6 @@
 
 namespace Domains\Tenants\Contracts;
 
-use DateTime;
 use Domains\Tenants\DataTransferObjects\TenantData;
 use Domains\Tenants\DataTransferObjects\TenantPaginatedData;
 use Interfaces\Http\Tenant\DataTransferObjects\IndexTenantRequestData;

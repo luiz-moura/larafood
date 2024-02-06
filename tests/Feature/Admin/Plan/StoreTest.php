@@ -9,7 +9,7 @@ beforeEach(function () {
     $this->user = UserFactory::new()->create();
 });
 
-it('Should create plan', function () {
+it('should create plan', function () {
     $formData = PlanFactory::new()->mock();
 
     $response = $this->actingAs($this->user)->post($this->uri, $formData);
