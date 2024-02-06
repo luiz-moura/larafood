@@ -12,7 +12,7 @@ class ProductResource extends JsonResource
             'identify' => $this->uuid,
             'flag' => $this->flag,
             'name' => $this->name,
-            'image' => url("storage/{$this->image}"),
+            'image_url' => url("storage/{$this->image}"),
             'price' => $this->price,
             'description' => $this->description,
         ];

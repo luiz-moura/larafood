@@ -3,10 +3,8 @@
 namespace Interfaces\Http\Api\Order\Controllers;
 
 use Domains\ACL\Clients\DataTransferObjects\ClientData;
-use Domains\Orders\Actions\FindOrderByUuidAndTenantUuidAction;
-use Domains\Orders\Exceptions\OrderIsNotFromTheCustomerException;
 use Domains\Orders\UseCases\CreateOrderUseCase;
-use Illuminate\Http\Request;
+use Domains\Orders\UseCases\FindOrderByUuidAndTenantUuidAUseCase;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Api\Order\DataTransferObjects\OrderFormData;
 use Interfaces\Http\Api\Order\Requests\StoreOrderRequest;
@@ -18,27 +16,18 @@ class OrderController extends Controller
         StoreOrderRequest $request,
         CreateOrderUseCase $createOrderUseCase,
     ) {
-        $client = auth()->hasUser() ? ClientData::fromArray($request->user()->toArray()) : null;
+        $client = ClientData::fromArray($request->user()->toArray());
         $orderForm = OrderFormData::fromRequest($request->validated());
-
-        $order = $createOrderUseCase($orderForm, $request->companyToken, $client);
+        $order = $createOrderUseCase($orderForm, $request->get('companyToken'), $client);
 
         return OrderResource::make($order);
     }
 
     public function show(
         string $identify,
-        Request $request,
-        FindOrderByUuidAndTenantUuidAction $findOrderByUuidAndTenantUuidAction
+        FindOrderByUuidAndTenantUuidAUseCase $findOrderByUuidAndTenantUuidAction
     ) {
-        $order = $findOrderByUuidAndTenantUuidAction(
-            $identify,
-            $request->companyToken,
-            withRelations: ['client', 'products', 'table']
-        );
-
-        $clientId = auth()->user()?->id;
-        throw_if($order->client_id && $order->client_id !== $clientId, OrderIsNotFromTheCustomerException::class);
+        $order = $findOrderByUuidAndTenantUuidAction($identify, withRelations: ['client', 'products', 'table']);
 
         return OrderResource::make($order);
     }

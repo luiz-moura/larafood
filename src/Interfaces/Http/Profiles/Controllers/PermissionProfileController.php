@@ -5,7 +5,6 @@ namespace Interfaces\Http\Profiles\Controllers;
 use Domains\ACL\Permissions\Actions\GetAllPermissionsAvailableByProfileAction;
 use Domains\ACL\Permissions\Actions\GetAllPermissionsByProfileAction;
 use Domains\ACL\Permissions\Actions\SearchPermissionsAvailableByProfileAction;
-use Domains\ACL\Permissions\Actions\SearchPermissionsByProfileAction;
 use Domains\ACL\Profiles\Actions\AttachPermissionsInProfileAction;
 use Domains\ACL\Profiles\Actions\DetachProfilePermissionAction;
 use Domains\ACL\Profiles\Actions\FindProfileAction;
@@ -48,24 +47,6 @@ class PermissionProfileController extends Controller
         $paginatedData = $getAllPermissionsAvailableByProfileAction($profileId, $paginationData);
 
         return view('admin.pages.profiles.permissions.available', [
-            'profile' => $profileData,
-            'permissions' => $paginatedData->data,
-            'pagination' => $paginatedData->pagination,
-        ]);
-    }
-
-    public function search(
-        int $profileId,
-        SearchPermissionRequest $request,
-        FindProfileAction $findProfileAction,
-        SearchPermissionsByProfileAction $searchPermissionsByProfileAction
-    ) {
-        $profileData = $findProfileAction($profileId);
-
-        $paginationData = SearchPermissionRequestData::fromRequest($request->validated());
-        $paginatedData = $searchPermissionsByProfileAction($profileId, $paginationData);
-
-        return view('admin.pages.profiles.permissions.index', [
             'profile' => $profileData,
             'permissions' => $paginatedData->data,
             'pagination' => $paginatedData->pagination,

@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Interfaces\Http\Api\Authentication\Controllers\AuthenticatedTokenController;
 use Interfaces\Http\Api\Authentication\Controllers\RegisteredClientController;
 use Interfaces\Http\Api\Authentication\Middlewares\VerifyCompanyTokenMiddleware;
-use Interfaces\Http\Api\Authentication\Resources\ClientResource;
 use Interfaces\Http\Api\Category\Controllers\CategoryController;
 use Interfaces\Http\Api\Order\Controllers\MyOrderController;
 use Interfaces\Http\Api\Order\Controllers\OrderController;
@@ -21,10 +19,6 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(VerifyCompanyTokenMiddleware::class)->group(function () {
-        Route::controller(OrderController::class)->group(function () {
-            Route::post('orders', 'store');
-            Route::get('orders/{identify}', 'show');
-        });
         Route::controller(CategoryController::class)->group(function () {
             Route::get('categories', 'index');
             Route::get('categories/{identify}', 'show')->whereUuid(['identify']);
@@ -37,16 +31,15 @@ Route::prefix('v1')->group(function () {
             Route::get('products', 'index');
             Route::get('products/{identify}', 'show')->whereUuid(['identify']);
         });
-
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::controller(MyOrderController::class)->group(function () {
-                Route::get('my-orders', 'index');
-                Route::post('my-orders', 'store');
-            });
-            Route::controller(OrderEvaluationController::class)->group(function () {
-                Route::post('orders/{identify}/evaluations', 'store');
-            });
+        Route::middleware('auth:sanctum')->controller(OrderController::class)->group(function () {
+            Route::post('orders', 'store');
         });
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('orders/{identify}', [OrderController::class, 'show']);
+        Route::get('my-orders', [MyOrderController::class, 'index']);
+        Route::post('orders/{identify}/evaluations', [OrderEvaluationController::class, 'store']);
     });
 });
 
@@ -56,8 +49,6 @@ Route::prefix('auth')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('logout', [AuthenticatedTokenController::class, 'destroy']);
-        Route::get('me', function (Request $request) {
-            return ClientResource::make($request->user());
-        });
+        Route::get('me', [RegisteredClientController::class, 'me']);
     });
 });

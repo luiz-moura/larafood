@@ -11,7 +11,7 @@ use Infrastructure\Shared\Controller;
 use Interfaces\Http\Authentication\DataTransferObjects\UserTenantFormData;
 use Interfaces\Http\Authentication\Requests\RegisteredUserRequest;
 use Interfaces\Http\Users\DataTransferObjects\UserFormData;
-use Support\Authentication\Actions\AuthenticateAction;
+use Domains\Authentication\Actions\AuthenticateAction;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class RegisteredUserController extends Controller
@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
         $userTenantFormData = UserTenantFormData::fromRequest([
             ...$validatedData,
             'name' => $validatedData['company'],
-            'expires' => now()->addDays(7)
+            'expires' => now()->addDays(7),
         ]);
         $tenantData = $createTenantAction(session('plan')->id, $userTenantFormData);
 

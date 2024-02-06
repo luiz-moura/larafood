@@ -8,8 +8,8 @@ use Interfaces\Http\Api\Authentication\DataTransferObjects\AuthenticatedTokenReq
 use Interfaces\Http\Api\Authentication\Requests\AuthenticatedTokenRequest;
 use Interfaces\Http\Api\Authentication\Resources\AuthenticatedResource;
 use stdClass;
-use Support\Authentication\Actions\CheckClientCredentialsAction;
-use Support\Authentication\Actions\GenerateClientTokenAction;
+use Domains\Authentication\Actions\CheckClientCredentialsAction;
+use Domains\Authentication\Actions\GenerateClientTokenAction;
 
 class AuthenticatedTokenController extends Controller
 {

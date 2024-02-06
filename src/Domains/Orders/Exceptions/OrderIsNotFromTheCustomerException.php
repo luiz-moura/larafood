@@ -10,8 +10,8 @@ class OrderIsNotFromTheCustomerException extends ResponseException
     public function __construct()
     {
         parent::__construct(
-            'O pedido é de outro cliente.',
-            Response::HTTP_UNAUTHORIZED
+            'O pedido não pertence a você.',
+            Response::HTTP_FORBIDDEN
         );
     }
 }

@@ -29,16 +29,14 @@ class OrderRepository extends AbstractRepository implements OrderRepositoryContr
             ->attach($orderProducts->map->toArray()->all());
     }
 
-    public function findByIdentifyAndTenantUuid(
+    public function findByIdentify(
         string $identify,
-        string $companyToken,
         array $with = []
     ): OrderData {
         return OrderData::fromArray(
             $this->model->newQueryWithoutScopes()
                 ->with($with)
                 ->where('identify', $identify)
-                ->whereRelation('tenant', 'uuid', $companyToken)
                 ->firstOrFail()
                 ->toArray()
         );

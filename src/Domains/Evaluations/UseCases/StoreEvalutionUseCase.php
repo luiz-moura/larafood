@@ -3,24 +3,24 @@
 namespace Domains\Evaluations\UseCases;
 
 use Domains\Evaluations\Actions\CreateEvaluationAction;
-use Domains\Orders\Actions\FindOrderByUuidAndTenantUuidAction;
+use Domains\Orders\Contracts\OrderRepository;
+use Domains\Orders\Exceptions\OrderIsNotFromTheCustomerException;
 use Interfaces\Http\Api\OrderEvaluation\DataTransferObjects\OrderEvaluationFormData;
 
 class StoreEvalutionUseCase
 {
     public function __construct(
         private CreateEvaluationAction $createEvaluationAction,
-        private FindOrderByUuidAndTenantUuidAction $findOrderByUuidAndTenantUuidAction
+        private OrderRepository $orderRepository
     ) {
     }
 
     public function __invoke(
         OrderEvaluationFormData $evaluation,
         string $orderIdentify,
-        string $companyToken,
         int $clientId
     ) {
-        $order = ($this->findOrderByUuidAndTenantUuidAction)($orderIdentify, $companyToken, ['client', 'products', 'table']);
+        $order = $this->orderRepository->findByIdentify($orderIdentify, ['client', 'products', 'table']);
 
         throw_if($order->client_id && $order->client_id !== $clientId, OrderIsNotFromTheCustomerException::class);
 

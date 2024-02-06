@@ -18,7 +18,7 @@ class OrderEvaluationController extends Controller
         $evaluation = OrderEvaluationFormData::fromRequest($request->validated());
 
         $clientId = auth()->user()->id;
-        $evaluation = $useCase($evaluation, $orderIdentify, $request->companyToken, $clientId);
+        $evaluation = $useCase($evaluation, $orderIdentify, $clientId);
 
         return OrderEvaluationResource::make($evaluation);
     }

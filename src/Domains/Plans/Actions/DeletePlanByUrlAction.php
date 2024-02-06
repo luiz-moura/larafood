@@ -3,7 +3,7 @@
 namespace Domains\Plans\Actions;
 
 use Domains\Plans\Contracts\PlanRepository;
-use Domains\Plans\Exceptions\CannotDeletePlanWithDetailsException;
+use Domains\Plans\Exceptions\CannotDeletePlanWithTenantsException;
 
 class DeletePlanByUrlAction
 {
@@ -13,9 +13,9 @@ class DeletePlanByUrlAction
 
     public function __invoke(string $url): void
     {
-        $hasDetail = $this->planRepository->hasDetail($url);
+        $hasTenants = $this->planRepository->hasTenants($url);
 
-        throw_if($hasDetail, CannotDeletePlanWithDetailsException::class);
+        throw_if($hasTenants, CannotDeletePlanWithTenantsException::class);
 
         $this->planRepository->deleteByUrl($url);
     }

@@ -4,7 +4,6 @@ namespace Interfaces\Http\Plans\Controllers;
 
 use Domains\ACL\Profiles\Actions\GetAllProfilesAvailableByPlanAction;
 use Domains\ACL\Profiles\Actions\GetAllProfilesByPlanAction;
-use Domains\ACL\Profiles\Actions\SearchProfileByPlanAction;
 use Domains\ACL\Profiles\Actions\SearchProfilesAvailableByPlanAction;
 use Domains\Plans\Actions\AttachProfilesInPlanAction;
 use Domains\Plans\Actions\DetachPlanProfileAction;
@@ -48,24 +47,6 @@ class PlanProfileController extends Controller
         $paginatedData = $getAllProfilesAvailableByPlanAction($planData->id, $paginationData);
 
         return view('admin.pages.plans.profiles.available', [
-            'plan' => $planData,
-            'profiles' => $paginatedData->data,
-            'pagination' => $paginatedData->pagination,
-        ]);
-    }
-
-    public function search(
-        string $planUrl,
-        SearchProfileRequest $request,
-        FindPlanByUrlAction $findPlanByUrlAction,
-        SearchProfileByPlanAction $searchProfileByPlanAction
-    ) {
-        $planData = $findPlanByUrlAction($planUrl);
-
-        $paginationData = SearchProfileRequestData::fromRequest($request->validated());
-        $paginatedData = ($searchProfileByPlanAction)($planData->id, $paginationData);
-
-        return view('admin.pages.plans.profiles.index', [
             'plan' => $planData,
             'profiles' => $paginatedData->data,
             'pagination' => $paginatedData->pagination,

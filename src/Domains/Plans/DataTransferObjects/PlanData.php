@@ -21,7 +21,7 @@ class PlanData extends DataTransferObject
             price: $data['price'],
             description: $data['description'] ?? null,
             url: $data['url'],
-            plan: isset($data['details']) ? PlanDetailCollection::fromArray($data['details']) : null,
+            details: isset($data['details']) ? PlanDetailCollection::fromArray($data['details']) : null,
         );
     }
 }

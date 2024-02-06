@@ -53,7 +53,7 @@ class RoleUserController extends Controller
         ]);
     }
 
-    public function search(
+    public function searchAvailable(
         int $id,
         SearchRoleRequest $request,
         FindUserAction $findUserAction,

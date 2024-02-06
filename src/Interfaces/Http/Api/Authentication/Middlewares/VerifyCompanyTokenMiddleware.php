@@ -5,6 +5,7 @@ namespace Interfaces\Http\Api\Authentication\Middlewares;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class VerifyCompanyTokenMiddleware
 {
@@ -19,8 +20,11 @@ class VerifyCompanyTokenMiddleware
     {
         $companyToken = $request->header('company_token');
 
-        if (!$companyToken) {
-            return response()->status(Response::HTTP_UNPROCESSABLE_ENTITY);
+        if (!$companyToken || !Str::isUuid($companyToken)) {
+            return response(
+                ['message' => 'Company token not found in the header'],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         $request->merge(['companyToken' => $companyToken]);

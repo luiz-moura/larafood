@@ -73,17 +73,19 @@ class TableRepository extends AbstractRepository implements TableRepositoryContr
             ->orderBy($paginationData->order, $paginationData->sort)
             ->paginate($paginationData->per_page, $paginationData->page);
 
+        // dd($tables);
+
         return TablePaginatedData::fromPaginator($tables);
     }
 
     public function queryByTenantUuid(string $companyToken, IndexTableRequestData $validatedRequest): TablePaginatedData
     {
-        $tenants = $this->model->newQueryWithoutScopes()
+        $tables = $this->model->newQueryWithoutScopes()
             ->select()
             ->whereRelation('tenant', 'uuid', $companyToken)
             ->orderBy($validatedRequest->order, $validatedRequest->sort)
             ->paginate($validatedRequest->per_page, $validatedRequest->page);
 
-        return TablePaginatedData::fromPaginator($tenants);
+        return TablePaginatedData::fromPaginator($tables);
     }
 }

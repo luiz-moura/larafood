@@ -6,8 +6,8 @@ use Application\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Infrastructure\Shared\Controller;
 use Interfaces\Http\Authentication\Requests\LoginRequest;
-use Support\Authentication\Actions\AuthenticateAction;
-use Support\Authentication\Actions\DestroyAuthentication;
+use Domains\Authentication\Actions\AuthenticateAction;
+use Domains\Authentication\Actions\DestroyAuthentication;
 
 class AuthenticatedSessionController extends Controller
 {
