@@ -23,7 +23,8 @@
             </ul>
         </div>
         <div class="card-footer">
-            <form action="{{ route('plan_details.destroy', [$planDetail->plan->url, $planDetail->id]) }}" method="POST">
+            <a href="{{ route('plan_details.edit', [$planDetail->plan->url, $planDetail->id]) }}" class="btn btn-info mr-2">Editar</a>
+            <form action="{{ route('plan_details.destroy', [$planDetail->plan->url, $planDetail->id]) }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">

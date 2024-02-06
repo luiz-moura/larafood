@@ -21,7 +21,7 @@
                     <strong>Imagem: </strong>
                     <img src="{{ url("storage/{$tenant->logo}") }}"
                          alt="{{ $tenant->name }}"
-                         style="max-width: 90px">
+                         style="max-width: 250px">
                 </li>
                 <li><strong>Plano: </strong> {{ $tenant->plan->name }}</li>
                 <li><strong>Nome: </strong> {{ $tenant->name }}</li>
@@ -42,6 +42,9 @@
                 <li><strong>Ativo: </strong> {{ $tenant->subscription_active }}</li>
                 <li><strong>Cancelou: </strong> {{ $tenant->subscription_suspended }}</li>
             </ul>
+        </div>
+        <div class="card-footer">
+            <a href="{{ route('tenants.edit', $tenant->id) }}" class="btn btn-info">Editar</a>
         </div>
     </div>
 @stop

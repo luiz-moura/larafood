@@ -19,17 +19,6 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <form action="{{ route('plans.profiles.search', $plan->url) }}" method="GET" class="form form-inline">
-                <input type="text"
-                       name="filter"
-                       placeholder="Nome"
-                       class="form-control"
-                       value="{{ request()->filter }}"
-                       minlength="2">
-                <button type="submit" class="btn btn-dark">Filtrar</button>
-            </form>
-        </div>
         <div class="card-body">
             <table class="table-condensed table">
                 <thead>

@@ -21,7 +21,7 @@
                             @endif
                         </ul>
                         <a href="{{ route('site.choose_plan', $plan->url) }}" class="w-100 btn btn-lg btn-outline-primary">
-                            Assinar
+                            {{ __('site.subscribe') }}
                         </a>
                     </div>
                 </div>
