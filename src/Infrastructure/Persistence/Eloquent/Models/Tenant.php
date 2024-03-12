@@ -31,11 +31,6 @@ class Tenant extends Model
         'expires_at',
     ];
 
-    protected $dates = [
-        'subscribed_at',
-        'expires_at',
-    ];
-
     protected $casts = [
         'active' => TenantActiveEnum::class,
         'subscribed_at' => 'datetime',

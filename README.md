@@ -60,6 +60,10 @@ Start the server in background
   sail up -d
 ```
 
+```bash
+  sail artisan key:generate
+```
+
 Install npm dependencies
 ```bash
   sail npm install && sail npm run dev

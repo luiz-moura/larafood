@@ -1,23 +1,24 @@
 {
     "name": "laravel/laravel",
+    "version": "1.0",
     "type": "project",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "darkaonline/l5-swagger": "^8.5",
         "guzzlehttp/guzzle": "^7.2",
-        "jeroennoten/laravel-adminlte": "^3.8",
-        "laravel/framework": "^9.11",
+        "jeroennoten/laravel-adminlte": "^3.9.5",
+        "laravel/framework": "^10.47.0",
         "laravel/horizon": "^5.10",
-        "laravel/sail": "^1.16",
-        "laravel/sanctum": "^3.0",
+        "laravel/sail": "^1.26",
+        "laravel/sanctum": "^3.3.3",
         "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
         "phpmd/phpmd": "^2.13",
         "sebastian/phpcpd": "^6.0",
-        "sentry/sentry-laravel": "^2.12",
+        "sentry/sentry-laravel": "^4.1",
         "spatie/data-transfer-object": "^3.8",
         "spatie/laravel-activitylog": "^4.7.2",
         "spatie/laravel-health": "^1.16",
@@ -32,7 +33,7 @@
         "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.2",
         "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -82,6 +83,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
