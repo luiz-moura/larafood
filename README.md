@@ -42,7 +42,7 @@ src
 
 1. Clone the project
 ```bash
-  git clone https://github.com/luiz-moura/laravel-movie-app.git
+  git clone https://github.com/luiz-moura/larafood.git
 ```
 
 2. Create .env
