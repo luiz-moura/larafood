@@ -40,51 +40,50 @@ src
 
 ## Installation
 
-Clone the project
+1. Clone the project
 ```bash
-  git clone https://github.com/luiz-moura/larafood.git
+  git clone https://github.com/luiz-moura/laravel-movie-app.git
 ```
 
-Install composer dependencies
+2. Create .env
 ```bash
-  composer install
+  cp .env.example .env
 ```
 
-Create aliases for sail bash path
+3. Start the server in background
+```bash
+  docker-compose up -d
+```
+
+4. Create aliases for sail bash path
 ```bash
   alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 ```
 
-Start the server in background
-```bash
-  sail up -d
-```
-
+5. Generate key
 ```bash
   sail artisan key:generate
 ```
 
-Install npm dependencies
+6. Install composer dependencies
+```bash
+  sail composer install
+```
+
+7. Install NPM dependencies
 ```bash
   sail npm install && sail npm run dev
 ```
 
-Project listen in port http://localhost:80
-
-## Database
-
-Create tables and fill populate with fictitious data
+8. Create tables and fill populate with fictitious data
 ```bash
-  php artisan migrate:fresh --seed
+  sail artisan migrate:fresh --seed
 ```
+
+ - Project listen in port http://localhost:80
  - User admin: admin@gmail.com, password: 12345678
 
 ## Commands
-
-Start queue
-```bash
-  sail queue:work
-```
 
 Stop the server
 ```bash
